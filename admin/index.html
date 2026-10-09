@@ -1,0 +1,1449 @@
+<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#15302a">
+<title>קליניקה · מור ששון</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700&family=Suez+One&display=swap">
+<style>
+/* Layout: dark jade rail on the right, quiet paper workspace; ink-and-seal palette drawn from a Chinese-medicine clinic — jade for action, cinnabar seal for warnings, gold for money. */
+:root{
+  --bg:#f1f2ee; --surface:#ffffff; --sunk:#e8eae4; --line:#d6dad2; --hatch:#dfe2db;
+  --ink:#1a231f; --muted:#5d6963; --jade:#1d6b5c; --jade-ink:#ffffff; --jade-soft:#d9eae4;
+  --cin:#b33e28; --cin-soft:#f6e1db; --gold:#94690f; --gold-soft:#f3e8cf; --plum:#6f4a8c;
+  --rail:#15302a; --rail-fg:#b9d0c8; --rail-on:#e7c46a; --shadow:0 1px 2px rgb(20 40 30 / .08),0 4px 16px rgb(20 40 30 / .06);
+  --display:"Suez One","Frank Ruhl Libre",Georgia,serif;
+  --body:"Assistant","Arial Hebrew",Arial,sans-serif;
+  --hour:56px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#111614; --surface:#1a201d; --sunk:#222a26; --line:#313b36; --hatch:#1e2522;
+  --ink:#e3eae6; --muted:#93a29b; --jade:#6cc2ac; --jade-ink:#0b1c17; --jade-soft:#1b342e;
+  --cin:#ec8b74; --cin-soft:#3a221c; --gold:#e1b75a; --gold-soft:#372d18; --plum:#c3a2dd;
+  --rail:#0a1210; --rail-fg:#9fb6ad; --rail-on:#e7c46a; --shadow:0 1px 2px rgb(0 0 0 / .4);
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111614; --surface:#1a201d; --sunk:#222a26; --line:#313b36; --hatch:#1e2522;
+  --ink:#e3eae6; --muted:#93a29b; --jade:#6cc2ac; --jade-ink:#0b1c17; --jade-soft:#1b342e;
+  --cin:#ec8b74; --cin-soft:#3a221c; --gold:#e1b75a; --gold-soft:#372d18; --plum:#c3a2dd;
+  --rail:#0a1210; --rail-fg:#9fb6ad; --rail-on:#e7c46a; --shadow:0 1px 2px rgb(0 0 0 / .4);
+  color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;direction:rtl}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--jade);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+.ltr{direction:ltr;unicode-bidi:isolate}
+
+/* shell */
+.app{display:grid;grid-template-columns:76px 1fr;height:100%}
+.rail{background:var(--rail);color:var(--rail-fg);display:flex;flex-direction:column;align-items:stretch;gap:2px;padding:10px 6px;overflow-y:auto}
+.seal{width:44px;height:44px;margin:2px auto 12px;border-radius:10px;background:var(--rail-on);color:var(--rail);display:grid;place-items:center;font-family:var(--display);font-size:22px;line-height:1}
+.rail a{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 2px;border-radius:10px;color:inherit;text-decoration:none;font-size:11.5px;font-weight:600;position:relative}
+.rail a svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.rail a:hover{background:rgb(255 255 255 / .06)}
+.rail a[aria-current="page"]{color:#fff;background:rgb(255 255 255 / .09)}
+.rail a[aria-current="page"]::before{content:"";position:absolute;inset-inline-start:-6px;top:10px;bottom:10px;width:3px;border-radius:3px;background:var(--rail-on)}
+.main{display:flex;flex-direction:column;min-width:0;min-height:0}
+.top{display:flex;align-items:center;gap:10px;padding:8px 18px;background:var(--surface);border-bottom:1px solid var(--line)}
+.top .brand{font-family:var(--display);font-size:18px;color:var(--jade);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.top .sp{flex:1}
+.search{position:relative;width:min(280px,40vw)}
+.search input{width:100%;border:1px solid var(--line);background:var(--sunk);border-radius:999px;padding:6px 14px}
+.search .res{position:absolute;inset-inline:0;top:calc(100% + 4px);background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);z-index:40;overflow:hidden}
+.search .res button{display:flex;justify-content:space-between;width:100%;border:0;background:none;padding:8px 12px;text-align:start;cursor:pointer}
+.search .res button:hover{background:var(--sunk)}
+.ibtn{position:relative;width:38px;height:38px;border-radius:50%;border:0;background:transparent;display:grid;place-items:center;cursor:pointer;color:var(--ink)}
+.ibtn:hover{background:var(--sunk)}
+.ibtn svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.badge{position:absolute;top:2px;inset-inline-end:0;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:var(--cin);color:#fff;font-size:11px;font-weight:700;display:grid;place-items:center}
+#view{flex:1;overflow:auto;min-height:0}
+.page{padding-inline:20px;padding-block:20px 90px;max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+.page-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px}
+.page-head h1{font-family:var(--display);font-weight:400;font-size:28px;margin:0;line-height:1.15;text-wrap:balance}
+.page-head p{margin:2px 0 0;color:var(--muted)}
+.crumbs{font-size:13px;color:var(--muted)}
+.with-sub{display:grid;grid-template-columns:190px 1fr;min-height:100%}
+.subnav{border-inline-end:1px solid var(--line);background:var(--surface);padding:14px 10px;display:flex;flex-direction:column;gap:4px}
+.subnav button{border:0;background:none;text-align:start;padding:9px 12px;border-radius:10px;cursor:pointer;font-weight:600;color:var(--muted)}
+.subnav button[aria-pressed="true"]{background:var(--sunk);color:var(--ink)}
+
+/* parts */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;min-width:0}
+.card h2,.sec-title{font-size:17px;margin:0;font-weight:700}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.between{justify-content:space-between}
+.stack{display:flex;flex-direction:column;gap:12px}
+.grid-auto{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-weight:600;padding:8px 14px;border-radius:10px;cursor:pointer;text-decoration:none;white-space:nowrap;font-size:14px}
+.btn:hover{background:var(--sunk)}
+.btn.primary{background:var(--jade);border-color:var(--jade);color:var(--jade-ink)}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn.ink{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.btn.danger{color:var(--cin);border-color:color-mix(in srgb,var(--cin) 40%,var(--line))}
+.btn.wa{color:var(--jade);border-color:color-mix(in srgb,var(--jade) 45%,var(--line))}
+.btn.sm{padding:5px 10px;font-size:13px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;white-space:nowrap;background:var(--sunk);color:var(--muted)}
+.chip.jade{background:var(--jade-soft);color:var(--jade)}
+.chip.cin{background:var(--cin-soft);color:var(--cin)}
+.chip.gold{background:var(--gold-soft);color:var(--gold)}
+.chip.ex{background:transparent;border:1px dashed var(--line)}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;color:var(--muted);min-width:0}
+input,select,textarea{border:1px solid var(--line);background:var(--surface);border-radius:9px;padding:7px 10px;width:100%;min-width:0}
+textarea{min-height:84px;resize:vertical;line-height:1.5}
+input[type="checkbox"]{width:auto}
+input[type="tel"],input[type="url"],input[type="time"],input[type="number"],input[type="date"]{direction:ltr;text-align:right}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.form .full{grid-column:1/-1}
+.tabs{display:flex;gap:22px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tabs button{border:0;background:none;padding:10px 0;font-weight:700;color:var(--muted);border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap}
+.tabs button[aria-selected="true"]{color:var(--ink);border-color:var(--ink)}
+.seg{display:inline-flex;background:var(--sunk);border-radius:10px;padding:3px;gap:2px}
+.seg button{border:0;background:none;padding:5px 12px;border-radius:8px;font-weight:600;color:var(--muted);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.empty{padding:22px;text-align:center;color:var(--muted);background:var(--sunk);border-radius:12px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:9px 12px;text-align:start;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:12px;color:var(--muted);font-weight:700;background:var(--sunk)}
+tr:last-child td{border-bottom:0}
+tbody tr.click{cursor:pointer}
+tbody tr.click:hover{background:var(--sunk)}
+.fab{position:fixed;inset-inline-end:calc(76px + 22px);bottom:calc(22px + env(safe-area-inset-bottom,0px));width:54px;height:54px;border-radius:16px;border:0;background:var(--ink);color:var(--bg);display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 18px rgb(0 0 0 / .22);z-index:20}
+.fab svg{width:24px;height:24px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round}
+.toast{position:fixed;inset-inline:0;bottom:calc(20px + env(safe-area-inset-bottom,0px));margin:0 auto;width:max-content;max-width:calc(100% - 32px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:12px;font-weight:600;z-index:90}
+.switch{position:relative;width:40px;height:22px;flex:none}
+.switch input{opacity:0;position:absolute;inset:0;margin:0;cursor:pointer;z-index:1}
+.switch span{position:absolute;inset:0;border-radius:22px;background:var(--line);transition:background .15s}
+.switch span::after{content:"";position:absolute;top:3px;inset-inline-start:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .15s}
+.switch input:checked+span{background:var(--jade)}
+.switch input:checked+span::after{transform:translateX(-18px)}
+.note{font-size:13px;color:var(--muted)}
+.warn{font-size:13px;background:var(--gold-soft);color:var(--gold);border-radius:9px;padding:7px 10px}
+.alert{font-size:13px;background:var(--cin-soft);color:var(--cin);border-radius:9px;padding:7px 10px}
+.okbox{font-size:13px;background:var(--jade-soft);color:var(--jade);border-radius:9px;padding:7px 10px}
+
+/* calendar */
+.cal{display:flex;flex-direction:column;height:100%;min-height:0}
+.cal-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 18px;background:var(--surface);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.cal-nav{display:flex;align-items:center;gap:8px}
+.cal-nav .lbl{font-size:18px;font-weight:700;min-width:130px;text-align:center}
+.cal-scroll{flex:1;overflow:auto;min-height:0;background:var(--surface)}
+.cal-head{position:sticky;top:0;z-index:5;display:grid;background:var(--surface);border-bottom:1px solid var(--line)}
+.cal-head div{padding:8px 4px;text-align:center;font-weight:600;color:var(--muted);display:flex;align-items:baseline;justify-content:center;gap:6px}
+.cal-head b{font-size:22px;font-weight:600;color:var(--ink)}
+.cal-head .today,.cal-head .today b{color:var(--jade)}
+.cal-head .today b{background:var(--jade-soft);border-radius:8px;padding:0 6px}
+.cal-body{display:grid;position:relative}
+.gut{position:relative;border-inline-start:1px solid var(--line)}
+.gut span{position:absolute;inset-inline:0;text-align:center;font-size:12px;color:var(--muted);transform:translateY(-50%)}
+.col{position:relative;border-inline-start:1px solid var(--line);background:repeating-linear-gradient(135deg,var(--hatch) 0 2px,transparent 2px 9px);cursor:copy}
+.avail{position:absolute;inset-inline:0;background:var(--surface)}
+.lines{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(var(--line) 1px,transparent 1px);background-size:100% var(--hour);opacity:.7}
+.now{position:absolute;inset-inline:0;height:0;border-top:2px solid var(--cin);z-index:4;pointer-events:none}
+.now::before{content:"";position:absolute;inset-inline-end:-5px;top:-6px;width:10px;height:10px;border-radius:50%;background:var(--cin)}
+.ev{position:absolute;z-index:3;border-radius:9px;padding:5px 8px;overflow:hidden;cursor:pointer;font-size:12.5px;line-height:1.3;
+  background:color-mix(in srgb,var(--c) 17%,var(--surface));border:1px solid color-mix(in srgb,var(--c) 35%,transparent);border-inline-start:4px solid var(--c);color:var(--ink)}
+.ev:hover{box-shadow:var(--shadow)}
+.ev b{display:block;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev .t{color:var(--muted)}
+.ev .chip{font-size:10.5px;padding:0 6px;margin-bottom:2px}
+.ev.paid{background:color-mix(in srgb,var(--muted) 14%,var(--surface));border-inline-start-color:var(--muted)}
+.ev.cancelled{opacity:.55;text-decoration:line-through}
+.ev.noshow{border-style:dashed}
+.ev.pending{border-style:dashed;background:color-mix(in srgb,#c9a227 20%,var(--surface))}
+.daychips{display:flex;gap:6px;overflow-x:auto;padding:8px 12px;background:var(--surface);border-bottom:1px solid var(--line)}
+.daychips button{flex:none;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:4px 10px;cursor:pointer;text-align:center;line-height:1.2}
+.daychips button b{display:block;font-size:17px}
+.daychips button[aria-pressed="true"]{background:var(--jade);color:var(--jade-ink);border-color:var(--jade)}
+
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgb(10 20 16 / .38);z-index:50}
+.drawer{position:fixed;top:0;bottom:0;inset-inline-end:0;width:min(430px,100%);background:var(--bg);z-index:60;display:flex;flex-direction:column;box-shadow:0 0 40px rgb(0 0 0 / .25)}
+.dh{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--jade);color:var(--jade-ink);padding:12px 16px;padding-top:calc(12px + env(safe-area-inset-top,0px))}
+.dh h2{margin:0;font-size:18px}
+.dh .ibtn{color:inherit}
+.dh .ibtn:hover{background:rgb(255 255 255 / .15)}
+.db{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:12px}
+.df{display:flex;gap:10px;padding:12px 16px;padding-bottom:calc(12px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);background:var(--surface);position:relative}
+.df .btn{flex:1;padding:11px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px}
+.who{display:flex;align-items:center;gap:10px}
+.ava{width:40px;height:40px;border-radius:50%;background:var(--jade-soft);color:var(--jade);display:grid;place-items:center;font-weight:700;flex:none}
+.who .nm{font-weight:700;font-size:16px}
+.menu{position:absolute;bottom:calc(100% + 6px);inset-inline-end:16px;width:240px;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 28px rgb(0 0 0 / .18);overflow:hidden}
+.menu button{display:flex;align-items:center;justify-content:space-between;width:100%;border:0;border-bottom:1px solid var(--line);background:none;padding:11px 14px;cursor:pointer;font-weight:600;text-align:start}
+.menu button:last-child{border-bottom:0}
+.menu button:hover{background:var(--sunk)}
+.menu button.red{color:var(--cin)}
+.menu svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.pick{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
+.pick button{border:0;border-bottom:1px solid var(--line);background:none;padding:8px 12px;text-align:start;cursor:pointer;display:flex;justify-content:space-between;gap:8px}
+.pick button:last-child{border-bottom:0}
+.pick button:hover{background:var(--sunk)}
+.notes .n{border-inline-start:3px solid var(--gold);padding:6px 10px;background:var(--surface);border-radius:8px}
+.vars{display:flex;flex-wrap:wrap;gap:6px}
+.vars button{border:1px dashed var(--line);background:var(--surface);border-radius:999px;padding:2px 10px;font-size:12px;cursor:pointer}
+.preview{white-space:pre-wrap;background:var(--sunk);border-radius:10px;padding:10px 12px;font-size:13.5px;border-inline-start:3px solid var(--jade);max-height:240px;overflow:auto}
+
+/* pos */
+.pos{display:grid;grid-template-columns:1fr 370px;height:100%;min-height:0}
+.pos-items{display:flex;flex-direction:column;min-height:0;border-inline-end:1px solid var(--line)}
+.pos-items .bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 18px;background:var(--surface);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.pos-items .bar .tabs{border:0}
+.tiles{padding:18px;display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;overflow:auto;align-content:start}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;display:flex;flex-direction:column;gap:6px;min-height:120px;text-align:center;justify-content:space-between}
+.tile:hover{border-color:var(--jade);box-shadow:var(--shadow)}
+.tile .k{font-size:12px;font-weight:700;color:var(--c,var(--jade))}
+.tile .p{font-size:22px;font-weight:700}
+.cart{display:flex;flex-direction:column;background:var(--surface);min-height:0}
+.cart .lines{position:static;opacity:1;background:none;flex:1;overflow:auto;pointer-events:auto}
+.cline{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:8px 14px;border-bottom:1px solid var(--line)}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:8px}
+.qty button{border:0;background:none;width:26px;height:26px;cursor:pointer}
+.totals{padding:10px 14px;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr auto;gap:4px 10px;font-size:14px}
+.totals .grand{font-size:20px;font-weight:700}
+
+/* misc */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.kpi .v{font-size:28px;font-weight:700;line-height:1.2}
+.kpi .d{font-size:12.5px;font-weight:700}
+.up{color:var(--jade)} .down{color:var(--cin)}
+.week{display:grid;grid-template-columns:repeat(7,minmax(120px,1fr));gap:8px;overflow-x:auto}
+.wday{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:8px;min-width:120px}
+.wday h3{margin:0;font-size:14px;text-align:center}
+.rng{display:flex;flex-direction:column;gap:4px;background:var(--sunk);border-radius:9px;padding:6px}
+.rng input{padding:4px 6px;font-size:13px}
+.rep-cat{display:flex;flex-direction:column;gap:8px}
+.rep-cat header{display:flex;flex-direction:column;gap:2px;padding-bottom:8px;border-bottom:1px solid var(--line);margin-bottom:4px}
+.rep-cat header b{font-size:19px}
+.rep-link{display:flex;align-items:center;justify-content:space-between;border:0;background:var(--sunk);border-radius:10px;padding:11px 14px;cursor:pointer;font-weight:600;text-align:start}
+.rep-link:hover{background:var(--jade-soft)}
+.auto-card{display:flex;flex-direction:column;gap:10px}
+.flow{display:flex;align-items:center;gap:8px;color:var(--jade)}
+.flow svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.svc-row{display:grid;grid-template-columns:auto 1fr auto auto;gap:12px;align-items:center;padding:10px 14px;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.dot{width:14px;height:14px;border-radius:50%;background:var(--c)}
+.swatches{display:flex;gap:8px;flex-wrap:wrap}
+.swatches button{width:28px;height:28px;border-radius:50%;border:2px solid transparent;background:var(--c);cursor:pointer}
+.swatches button[aria-pressed="true"]{border-color:var(--ink);box-shadow:0 0 0 2px var(--surface) inset}
+
+@media (max-width:900px){
+  .pos{grid-template-columns:1fr;height:auto}
+  .pos-items{border:0;max-height:none}
+  .with-sub{grid-template-columns:1fr}
+  .subnav{flex-direction:row;overflow-x:auto;border-inline-end:0;border-bottom:1px solid var(--line);padding:8px}
+  .subnav button{white-space:nowrap}
+}
+@media (max-width:760px){
+  .app{grid-template-columns:1fr;grid-template-rows:1fr auto}
+  .rail{grid-row:2;flex-direction:row;overflow-x:auto;overflow-y:hidden;padding:4px 6px calc(4px + env(safe-area-inset-bottom,0px));gap:0}
+  .seal{display:none}
+  .rail a{min-width:66px;font-size:11px}
+  .rail a[aria-current="page"]::before{inset-inline:14px;top:auto;bottom:-4px;width:auto;height:3px}
+  .main{grid-row:1}
+  .fab{inset-inline-end:18px;bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+  .top .brand{display:none}
+  .search{flex:1;width:auto}
+  .page{padding-inline:16px}
+  .cal-bar{padding:8px 12px}
+  .cal-nav .lbl{min-width:0;font-size:16px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.login{position:fixed;inset:0;z-index:200;background:var(--bg);display:grid;place-items:center;padding:20px}
+.login .card{width:min(380px,100%);display:flex;flex-direction:column;gap:14px;box-shadow:var(--shadow)}
+.login h1{font-family:var(--display);font-weight:400;font-size:26px;margin:0;color:var(--jade)}
+.login .seal{margin:0}
+.logout{font-size:13px;font-weight:600;color:var(--muted);border:0;background:none;cursor:pointer;padding:6px 8px;border-radius:8px}
+.logout:hover{background:var(--sunk)}
+</style>
+
+<div class="login" id="login" hidden>
+  <form class="card" id="loginForm" autocomplete="on">
+    <div class="seal" aria-hidden="true">מ</div>
+    <h1>ניהול הקליניקה</h1>
+    <label class="f">אימייל<input id="lg-email" type="email" autocomplete="username" required dir="ltr"></label>
+    <label class="f">סיסמה<input id="lg-pass" type="password" autocomplete="current-password" required dir="ltr"></label>
+    <div id="lg-msg" class="alert" hidden></div>
+    <button class="btn primary" type="submit" id="lg-btn">כניסה</button>
+    <button class="logout" type="button" id="lg-forgot">שכחתי סיסמה</button>
+  </form>
+  <form class="card" id="recForm" hidden>
+    <div class="seal" aria-hidden="true">מ</div>
+    <h1>סיסמה חדשה</h1>
+    <label class="f">סיסמה חדשה<input id="rc-p1" type="password" autocomplete="new-password" required dir="ltr"></label>
+    <label class="f">שוב את הסיסמה<input id="rc-p2" type="password" autocomplete="new-password" required dir="ltr"></label>
+    <div id="rc-msg" class="alert" hidden></div>
+    <button class="btn primary" type="submit">שמירת הסיסמה</button>
+  </form>
+</div>
+<div class="app">
+  <nav class="rail" id="rail" aria-label="ניווט ראשי">
+    <div class="seal" aria-hidden="true">מ</div>
+  </nav>
+  <div class="main">
+    <header class="top">
+      <span class="brand" id="brand">מור ששון · רפואה סינית</span>
+      <span class="sp"></span>
+      <div class="search">
+        <input id="gsearch" type="search" placeholder="חיפוש לקוח…" autocomplete="off" aria-label="חיפוש לקוח">
+        <div class="res" id="gres" hidden></div>
+      </div>
+      <button class="ibtn" id="bell" aria-label="הודעות לשליחה"><svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0112 0v5l1.5 2h-15z"/><path d="M10 20a2 2 0 004 0"/></svg><span class="badge" id="bellN" hidden>0</span></button>
+      <button class="logout" id="logout" hidden>יציאה</button>
+      <button class="ibtn" id="gear" aria-label="הגדרות"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 01-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 010-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 014 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 010 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg></button>
+    </header>
+    <div id="view"></div>
+  </div>
+</div>
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" hidden aria-modal="true" role="dialog"></aside>
+<div class="toast" id="toast" hidden role="status"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../config.js"></script>
+<script>
+/* ================= constants & utils ================= */
+const WD=["ראשון","שני","שלישי","רביעי","חמישי","שישי","שבת"];
+const MONTHS=["ינואר","פברואר","מרץ","אפריל","מאי","יוני","יולי","אוגוסט","ספטמבר","אוקטובר","נובמבר","דצמבר"];
+const COLORS=["#1d6b5c","#b33e28","#94690f","#4a5fa8","#7a4f96","#2f8494","#5f7a24","#a34a72"];
+const METHODS=["מזומן","ביט","פייבוקס","אשראי","העברה בנקאית"];
+const $=s=>document.querySelector(s);
+const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const el=html=>{const t=document.createElement("template");t.innerHTML=html.trim();return t.content.firstElementChild};
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pad=n=>String(n).padStart(2,"0");
+const ymd=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const parseYmd=s=>{const[y,m,d]=String(s).split("-").map(Number);return new Date(y,(m||1)-1,d||1)};
+const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+const startOfWeek=d=>{const x=new Date(d);x.setHours(0,0,0,0);x.setDate(x.getDate()-x.getDay());return x};
+const toMin=t=>{const[a,b]=String(t||"0:0").split(":").map(Number);return a*60+(b||0)};
+const toHM=m=>`${pad(Math.floor(m/60))}:${pad(m%60)}`;
+const money=n=>"₪"+(Math.round((Number(n)||0)*100)/100).toLocaleString("he-IL");
+const fmtD=s=>{const d=parseYmd(s);return `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`};
+const fmtDT=iso=>{if(!iso)return"";const d=new Date(iso);return `${pad(d.getDate())}/${pad(d.getMonth()+1)} ${pad(d.getHours())}:${pad(d.getMinutes())}`};
+const dayName=s=>WD[parseYmd(s).getDay()];
+const todayStr=()=>ymd(new Date());
+const aStart=a=>{const d=parseYmd(a.date);d.setHours(0,toMin(a.start),0,0);return d};
+const aEnd=a=>new Date(aStart(a).getTime()+(Number(a.minutes)||60)*6e4);
+const aEndHM=a=>toHM(toMin(a.start)+(Number(a.minutes)||60));
+const intlPhone=p=>{let d=String(p||"").replace(/\D/g,"");if(d.startsWith("972"))return d;if(d.startsWith("0"))return "972"+d.slice(1);return d};
+const waLink=(phone,text)=>`https://wa.me/${intlPhone(phone)}?text=${encodeURIComponent(text)}`;
+const initial=n=>(String(n||"?").trim()[0]||"?");
+const ICON={
+ cal:'<svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>',
+ shop:'<svg viewBox="0 0 24 24"><path d="M4 9l1.5-5h13L20 9M4 9h16v2a3 3 0 01-6 0 3 3 0 01-4 0 3 3 0 01-6 0zM5 13v7h14v-7"/></svg>',
+ user:'<svg viewBox="0 0 24 24"><rect x="4" y="3.5" width="16" height="17" rx="3"/><circle cx="12" cy="10" r="3"/><path d="M7.5 17.5c1-2 2.6-3 4.5-3s3.5 1 4.5 3"/></svg>',
+ pay:'<svg viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="11" rx="2"/><path d="M6 9V5h12v4M7 13h2M11 13h2M15 13h2M7 16h10"/></svg>',
+ bolt:'<svg viewBox="0 0 24 24"><path d="M13 3L5 13h6l-1 8 8-10h-6z"/></svg>',
+ list:'<svg viewBox="0 0 24 24"><rect x="4" y="4" width="11" height="4" rx="2"/><rect x="4" y="10" width="11" height="4" rx="2"/><rect x="4" y="16" width="11" height="4" rx="2"/><path d="M19 6h.01M19 12h.01M19 18h.01"/></svg>',
+ clock:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>',
+ chart:'<svg viewBox="0 0 24 24"><path d="M6 20V10M12 20V4M18 20v-7"/></svg>',
+ plus:'<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>',
+ x:'<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+ dup:'<svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 11-2.3-5.7M20 4v4h-4"/></svg>',
+ bell:'<svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0112 0v5l1.5 2h-15z"/><path d="M10 20a2 2 0 004 0"/></svg>',
+ noshow:'<svg viewBox="0 0 24 24"><circle cx="10" cy="8" r="3.5"/><path d="M3.5 20c.8-3.5 3.3-5.5 6.5-5.5s5.7 2 6.5 5.5M17 8l4 4M21 8l-4 4"/></svg>',
+ trash:'<svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></svg>',
+ wa:'<svg viewBox="0 0 24 24"><path d="M4 20l1.3-3.9A8 8 0 1112 20a8 8 0 01-3.9-1z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.4-1.8-1-1 .8a4 4 0 01-2.1-2.1l.8-1-1-1.8z"/></svg>',
+ filter:'<svg viewBox="0 0 24 24"><path d="M4 5h16l-6 7.5V19l-4 1.5v-8z"/></svg>',
+ chev:'<svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>',
+ chevR:'<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>',
+ up:'<svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg>',
+ down:'<svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>',
+ edit:'<svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg>'
+};
+
+/* ================= defaults ================= */
+const DEF_AUTO={
+  confirm:{on:true,tpl:"שלום {שם}, התור שלך ל{טיפול} נקבע ליום {יום} {תאריך} בשעה {שעה}.\n📍 {כתובת}\n{הוראות}\n\n{דגשים}\n\nלהוספה ליומן: {קישור_יומן}\n{שורת_מקדמה}\n\nלשינוי או ביטול התור: {קישור_אישי}\n\n{מדיניות}"},
+  reminder:{on:true,hours:24,tpl:"היי {שם}, תזכורת לתור ל{טיפול} ביום {יום} {תאריך} בשעה {שעה}.\n📍 {כתובת}\n{ניווט}\n\n{מדיניות}\nאם צריך לשנות, אפשר להשיב להודעה הזו."},
+  after:{on:true,tpl:"תודה שהגעת היום, {שם}! 🌿\nיתרה לתשלום: {סכום}\n{קישורי_תשלום}\nהקבלה תישלח אליך כאן לאחר התשלום."},
+  receipt:{on:true,tpl:"{קבלה}"},
+  birthday:{on:false,tpl:"מזל טוב {שם}! מאחלים לך שנה בריאה ומאוזנת 🌿\n{עסק}"},
+  winback:{on:false,days:60,tpl:"היי {שם}, עבר זמן מה מאז הטיפול האחרון. אם תרצה לקבוע תור, אפשר כאן: {קישור_הזמנה}\n{עסק}"}
+};
+const AUTO_META={
+  confirm:{name:"אישור תור",cat:"popular",desc:"כשנקבע תור חדש, נשלחים ללקוח פרטי התור, הוראות הגעה, דגשים וקישור להוספה ליומן.",from:ICON.cal,trigger:"נקבע תור"},
+  reminder:{name:"תזכורת לפני תור",cat:"popular",desc:"תזכורת בוואטסאפ מספר שעות לפני הטיפול, כולל כתובת וניווט.",from:ICON.clock,trigger:"שעות לפני התור",param:["hours","שעות לפני"]},
+  after:{name:"תודה וקישור לתשלום",cat:"pay",desc:"בסוף טיפול שלא שולם, נשלחת הודעת תודה עם קישורי ביט ופייבוקס.",from:ICON.pay,trigger:"הטיפול הסתיים ולא שולם"},
+  receipt:{name:"קבלה לאחר תשלום",cat:"pay",desc:"עם קבלת תשלום מופקת קבלה ונשלחת ללקוח בוואטסאפ.",from:ICON.pay,trigger:"התקבל תשלום"},
+  birthday:{name:"ברכת יום הולדת",cat:"keep",desc:"ביום ההולדת של הלקוח נשלחת ברכה אישית.",from:ICON.user,trigger:"יום הולדת"},
+  winback:{name:"חזרה לטיפול",cat:"keep",desc:"לקוח שלא הגיע כבר זמן מה ואין לו תור עתידי מקבל הזמנה לחזור.",from:ICON.user,trigger:"ימים ללא ביקור",param:["days","ימים ללא ביקור"]}
+};
+const DEF_SETTINGS={bizName:"מור ששון · רפואה סינית",phone:"",address:"",nav:"",directions:"",notes:"",tags:["רפואה משלימה"],
+  bookingUrl:"https://mor-sasson.com",hyp:"",bit:"",paybox:"",bizId:"",invNo:1001,vat:"licensed",vatRate:18,
+  policy:{freeHours:24,fullHours:12},blocked:[],blacklist:[],auto:DEF_AUTO};
+const DEF_HOURS={days:{0:[{s:"09:30",e:"13:30"}],1:[{s:"09:00",e:"14:00"}],2:[{s:"09:30",e:"13:30"},{s:"16:00",e:"21:00"}],3:[{s:"12:30",e:"14:30"}],4:[{s:"09:00",e:"14:30"}],5:[],6:[]}};
+function mergeSettings(o){
+  const s=structuredClone(DEF_SETTINGS);const src=structuredClone(o||{});
+  Object.assign(s,src);
+  s.policy={...DEF_SETTINGS.policy,...(src.policy||{})};
+  s.auto={};for(const k in DEF_AUTO)s.auto[k]={...DEF_AUTO[k],...((src.auto||{})[k]||{})};
+  return s;
+}
+
+/* ================= store ================= */
+const COLS=["services","products","packages","clients","appts","receipts"];
+const st={};COLS.forEach(c=>st[c]={});
+let S=mergeSettings({}), H=structuredClone(DEF_HOURS);
+let db=null, demo=false, loaded=false;
+function toast(t){const e=$("#toast");e.textContent=t;e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>e.hidden=true,2800)}
+async function guard(p,msg){try{await p}catch(e){console.error(e);toast(msg||"השמירה לא הצליחה. נסו שוב.")}}
+function newId(col){return db?db.collection(col).doc().id:("l"+Math.random().toString(36).slice(2,11))}
+function put(col,id,data){const body={...data};delete body.id;st[col][id]={...body,id};schedule();if(db)return guard(db.collection(col).doc(id).set(body));}
+function upd(col,id,p){if(p&&p.sent&&st[col][id]&&st[col][id].sent)p={...p,sent:{...st[col][id].sent,...p.sent}};st[col][id]={...st[col][id],...p};schedule();if(db)return guard(db.collection(col).doc(id).update(p));}
+function del(col,id){delete st[col][id];schedule();if(db)return guard(db.collection(col).doc(id).delete());}
+function saveSettings(){schedule();if(db)return guard(db.doc("settings/main").set(structuredClone(S)));}
+function saveHours(){schedule();if(db)return guard(db.doc("settings/hours").set(structuredClone(H)));}
+const list=c=>Object.values(st[c]);
+const svcList=()=>list("services").sort((a,b)=>(a.order??0)-(b.order??0)||String(a.name).localeCompare(b.name));
+const liveAppts=()=>list("appts").filter(a=>a.date&&a.start);
+
+/* ================= domain ================= */
+const tplFor=date=>((H.days||{})[parseYmd(date).getDay()]||[]);
+const hasOverride=date=>!!(H.overrides&&Object.prototype.hasOwnProperty.call(H.overrides,date));
+function rawRanges(date){return hasOverride(date)?H.overrides[date]:tplFor(date)}
+function rangesFor(date){
+  if((S.blocked||[]).some(b=>date>=b.from&&date<=(b.to||b.from)))return[];
+  return (rawRanges(date)||[]).filter(r=>r.s&&r.e);
+}
+function inHours(date,start,minutes){const s=toMin(start),e=s+Number(minutes||0);return rangesFor(date).some(r=>s>=toMin(r.s)&&e<=toMin(r.e))}
+function overlaps(a,ignoreId){const s=aStart(a),e=aEnd(a);return liveAppts().filter(x=>x.id!==ignoreId&&x.date===a.date&&!["cancelled"].includes(x.status)&&aStart(x)<e&&aEnd(x)>s)}
+function hoursLeft(a){return (aStart(a)-new Date())/3.6e6}
+function policyTier(a){const h=hoursLeft(a),p=S.policy;if(h>=p.freeHours)return"free";if(h>=p.fullHours)return"deposit";return"full"}
+function policyFee(a,tier){tier=tier||policyTier(a);return tier==="free"?0:tier==="deposit"?(Number(a.deposit)||0):(Number(a.price)||0)}
+function policyText(){const p=S.policy;return `מדיניות ביטול: עד ${p.freeHours} שעות לפני התור ללא עלות. בין ${p.freeHours} ל-${p.fullHours} שעות: דמי ביטול בגובה המקדמה. פחות מ-${p.fullHours} שעות או אי הגעה: חיוב מלא.`}
+function owed(a){
+  const dep=a.depositPaid?Number(a.deposit)||0:0;
+  if(a.status==="cancelled"||a.status==="noshow")return a.feePaid?0:Math.max(0,(Number(a.cancelFee)||0)-dep);
+  if(a.paid)return 0;
+  if(aEnd(a)>new Date())return 0;
+  return Math.max(0,(Number(a.price)||0)-dep);
+}
+function clientAppts(cid){return liveAppts().filter(a=>a.clientId===cid).sort((a,b)=>aStart(b)-aStart(a))}
+function clientBalance(cid){return clientAppts(cid).reduce((s,a)=>s+owed(a),0)}
+function lastVisit(cid){const v=clientAppts(cid).filter(a=>aEnd(a)<new Date()&&!["cancelled","noshow"].includes(a.status));return v[0]||null}
+function nextAppt(cid){return clientAppts(cid).filter(a=>aStart(a)>new Date()&&a.status==="booked").sort((a,b)=>aStart(a)-aStart(b))[0]||null}
+function gcal(a){
+  const d=a.date.replaceAll("-",""),s=toMin(a.start),e=s+(Number(a.minutes)||60),t=m=>`${pad(Math.floor(m/60))}${pad(m%60)}00`;
+  return "https://calendar.google.com/calendar/render?"+new URLSearchParams({action:"TEMPLATE",text:`${a.serviceName} · ${S.bizName}`,dates:`${d}T${t(s)}/${d}T${t(e)}`,ctz:"Asia/Jerusalem",location:S.address||"",details:S.notes||""}).toString();
+}
+function hypLink(a){if(!S.hyp)return"";return S.hyp.replaceAll("{amount}",encodeURIComponent(a.deposit||0)).replaceAll("{name}",encodeURIComponent(a.clientName||"")).replaceAll("{id}",encodeURIComponent(a.id||""))}
+function payLinks(){const l=[];if(S.bit)l.push("ביט: "+S.bit);if(S.paybox)l.push("פייבוקס: "+S.paybox);if(!l.length&&S.phone)l.push(`אפשר לשלם בביט או בפייבוקס למספר ${S.phone}`);return l.join("\n")}
+function fill(tpl,v){return String(tpl||"").replace(/\{([^}]+)\}/g,(m,k)=>v[k]??"").replace(/\n{3,}/g,"\n\n").trim()}
+function apptVars(a){
+  const hl=hypLink(a);
+  return {"שם":(a.clientName||"").split(" ")[0],"שם_מלא":a.clientName||"","טיפול":a.serviceName||"","יום":dayName(a.date),"תאריך":fmtD(a.date),"שעה":a.start,
+    "מחיר":money(a.price),"סכום":money(owed(a)||Math.max(0,(a.price||0)-(a.depositPaid?a.deposit||0:0))),"כתובת":S.address,"ניווט":S.nav?("ניווט: "+S.nav):"",
+    "הוראות":S.directions?("הוראות הגעה:\n"+S.directions):"","דגשים":S.notes?("דגשים לקראת הטיפול:\n"+S.notes):"","קישור_יומן":gcal(a),"קישור_אישי":((st.clients[a.clientId]||{}).token?`${location.origin}/my/?t=${(st.clients[a.clientId]||{}).token}`:""),
+    "שורת_מקדמה":(!a.depositPaid&&Number(a.deposit)>0&&hl)?`לאישור התור יש לשלם מקדמה של ${money(a.deposit)}:\n${hl}`:"",
+    "מדיניות":policyText(),"קישורי_תשלום":payLinks(),"עסק":S.bizName,"טלפון_עסק":S.phone,"קישור_הזמנה":S.bookingUrl};
+}
+function clientVars(c){return {"שם":(c.name||"").split(" ")[0],"שם_מלא":c.name||"","עסק":S.bizName,"קישור_הזמנה":S.bookingUrl,"טלפון_עסק":S.phone}}
+function receiptText(r){
+  const L=[S.bizName];if(S.bizId)L.push(`${S.vat==="licensed"?"עוסק מורשה":"עוסק פטור"} ${S.bizId}`);if(S.address)L.push(S.address);
+  L.push("",`קבלה מס' ${r.no}`,`תאריך: ${fmtDT(r.date)}`,`לכבוד: ${r.clientName||"לקוח מזדמן"}`,"");
+  r.lines.forEach(l=>L.push(`${l.name}${l.qty>1?` ×${l.qty}`:""}: ${money(l.price*l.qty)}`));
+  if(r.discount)L.push(`הנחה: -${money(r.discount)}`);
+  if(r.vatMode==="licensed"){const before=r.total/(1+r.vatRate/100);L.push(`סה"כ לפני מע"מ: ${money(before)}`,`מע"מ ${r.vatRate}%: ${money(r.total-before)}`)}
+  L.push(`סה"כ שולם: ${money(r.total)} (${r.method})`,"","תודה ולהתראות! 🌿");
+  return L.join("\n");
+}
+function approveMsg(a){const f=(a.clientName||"").split(" ")[0];const base=`שלום ${f}, הבקשה לתור ל${a.serviceName} ביום ${dayName(a.date)} ${fmtD(a.date)} בשעה ${a.start} אושרה.`;
+  if(!(Number(a.deposit)>0))return confirmMsg(a);
+  const hl=a.hypLink||hypLink(a);
+  return base+`\nלהשלמת התור יש לשלם מקדמה של ${money(a.deposit)}`+(hl?`:\n${hl}`:". קישור לתשלום יישלח אליך בנפרד.")+`\nמיד אחרי התשלום תישלח אליך הודעת אישור סופית עם כל הפרטים.`}
+function rejectMsg(a){return `שלום ${(a.clientName||"").split(" ")[0]}, מצטער, לא אוכל לקבל אותך בשעה שביקשת (${dayName(a.date)} ${fmtD(a.date)} בשעה ${a.start}). אשמח לתאם מועד אחר: ${S.bookingUrl||"https://mor-sasson.com"}/book/`}
+function pendingBtns(a,done){const w=el(`<div class="row"></div>`);
+  w.appendChild(waBtn(a.phone,approveMsg(a),"אישור התור",()=>{upd("appts",a.id,{status:"booked",approvedAt:new Date().toISOString()});toast("התור אושר");if(done)done()},"btn wa sm"));
+  w.appendChild(waBtn(a.phone,rejectMsg(a),"דחייה",()=>{upd("appts",a.id,{status:"cancelled",cancelFee:0,rejected:true,cancelledAt:new Date().toISOString(),cancelledBy:"admin"});toast("הבקשה נדחתה");if(done)done()},"btn sm"));
+  return w}
+function confirmMsg(a){return fill(S.auto.confirm.tpl,apptVars(a))}
+function reminderMsg(a){return fill(S.auto.reminder.tpl,apptVars(a))}
+function afterMsg(a){return fill(S.auto.after.tpl,apptVars(a))}
+function cancelMsg(a){const f=Number(a.cancelFee)||0;return `שלום ${(a.clientName||"").split(" ")[0]}, התור ל${a.serviceName} ביום ${dayName(a.date)} ${fmtD(a.date)} בשעה ${a.start} בוטל.`+(f?`\nלפי מדיניות הביטול, דמי הביטול הם ${money(f)}${a.depositPaid?" (המקדמה ששולמה מקוזזת)":""}.\nיתרה לתשלום: ${money(owed(a))}\n${payLinks()}`:"")}
+const blocked=cid=>(S.blacklist||[]).includes(cid);
+function dueMessages(){
+  const out=[],now=new Date(),A=S.auto;
+  for(const a of liveAppts()){
+    if(blocked(a.clientId))continue;
+    const sent=a.sent||{};
+    if(a.status==="pending"&&aEnd(a)>now)out.push({kind:"pending",label:"בקשת תור חדשה",a,phone:a.phone,name:a.clientName,when:new Date(a.createdAt||now),text:""});
+    if(A.confirm.on&&a.status==="booked"&&(a.source==="web"||a.byClient)&&(!(Number(a.deposit)>0)||a.depositPaid)&&!sent.confirm&&aEnd(a)>now)
+      out.push({kind:"confirm",label:"אישור תור",a,phone:a.phone,name:a.clientName,when:new Date(a.createdAt||now),text:confirmMsg(a)});
+    if(a.status==="cancelled"&&a.cancelledBy==="client"&&!sent.cancel)
+      out.push({kind:"cancel",label:"ביטול מהלקוח",a,phone:a.phone,name:a.clientName,when:new Date(a.cancelledAt||now),text:cancelMsg(a)});
+    if(A.reminder.on&&a.status==="booked"&&aStart(a)>now&&(aStart(a)-now)<=Number(A.reminder.hours||24)*3.6e6&&!sent.reminder)
+      out.push({kind:"reminder",label:"תזכורת",a,phone:a.phone,name:a.clientName,when:aStart(a),text:reminderMsg(a)});
+    if(A.after.on&&["booked","done"].includes(a.status)&&!a.paid&&aEnd(a)<now&&(now-aEnd(a))<3*864e5&&!sent.after&&owed(a)>0)
+      out.push({kind:"after",label:"תודה ותשלום",a,phone:a.phone,name:a.clientName,when:aEnd(a),text:afterMsg(a)});
+  }
+  const y=String(now.getFullYear()),md=`${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
+  for(const c of list("clients")){
+    if(blocked(c.id))continue;const sent=c.sent||{};
+    if(A.birthday.on&&c.birthday&&c.birthday.slice(5)===md&&sent.birthday!==y)
+      out.push({kind:"birthday",label:"יום הולדת",c,phone:c.phone,name:c.name,when:now,text:fill(A.birthday.tpl,clientVars(c))});
+    if(A.winback.on){const lv=lastVisit(c.id),days=Number(A.winback.days||60);
+      if(lv&&!nextAppt(c.id)&&(now-aEnd(lv))>days*864e5&&(!sent.winback||(now-new Date(sent.winback))>days*864e5))
+        out.push({kind:"winback",label:"חזרה לטיפול",c,phone:c.phone,name:c.name,when:now,text:fill(A.winback.tpl,clientVars(c))});}
+  }
+  return out.sort((x,y)=>x.when-y.when);
+}
+function markSent(m){const iso=new Date().toISOString();
+  if(m.a)upd("appts",m.a.id,{sent:{[m.kind]:iso}});
+  else if(m.c)upd("clients",m.c.id,{sent:{[m.kind]:m.kind==="birthday"?String(new Date().getFullYear()):iso}});}
+function waBtn(phone,text,label,onSent,cls="btn wa"){
+  const a=el(`<a class="${cls}" target="_blank" rel="noopener">${ICON.wa}<span>${esc(label)}</span></a>`);
+  a.href=waLink(phone,text);if(onSent)a.addEventListener("click",()=>setTimeout(onSent,50));return a;
+}
+
+/* ================= routing & shell ================= */
+const NAV=[["calendar","יומן",ICON.cal],["business","העסק שלי",ICON.shop],["clients","לקוחות",ICON.user],["pos","תשלום",ICON.pay],["automations","אוטומציות",ICON.bolt],["prices","מחירון",ICON.list],["hours","שעות עבודה",ICON.clock],["reports","דוחות",ICON.chart]];
+const VIEWS={};let route="calendar";
+function buildRail(){const r=$("#rail");NAV.forEach(([k,l,i])=>{const a=el(`<a href="#${k}" data-r="${k}">${i}<span>${l}</span></a>`);r.appendChild(a)})}
+function go(r){route=VIEWS[r]?r:"calendar";if(location.hash!=="#"+route){try{history.replaceState(null,"","#"+route)}catch(e){}}renderView(true)}
+window.addEventListener("hashchange",()=>go(location.hash.slice(1)));
+let rq=0,pending=false;
+function schedule(){if(rq)return;rq=requestAnimationFrame(()=>{rq=0;renderView();renderBell();refreshDrawer()})}
+function renderView(force){
+  const v=$("#view"),ae=document.activeElement;
+  if(!force&&v.contains(ae)&&ae.matches("input,textarea,select")){pending=true;return}
+  pending=false;
+  $$("#rail a").forEach(a=>{if(a.dataset.r===route)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
+  const sy=v.scrollTop;const keep=v.dataset.route===route;
+  v.innerHTML="";v.dataset.route=route;
+  const node=VIEWS[route]();v.appendChild(node);
+  if(keep)v.scrollTop=sy;
+  $("#brand").textContent=S.bizName;
+  if(VIEWS[route].after)VIEWS[route].after(node,keep);
+}
+document.addEventListener("focusout",()=>{if(pending)setTimeout(()=>{if(!$("#view").contains(document.activeElement))schedule()},0)});
+
+/* drawer */
+let drawer=null;
+function openDrawer(fn){drawer={fn,dirty:false};paintDrawer();$("#drawer").hidden=false;$("#scrim").hidden=false}
+function paintDrawer(){const d=$("#drawer");const sy=d.querySelector(".db")?.scrollTop||0;d.innerHTML="";const n=drawer.fn();d.append(...(n instanceof DocumentFragment?[n]:[n]));const b=d.querySelector(".db");if(b)b.scrollTop=sy;
+  d.addEventListener("input",()=>{if(drawer)drawer.dirty=true},{once:true})}
+function refreshDrawer(){if(!drawer||$("#drawer").hidden)return;if(drawer.dirty)return;if($("#drawer").contains(document.activeElement)&&document.activeElement.matches("input,textarea,select"))return;paintDrawer()}
+function closeDrawer(){drawer=null;$("#drawer").hidden=true;$("#scrim").hidden=true;$("#drawer").innerHTML=""}
+$("#scrim").onclick=closeDrawer;
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){const m=$("#drawer .menu");if(m){m.remove();return}if(drawer)closeDrawer()}});
+function frame(title,body,foot,extraHead=""){
+  const f=document.createDocumentFragment();
+  const h=el(`<div class="dh"><h2>${esc(title)}</h2><div class="row">${extraHead}<button class="ibtn" aria-label="סגירה">${ICON.x}</button></div></div>`);
+  h.querySelector("button[aria-label='סגירה']").onclick=closeDrawer;
+  const b=el(`<div class="db"></div>`);(Array.isArray(body)?body:[body]).forEach(x=>x&&b.appendChild(x));
+  f.append(h,b);if(foot){const ft=el(`<div class="df"></div>`);(Array.isArray(foot)?foot:[foot]).forEach(x=>x&&ft.appendChild(x));f.append(ft)}
+  return f;
+}
+function tabsEl(items,cur,onPick){const t=el(`<div class="tabs" role="tablist"></div>`);items.forEach(([k,l])=>{const b=el(`<button role="tab" aria-selected="${k===cur}">${l}</button>`);b.onclick=()=>onPick(k);t.appendChild(b)});return t}
+function swEl(checked,onChange,label){const w=el(`<label class="switch" title="${esc(label||"")}"><input type="checkbox" ${checked?"checked":""} aria-label="${esc(label||"הפעלה")}"><span></span></label>`);w.querySelector("input").onchange=e=>onChange(e.target.checked);return w}
+
+/* global search */
+$("#gsearch").addEventListener("input",e=>{
+  const q=e.target.value.trim(),r=$("#gres");if(!q){r.hidden=true;return}
+  const m=list("clients").filter(c=>(c.name||"").includes(q)||intlPhone(c.phone).includes(intlPhone(q)||"§")).slice(0,7);
+  r.innerHTML="";if(!m.length){r.appendChild(el(`<div class="note" style="padding:10px 12px">לא נמצא לקוח</div>`))}
+  m.forEach(c=>{const b=el(`<button><span>${esc(c.name)}</span><span class="muted ltr small">${esc(c.phone||"")}</span></button>`);b.onclick=()=>{r.hidden=true;e.target.value="";openDrawer(()=>clientDrawer(c.id))};r.appendChild(b)});
+  r.hidden=false;
+});
+$("#gsearch").addEventListener("blur",()=>setTimeout(()=>$("#gres").hidden=true,200));
+$("#gear").onclick=()=>{location.hash="settings"};
+$("#bell").onclick=()=>openDrawer(queueDrawer);
+let _pendSeen=null;
+function renderBell(){const n=dueMessages().length;const b=$("#bellN");b.hidden=!n;b.textContent=n;
+  const pend=liveAppts().filter(a=>a.status==="pending"&&aEnd(a)>new Date());
+  document.title=(pend.length?`(${pend.length}) `:"")+document.title.replace(/^\(\d+\) /,"");
+  if(_pendSeen===null){_pendSeen=new Set(pend.map(a=>a.id));return}
+  pend.forEach(a=>{if(_pendSeen.has(a.id))return;_pendSeen.add(a.id);toast(`בקשת תור חדשה: ${a.clientName}`);
+    try{if(window.Notification&&Notification.permission==="granted")new Notification("בקשת תור חדשה",{body:`${a.clientName} · ${dayName(a.date)} ${fmtD(a.date)} ${a.start}`})}catch(_){}})}
+
+/* ================= calendar ================= */
+const cal={week:startOfWeek(new Date()),day:todayStr(),showCancelled:false,svc:"",filterOpen:false};
+const narrow=()=>matchMedia("(max-width:760px)").matches;
+VIEWS.calendar=function(){
+  const nar=narrow();
+  if(nar&&(parseYmd(cal.day)<cal.week||parseYmd(cal.day)>=addDays(cal.week,7)))cal.day=ymd(cal.week);
+  const days=nar?[parseYmd(cal.day)]:[...Array(7)].map((_,i)=>addDays(cal.week,i));
+  const wrap=el(`<div class="cal"></div>`);
+  const m0=cal.week,m1=addDays(cal.week,6);
+  const lbl=m0.getMonth()===m1.getMonth()?`${MONTHS[m0.getMonth()]} ${m0.getFullYear()}`:`${MONTHS[m0.getMonth()]} – ${MONTHS[m1.getMonth()]} ${m1.getFullYear()}`;
+  const bar=el(`<div class="cal-bar">
+    <div class="cal-nav"><button class="btn sm" data-a="next" aria-label="השבוע הבא">${ICON.chev}</button><span class="lbl">${lbl}</span><button class="btn sm" data-a="prev" aria-label="השבוע הקודם">${ICON.chevR}</button><button class="btn sm" data-a="today">היום</button></div>
+    <div class="row"><button class="btn sm" data-a="shifts">${ICON.clock}<span>עריכת משמרות</span></button><button class="btn sm" data-a="filter">${ICON.filter}<span>סינון</span></button><button class="btn sm primary" data-a="new">${ICON.plus}<span>תור חדש</span></button></div></div>`);
+  bar.querySelector("[data-a=prev]").onclick=()=>{cal.week=addDays(cal.week,-7);cal.day=ymd(cal.week);renderView(true)};
+  bar.querySelector("[data-a=next]").onclick=()=>{cal.week=addDays(cal.week,7);cal.day=ymd(cal.week);renderView(true)};
+  bar.querySelector("[data-a=today]").onclick=()=>{cal.week=startOfWeek(new Date());cal.day=todayStr();renderView(true)};
+  bar.querySelector("[data-a=new]").onclick=()=>openDrawer(()=>newApptDrawer({date:nar?cal.day:(days.some(d=>ymd(d)===todayStr())?todayStr():ymd(days[0]))}));
+  bar.querySelector("[data-a=shifts]").onclick=()=>openShifts(cal.week);
+  bar.querySelector("[data-a=filter]").onclick=()=>{cal.filterOpen=!cal.filterOpen;renderView(true)};
+  wrap.appendChild(bar);
+  if(cal.filterOpen){
+    const f=el(`<div class="cal-bar" style="justify-content:flex-start"><label class="f" style="flex-direction:row;align-items:center;gap:8px">טיפול <select id="cf-svc" style="width:auto"><option value="">הכל</option></select></label><label class="row small" style="font-weight:600"><input type="checkbox" id="cf-can" ${cal.showCancelled?"checked":""}> הצגת תורים שבוטלו</label></div>`);
+    const sel=f.querySelector("#cf-svc");svcList().forEach(s=>sel.appendChild(el(`<option value="${s.id}" ${cal.svc===s.id?"selected":""}>${esc(s.name)} · ${money(s.price)}</option>`)));
+    sel.onchange=e=>{cal.svc=e.target.value;renderView(true)};f.querySelector("#cf-can").onchange=e=>{cal.showCancelled=e.target.checked;renderView(true)};
+    wrap.appendChild(f);
+  }
+  if(nar){const dc=el(`<div class="daychips"></div>`);for(let i=0;i<7;i++){const d=addDays(cal.week,i),s=ymd(d);const b=el(`<button aria-pressed="${s===cal.day}"><small>${WD[i]}</small><b>${d.getDate()}</b></button>`);b.onclick=()=>{cal.day=s;renderView(true)};dc.appendChild(b)}wrap.appendChild(dc)}
+  const dstr=days.map(ymd);
+  const appts=liveAppts().filter(a=>dstr.includes(a.date)&&(cal.showCancelled||a.status!=="cancelled")&&(!cal.svc||a.serviceId===cal.svc));
+  let mn=24*60,mx=0;
+  dstr.forEach(s=>rangesFor(s).forEach(r=>{mn=Math.min(mn,toMin(r.s));mx=Math.max(mx,toMin(r.e))}));
+  appts.forEach(a=>{mn=Math.min(mn,toMin(a.start));mx=Math.max(mx,toMin(a.start)+(Number(a.minutes)||60))});
+  if(mx<=mn){mn=8*60;mx=20*60}
+  const sH=Math.max(0,Math.floor(mn/60)-1),eH=Math.min(24,Math.ceil(mx/60)+1);
+  const HOUR=56,PX=HOUR/60,tot=(eH-sH)*HOUR;
+  const tmpl=`58px repeat(${days.length},minmax(${nar?"0":"110px"},1fr))`;
+  const sc=el(`<div class="cal-scroll"></div>`);
+  const head=el(`<div class="cal-head" style="grid-template-columns:${tmpl}"><div></div></div>`);
+  days.forEach(d=>{const s=ymd(d);const sp=hasOverride(s)?`<span class="chip gold" title="משמרת שונה מהקבוע">מיוחד</span>`:"";const hd=el(`<div class="${s===todayStr()?"today":""}" style="cursor:pointer" title="עריכת משמרות"><span>${WD[d.getDay()]}</span><b class="num">${d.getDate()}</b>${sp}</div>`);hd.onclick=()=>openShifts(cal.week);head.appendChild(hd)});
+  const body=el(`<div class="cal-body" style="grid-template-columns:${tmpl};height:${tot}px;--hour:${HOUR}px"></div>`);
+  const gut=el(`<div class="gut"></div>`);for(let hh=sH+1;hh<eH;hh++)gut.appendChild(el(`<span class="num" style="top:${(hh-sH)*HOUR}px">${pad(hh)}:00</span>`));body.appendChild(gut);
+  const now=new Date(),nowM=now.getHours()*60+now.getMinutes();
+  days.forEach(d=>{
+    const s=ymd(d),col=el(`<div class="col" data-date="${s}" role="button" aria-label="יום ${WD[d.getDay()]} ${fmtD(s)} – לחיצה לקביעת תור"></div>`);
+    rangesFor(s).forEach(r=>col.appendChild(el(`<div class="avail" style="top:${(toMin(r.s)-sH*60)*PX}px;height:${(toMin(r.e)-toMin(r.s))*PX}px"></div>`)));
+    col.appendChild(el(`<div class="lines"></div>`));
+    if(s===todayStr()&&nowM>=sH*60&&nowM<=eH*60)col.appendChild(el(`<div class="now" style="top:${(nowM-sH*60)*PX}px"></div>`));
+    const da=appts.filter(a=>a.date===s).sort((a,b)=>toMin(a.start)-toMin(b.start)||(b.minutes-a.minutes));
+    // lane layout
+    const placed=[];let cluster=[],cEnd=-1;
+    const flush=()=>{const n=Math.max(...cluster.map(x=>x.lane))+1;cluster.forEach(x=>x.n=n);cluster=[]};
+    da.forEach(a=>{const st=toMin(a.start),en=st+(Number(a.minutes)||60);if(cluster.length&&st>=cEnd)flush();
+      const used=new Set(cluster.filter(x=>x.en>st).map(x=>x.lane));let lane=0;while(used.has(lane))lane++;
+      const o={a,st,en,lane};cluster.push(o);placed.push(o);cEnd=Math.max(cEnd,en)});
+    if(cluster.length)flush();
+    placed.forEach(({a,st:s0,en,lane,n})=>{
+      const color=(st.services[a.serviceId]||{}).color||COLORS[0];
+      const chip=a.status==="cancelled"?`<span class="chip">בוטל</span>`:a.status==="noshow"?`<span class="chip cin">לא הגיע/ה</span>`:a.paid?`<span class="chip jade">שולם</span>`:(Number(a.deposit)>0&&!a.depositPaid&&aStart(a)>now)?`<span class="chip gold">ממתין למקדמה</span>`:(owed(a)>0?`<span class="chip cin">לגבייה</span>`:"");
+      const h=Math.max(22,(en-s0)*PX-2);
+      const ev=el(`<div class="ev ${a.paid?"paid":""} ${a.status}" style="--c:${color};top:${(s0-sH*60)*PX+1}px;height:${h}px;inset-inline-start:calc(${lane}*100%/${n} + 3px);width:calc(100%/${n} - 6px)" tabindex="0" role="button">
+        ${chip}<b>${esc(a.clientName)}</b>${h>34?`<div class="t">${esc(a.serviceName)}</div>`:""}${h>50?`<div class="t num">${a.start}–${aEndHM(a)}</div>`:""}</div>`);
+      ev.onclick=e=>{e.stopPropagation();openDrawer(()=>apptDrawer(a.id))};
+      ev.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();ev.click()}};
+      col.appendChild(ev);
+    });
+    col.onclick=e=>{if(e.target.closest(".ev"))return;const r=col.getBoundingClientRect();const m=sH*60+Math.floor((e.clientY-r.top)/PX/15)*15;openDrawer(()=>newApptDrawer({date:s,start:toHM(Math.max(0,Math.min(m,23*60+45)))}))};
+    body.appendChild(col);
+  });
+  sc.append(head,body);wrap.appendChild(sc);
+  if(!loaded&&db)wrap.appendChild(el(`<div class="note" style="padding:8px 18px">טוען נתונים…</div>`));
+  return wrap;
+};
+VIEWS.calendar.after=(node,keep)=>{const sc=node.querySelector(".cal-scroll");if(!sc)return;
+  if(keep&&cal._scroll!=null)sc.scrollTop=cal._scroll;else{const n=node.querySelector(".now")||node.querySelector(".avail");if(n)sc.scrollTop=Math.max(0,n.offsetTop-80)}
+  sc.addEventListener("scroll",()=>cal._scroll=sc.scrollTop)};
+setInterval(()=>{if(route==="calendar")schedule();else renderBell()},60000);
+let _nar=narrow();window.addEventListener("resize",()=>{const n=narrow();if(n!==_nar){_nar=n;if(route==="calendar")renderView(true)}});
+
+/* ================= appointment drawer ================= */
+const statusChip=a=>a.status==="pending"?'<span class="chip gold">ממתין לאישור</span>':a.status==="cancelled"?'<span class="chip">בוטל</span>':a.status==="noshow"?'<span class="chip cin">לא הגיע/ה</span>':a.paid?'<span class="chip jade">שולם</span>':aEnd(a)<new Date()?'<span class="chip gold">הסתיים</span>':'<span class="chip jade">מוזמן</span>';
+let apptTab="details";
+function apptDrawer(id){
+  const a=st.appts[id];if(!a)return frame("התור לא נמצא",el(`<div class="empty">התור נמחק.</div>`));
+  const body=[];
+  body.push(tabsEl([["details","פרטים"],["notes",`הערות${(a.notes||[]).length?` (${a.notes.length})`:""}`],["adv","מתקדם"]],apptTab,k=>{apptTab=k;drawer.dirty=false;paintDrawer()}));
+  if(apptTab==="details"){
+    // reminder strip
+    const sent=a.sent||{};let rem;
+    if(sent.reminder)rem=`<div class="okbox"><b>תזכורת</b> נשלחה ב-${fmtDT(sent.reminder)}</div>`;
+    else if(a.status!=="booked"||aStart(a)<new Date())rem="";
+    else if(!S.auto.reminder.on)rem=`<div class="note">תזכורות אוטומטיות כבויות</div>`;
+    else{const due=new Date(aStart(a).getTime()-S.auto.reminder.hours*3.6e6);rem=`<div class="warn"><b>תזכורת</b> ${due<=new Date()?"ממתינה לשליחה עכשיו (בפעמון למעלה)":`תיכנס לתור השליחה ב-${fmtDT(due.toISOString())}`}</div>`}
+    if(rem)body.push(el(rem));
+    if(a.status==="pending"){const pb=el(`<div class="box stack"><b>בקשת תור חדשה, ממתינה לאישור</b><span class="note">אישור ידחוף ללקוח הודעת וואטסאפ עם קישור למקדמה. דחייה תשחרר את השעה.</span></div>`);pb.appendChild(pendingBtns(a,()=>paintDrawer()));body.push(pb)}
+    const f=el(`<div class="box stack">
+      <div class="row between"><b>${esc(a.serviceName)} | <span class="num">${money(a.price)}</span></b>${statusChip(a)}</div>
+      <div class="form">
+        <label class="f">תאריך<input type="date" id="ad-date" value="${a.date}"></label>
+        <label class="f">שעת התחלה<input type="time" id="ad-start" step="300" value="${a.start}"></label>
+        <label class="f">משך (דקות)<input type="number" id="ad-min" min="5" step="5" value="${a.minutes||60}"></label>
+      </div>
+      <div class="box row between" style="background:var(--bg,#faf8f3)"><label class="f" style="flex:1;margin:0">מחיר לחיוב ₪ (לתור זה בלבד)<input type="number" id="ad-price" min="0" value="${a.price||0}"></label><button class="btn primary sm" id="ad-price-save" hidden style="align-self:flex-end">עדכון מחיר</button></div>
+      <div id="ad-warn"></div>
+      <button class="btn primary sm" id="ad-save" hidden>שמירת שינויים</button></div>`);
+    const chk=()=>{const t={...a,date:f.querySelector("#ad-date").value,start:f.querySelector("#ad-start").value,minutes:Number(f.querySelector("#ad-min").value)||60};const w=f.querySelector("#ad-warn");w.innerHTML="";
+      if(t.status==="booked"&&!inHours(t.date,t.start,t.minutes))w.appendChild(el(`<div class="warn">שימו לב, המועד מחוץ לשעות העבודה</div>`));
+      const ov=overlaps(t,a.id);if(ov.length)w.appendChild(el(`<div class="alert">חופף לתור של ${esc(ov[0].clientName)} (${ov[0].start})</div>`))};
+    chk();f.addEventListener("input",()=>{f.querySelector("#ad-save").hidden=false;chk()});
+    f.querySelector("#ad-price").addEventListener("input",e=>{f.querySelector("#ad-price-save").hidden=(Number(e.target.value)||0)===(Number(a.price)||0)});
+    f.querySelector("#ad-price-save").onclick=()=>{upd("appts",id,{price:Math.max(0,Number(f.querySelector("#ad-price").value)||0)});drawer.dirty=false;toast("המחיר עודכן");paintDrawer()};
+    f.querySelector("#ad-save").onclick=()=>{const p={date:f.querySelector("#ad-date").value,start:f.querySelector("#ad-start").value,minutes:Number(f.querySelector("#ad-min").value)||60,price:Number(f.querySelector("#ad-price").value)||0};
+      if(p.date!==a.date||p.start!==a.start)p.sent={...(a.sent||{}),reminder:null};
+      upd("appts",id,p);drawer.dirty=false;toast("התור עודכן");paintDrawer()};
+    const c=st.clients[a.clientId]||{};
+    const who=el(`<div class="box who"><div class="ava">${esc(initial(a.clientName))}</div><div style="flex:1;min-width:0"><div class="nm">${esc(a.clientName)}</div><div class="muted small ltr" style="text-align:right">${esc(a.phone||"")}</div></div></div>`);
+    const wb=waBtn(a.phone,`שלום ${(a.clientName||"").split(" ")[0]}, `,"");wb.className="ibtn";wb.setAttribute("aria-label","צ'אט בוואטסאפ");wb.querySelector("span").remove();who.appendChild(wb);
+    const ob=el(`<button class="btn sm">כרטיס לקוח</button>`);ob.onclick=()=>openDrawer(()=>clientDrawer(a.clientId));who.appendChild(ob);
+    body.push(who,f);
+    // messages box
+    const msg=el(`<div class="box stack"><b>הודעות ללקוח</b><div class="row" id="ad-msgs"></div></div>`);
+    const mr=msg.querySelector("#ad-msgs");
+    if(a.status==="booked"){
+      mr.appendChild(waBtn(a.phone,confirmMsg(a),(a.sent||{}).confirm?"אישור תור (נשלח)":"אישור תור",()=>upd("appts",id,{sent:{confirm:new Date().toISOString()}}),"btn wa sm"));
+      mr.appendChild(waBtn(a.phone,reminderMsg(a),"תזכורת",()=>upd("appts",id,{sent:{reminder:new Date().toISOString()}}),"btn wa sm"));
+    }
+    if(owed(a)>0||((a.status==="booked"||a.status==="done")&&!a.paid&&aEnd(a)<new Date()))mr.appendChild(waBtn(a.phone,a.status==="cancelled"||a.status==="noshow"?cancelMsg(a):afterMsg(a),"דרישת תשלום",()=>upd("appts",id,{sent:{after:new Date().toISOString()}}),"btn wa sm"));
+    if(a.receiptNo){const r=list("receipts").find(r=>r.no===a.receiptNo);if(r)mr.appendChild(waBtn(a.phone,receiptText(r),`קבלה #${r.no}`,null,"btn wa sm"))}
+    if(mr.children.length)body.push(msg);
+    // deposit
+    if(Number(a.deposit)>0&&a.status==="booked"){
+      const d=el(`<div class="box row between"><div><b>מקדמה ${money(a.deposit)}</b><div class="small ${a.depositPaid?"up":"muted"}">${a.depositPaid?"שולמה":"טרם שולמה"}</div></div><div class="row" id="dep"></div></div>`);
+      if(!a.depositPaid){const hl=a.hypLink||hypLink(a);if(hl)d.querySelector("#dep").appendChild(waBtn(a.phone,`שלום ${(a.clientName||"").split(" ")[0]}, לאישור התור יש לשלם מקדמה של ${money(a.deposit)}:\n${hl}`,"לינק HYP",null,"btn wa sm"));
+        const mb=el(`<button class="btn sm">סימון ששולמה</button>`);mb.onclick=()=>{upd("appts",id,{depositPaid:true,depositAt:new Date().toISOString()});toast("המקדמה סומנה כשולמה")};d.querySelector("#dep").appendChild(mb)}
+      if(!a.depositPaid){const lr=el(`<div class="box stack"><label class="f">קישור תשלום HYP לתור זה<input id="hl" type="url" placeholder="https://pay.hyp.co.il/p3/?pay=..." value="${esc(a.hypLink||"")}"></label><div class="row"><button class="btn sm" id="hl-s">שמירת הקישור</button><a class="btn sm" target="_blank" rel="noopener" href="https://pay.hyp.co.il/p/?action=login">יצירת קישור ב-HYP</a></div><span class="note">יוצרים ב-HYP בקשת תשלום ל-${money(a.deposit)}, מדביקים כאן ושולחים ללקוח בוואטסאפ.</span></div>`);lr.querySelector("#hl-s").onclick=()=>{upd("appts",id,{hypLink:lr.querySelector("#hl").value.trim()});toast("הקישור נשמר");paintDrawer()};body.push(d,lr)}else body.push(d);
+    }
+    if(a.status==="cancelled"||a.status==="noshow"){
+      body.push(el(`<div class="${owed(a)>0?"alert":"note"}">${a.status==="cancelled"?"בוטל":"לא הגיע/ה"} ${a.cancelledAt?fmtDT(a.cancelledAt):""}. דמי ביטול: ${money(a.cancelFee||0)}${a.feePaid?" (שולמו)":owed(a)>0?` · נותר לגבייה ${money(owed(a))}`:""}${a.refundDue&&!a.refunded?` · יש להחזיר מקדמה ${money(a.refundDue)}`:""}</div>`));
+      if(a.refundDue&&!a.refunded){const rb=el(`<button class="btn sm">סימון: המקדמה הוחזרה</button>`);rb.onclick=()=>upd("appts",id,{refunded:true});body.push(rb)}
+    }
+  }else if(apptTab==="notes"){
+    const n=el(`<div class="stack notes"></div>`);
+    (a.notes||[]).slice().reverse().forEach((x,i)=>{n.appendChild(el(`<div class="n"><div>${esc(x.text).replace(/\n/g,"<br>")}</div><div class="note">${fmtDT(x.at)}</div></div>`))});
+    if(!(a.notes||[]).length)n.appendChild(el(`<div class="empty">אין הערות לתור הזה</div>`));
+    const add=el(`<div class="box stack"><label class="f">הערה חדשה (רק אתה רואה)<textarea id="nt"></textarea></label><button class="btn primary sm">הוספת הערה</button></div>`);
+    add.querySelector("button").onclick=()=>{const t=add.querySelector("#nt").value.trim();if(!t)return;upd("appts",id,{notes:[...(a.notes||[]),{text:t,at:new Date().toISOString()}]});drawer.dirty=false;paintDrawer()};
+    body.push(add,n);
+  }else{
+    const adv=el(`<div class="stack">
+      <div class="box stack"><b>סטטוס</b><div class="row" id="stt"></div></div>
+      <div class="box stack small"><div>נקבע: ${fmtDT(a.createdAt)}${a.example?" · נתוני דוגמה":""}</div><div>${esc(policyText())}</div>
+        <div>כרגע: ${({free:"ביטול ללא עלות",deposit:`דמי ביטול ${money(a.deposit||0)}`,full:`חיוב מלא ${money(a.price||0)}`})[policyTier(a)]}</div></div>
+      <a class="btn" target="_blank" rel="noopener" href="${esc(gcal(a))}">${ICON.cal}<span>הוספה ליומן Google</span></a>
+      <div class="box stack"><b>מחיקה לצמיתות</b><span class="note">מוחק את התור בלי להשאיר רישום. לביטול רגיל השתמשו ב"אפשרויות".</span><button class="btn danger sm" id="hard">מחיקת התור</button></div></div>`);
+    const sr=adv.querySelector("#stt");
+    [["booked","מוזמן"],["done","הגיע/ה"],["noshow","לא הגיע/ה"],["cancelled","בוטל"]].forEach(([k,l])=>{const b=el(`<button class="btn sm ${a.status===k?"primary":""}">${l}</button>`);b.onclick=()=>{upd("appts",id,{status:k});paintDrawer()};sr.appendChild(b)});
+    const pb=el(`<label class="row small" style="font-weight:600"><input type="checkbox" ${a.paid?"checked":""}> שולם במלואו</label>`);pb.querySelector("input").onchange=e=>upd("appts",id,{paid:e.target.checked});sr.appendChild(pb);
+    const hb=adv.querySelector("#hard");hb.onclick=()=>{if(!hb.dataset.s){hb.dataset.s=1;hb.textContent="לחצו שוב למחיקה";return}del("appts",id);closeDrawer();toast("התור נמחק")};
+    body.push(adv);
+  }
+  // footer
+  const opt=el(`<button class="btn">אפשרויות</button>`);
+  opt.onclick=e=>{e.stopPropagation();const ft=opt.parentElement;const ex=ft.querySelector(".menu");if(ex){ex.remove();return}ft.appendChild(optionsMenu(a))};
+  const pay=a.paid&&!owed(a)?el(`<button class="btn ink" disabled>שולם ✓</button>`):el(`<button class="btn ink">מעבר לתשלום</button>`);
+  if(!pay.disabled)pay.onclick=()=>{posStartFor(a);closeDrawer();location.hash="pos";go("pos")};
+  return frame("פרטי התור",body,[opt,pay],statusChip(a));
+}
+function optionsMenu(a){
+  const m=el(`<div class="menu" role="menu"></div>`);
+  const item=(label,icon,fn,red)=>{const b=el(`<button role="menuitem" class="${red?"red":""}"><span>${label}</span>${icon}</button>`);b.onclick=fn;m.appendChild(b)};
+  item("שכפול תור (שבוע הבא)",ICON.dup,()=>openDrawer(()=>newApptDrawer({clientId:a.clientId,serviceId:a.serviceId,date:ymd(addDays(parseYmd(a.date),7)),start:a.start,minutes:a.minutes,price:a.price})));
+  if(a.status==="booked"){
+    const rm=waBtn(a.phone,reminderMsg(a),"",()=>upd("appts",a.id,{sent:{reminder:new Date().toISOString()}}),"");rm.setAttribute("role","menuitem");rm.innerHTML=`<span>שליחת תזכורת שוב</span>${ICON.bell}`;rm.style.cssText="display:flex;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--line);color:inherit;text-decoration:none;font-weight:600";m.appendChild(rm);
+    item("לא הגיע/ה",ICON.noshow,()=>openDrawer(()=>cancelDrawer(a.id,"noshow")),true);
+    item("ביטול התור",ICON.trash,()=>openDrawer(()=>cancelDrawer(a.id,"cancel")),true);
+  }
+  setTimeout(()=>document.addEventListener("click",function h(e){if(!m.contains(e.target)){m.remove();document.removeEventListener("click",h)}}),0);
+  return m;
+}
+function cancelDrawer(id,mode){
+  const a=st.appts[id];const tier=mode==="noshow"?"full":policyTier(a);
+  const opts=[["free",`ללא חיוב`,0],["deposit",`דמי ביטול בגובה המקדמה (${money(a.deposit||0)})`,Number(a.deposit)||0],["full",`חיוב מלא (${money(a.price||0)})`,Number(a.price)||0]];
+  const b=el(`<div class="stack"><div class="box stack"><b>${esc(a.clientName)} · ${dayName(a.date)} ${fmtD(a.date)} ${a.start}</b>
+    <div class="note">${mode==="noshow"?"לפי המדיניות, אי הגעה מחויבת במחיר מלא.":`נותרו ${Math.max(0,Math.round(hoursLeft(a)))} שעות עד התור. לפי המדיניות: ${opts.find(o=>o[0]===tier)[1]}.`}</div>
+    <div class="stack" id="fees"></div>${a.depositPaid?`<div class="note">הלקוח שילם מקדמה של ${money(a.deposit)}. היא תקוזז מדמי הביטול${tier==="free"?", ובביטול ללא חיוב תסומן להחזר":""}.</div>`:""}</div></div>`);
+  const fz=b.querySelector("#fees");opts.forEach(([k,l])=>fz.appendChild(el(`<label class="row" style="font-weight:600"><input type="radio" name="fee" value="${k}" ${k===tier?"checked":""}> ${l}</label>`)));
+  const ok=el(`<button class="btn ${mode==="noshow"?"danger":"danger"}">${mode==="noshow"?"סימון לא הגיע/ה":"ביטול התור"}</button>`);
+  ok.onclick=()=>{const k=b.querySelector("input[name=fee]:checked").value;const fee=opts.find(o=>o[0]===k)[2];
+    const p={status:mode==="noshow"?"noshow":"cancelled",cancelFee:fee,cancelledAt:new Date().toISOString(),feePaid:false,refundDue:(fee===0&&a.depositPaid)?Number(a.deposit):0};
+    upd("appts",id,p);const na={...a,...p};
+    openDrawer(()=>{const cb=el(`<button class="btn">סגירה</button>`);cb.onclick=closeDrawer;
+      return frame("התור עודכן",[el(`<div class="okbox">${mode==="noshow"?"סומן כלא הגיע/ה":"התור בוטל והשעה התפנתה"}.${owed(na)>0?` נותר לגבייה ${money(owed(na))}.`:""}</div>`),waBtn(na.phone,cancelMsg(na),"עדכון הלקוח בוואטסאפ",()=>upd("appts",id,{sent:{cancel:new Date().toISOString()}}))],[cb])})};
+  const back=el(`<button class="btn">חזרה</button>`);back.onclick=()=>openDrawer(()=>apptDrawer(id));
+  return frame(mode==="noshow"?"לא הגיע/ה":"ביטול תור",b,[back,ok]);
+}
+
+/* ================= shifts editor ================= */
+let sh=null;
+const normR=a=>JSON.stringify((a||[]).filter(r=>r.s&&r.e).map(r=>[r.s,r.e]).sort());
+function openShifts(week){sh={mode:"week",week:new Date(week),changed:false};shLoad();openDrawer(shiftsDrawer)}
+function shLoad(){sh.changed=false;if(sh.mode==="week"){sh.draft={};for(let i=0;i<7;i++){const s=ymd(addDays(sh.week,i));sh.draft[s]=structuredClone(rawRanges(s)||[])}}else{sh.draft={};for(let d=0;d<7;d++)sh.draft[d]=structuredClone((H.days||{})[d]||[])}}
+function shiftsDrawer(){
+  const body=[];
+  const seg=el(`<div class="seg" style="align-self:flex-start"><button data-m="week" aria-pressed="${sh.mode==="week"}">שבוע מסוים</button><button data-m="tpl" aria-pressed="${sh.mode==="tpl"}">שבוע קבוע</button></div>`);
+  seg.onclick=e=>{const m=e.target.dataset.m;if(!m||m===sh.mode)return;if(sh.changed){toast("יש שינויים שלא נשמרו. שמרו או בטלו קודם.");return}sh.mode=m;shLoad();drawer.dirty=false;paintDrawer()};
+  body.push(seg);
+  if(sh.mode==="week"){
+    const e=addDays(sh.week,6);
+    const nav=el(`<div class="row between box"><button class="btn sm" aria-label="שבוע קודם">${ICON.chevR}</button><b class="num">${sh.week.getDate()}/${sh.week.getMonth()+1} – ${e.getDate()}/${e.getMonth()+1}/${e.getFullYear()}</b><button class="btn sm" aria-label="שבוע הבא">${ICON.chev}</button></div>`);
+    const [pv,nx]=nav.querySelectorAll("button");
+    const move=n=>{if(sh.changed){toast("יש שינויים שלא נשמרו. שמרו או בטלו קודם.");return}sh.week=addDays(sh.week,n);shLoad();drawer.dirty=false;paintDrawer()};
+    pv.onclick=()=>move(-7);nx.onclick=()=>move(7);
+    body.push(nav,el(`<div class="note">שינוי כאן חל רק על השבוע הזה. השבוע הקבוע לא משתנה.</div>`));
+  }else body.push(el(`<div class="note">השבוע הקבוע חל על כל השבועות, חוץ מימים ששיניתם בנפרד (מסומנים "מיוחד" ביומן).</div>`));
+  const keys=sh.mode==="week"?Object.keys(sh.draft):[0,1,2,3,4,5,6];
+  keys.forEach(k=>{
+    const ranges=sh.draft[k];const dateS=sh.mode==="week"?k:null;
+    const dow=sh.mode==="week"?parseYmd(k).getDay():Number(k);
+    const past=dateS&&dateS<todayStr();
+    const differs=dateS&&normR(ranges)!==normR(tplFor(dateS));
+    const isBlocked=dateS&&(S.blocked||[]).some(b=>dateS>=b.from&&dateS<=(b.to||b.from));
+    const box=el(`<div class="box stack" style="gap:8px;${past?"opacity:.55":""}"><div class="row between"><b>${WD[dow]}${dateS?` <span class="num muted" style="font-weight:400">${fmtD(dateS).slice(0,5)}</span>`:""}</b><div class="row">${differs?'<span class="chip gold">שונה מהקבוע</span>':""}${!ranges.length?'<span class="chip">סגור</span>':""}</div></div></div>`);
+    if(isBlocked)box.appendChild(el(`<div class="warn">היום מסומן כחופשה בעמוד שעות העבודה, ולכן סגור להזמנות.</div>`));
+    ranges.forEach((r,i)=>{const x=el(`<div class="row" style="flex-wrap:nowrap"><input type="time" step="300" value="${r.s}" aria-label="התחלה"><span>–</span><input type="time" step="300" value="${r.e}" aria-label="סיום"><button class="ibtn" aria-label="הסרת טווח">${ICON.trash}</button></div>`);
+      const [a,b]=x.querySelectorAll("input");a.onchange=ev=>{r.s=ev.target.value;sh.changed=true};b.onchange=ev=>{r.e=ev.target.value;sh.changed=true};
+      x.querySelector("button").onclick=()=>{ranges.splice(i,1);sh.changed=true;drawer.dirty=false;paintDrawer()};box.appendChild(x)});
+    const acts=el(`<div class="row"></div>`);
+    const add=el(`<button class="btn sm">${ICON.plus}<span>טווח</span></button>`);add.onclick=()=>{const l=ranges.at(-1);ranges.push(l?{s:l.e,e:toHM(Math.min(23*60+55,toMin(l.e)+180))}:{s:"09:00",e:"14:00"});sh.changed=true;drawer.dirty=false;paintDrawer()};acts.appendChild(add);
+    if(ranges.length){const cl=el(`<button class="btn sm">סגירת היום</button>`);cl.onclick=()=>{ranges.length=0;sh.changed=true;drawer.dirty=false;paintDrawer()};acts.appendChild(cl)}
+    if(differs){const rs=el(`<button class="btn sm">חזרה לקבוע</button>`);rs.onclick=()=>{sh.draft[k]=structuredClone(tplFor(dateS));sh.changed=true;drawer.dirty=false;paintDrawer()};acts.appendChild(rs)}
+    box.appendChild(acts);
+    // booked appointments that would fall outside
+    const out=liveAppts().filter(a=>a.status==="booked"&&(dateS?a.date===dateS:(parseYmd(a.date).getDay()===dow&&a.date>=todayStr()&&!hasOverride(a.date)))&&!(ranges||[]).some(r=>r.s&&r.e&&toMin(a.start)>=toMin(r.s)&&toMin(a.start)+(Number(a.minutes)||60)<=toMin(r.e)));
+    if(out.length)box.appendChild(el(`<div class="alert">${out.length===1?"תור קיים":"תורים קיימים"} מחוץ למשמרת: ${out.slice(0,3).map(a=>`${esc(a.clientName)} ${dateS?"":fmtD(a.date).slice(0,5)+" "}${a.start}`).join(", ")}${out.length>3?"…":""}. התורים לא נמחקים.</div>`));
+    body.push(box);
+  });
+  body.push(el(`<div class="note">רק השעות שמוגדרות כאן מוצעות בקביעת תור. עמוד ההזמנה באתר (mor-sasson.com/book) מציג ללקוחות רק את השעות האלה, פחות שעות שכבר תפוסות.</div>`));
+  const cancel=el(`<button class="btn">ביטול</button>`);cancel.onclick=closeDrawer;
+  const save=el(`<button class="btn primary">שמירת משמרות</button>`);
+  save.onclick=()=>{
+    for(const k of Object.keys(sh.draft)){const rs=sh.draft[k].filter(r=>r.s||r.e);
+      if(rs.some(r=>!r.s||!r.e||toMin(r.e)<=toMin(r.s))){toast(`יום ${WD[sh.mode==="week"?parseYmd(k).getDay():Number(k)]}: שעת הסיום צריכה להיות אחרי שעת ההתחלה`);return}
+      const srt=[...rs].sort((a,b)=>toMin(a.s)-toMin(b.s));if(srt.some((r,i)=>i&&toMin(r.s)<toMin(srt[i-1].e))){toast(`יום ${WD[sh.mode==="week"?parseYmd(k).getDay():Number(k)]}: יש טווחים חופפים`);return}
+      sh.draft[k]=srt}
+    if(sh.mode==="week"){const ov={...(H.overrides||{})};const cut=ymd(addDays(new Date(),-1));
+      Object.keys(ov).forEach(d=>{if(d<cut)delete ov[d]});
+      Object.entries(sh.draft).forEach(([d,rs])=>{if(normR(rs)===normR(tplFor(d)))delete ov[d];else ov[d]=rs.map(r=>({s:r.s,e:r.e}))});
+      H={...H,overrides:ov};}
+    else{const days={};for(let d=0;d<7;d++)days[d]=sh.draft[d].map(r=>({s:r.s,e:r.e}));H={...H,days};}
+    hrDraft=null;saveHours();sh.changed=false;toast("המשמרות נשמרו והיומן עודכן");closeDrawer();
+  };
+  return frame("עריכת משמרות",body,[cancel,save]);
+}
+
+/* ================= new appointment ================= */
+function newApptDrawer(pre){
+  const svcs=svcList();
+  const st0={clientId:pre.clientId||null,newName:"",newPhone:"",q:""};
+  const sv0=svcs.find(s=>s.id===pre.serviceId)||svcs[0]||{id:"",name:"טיפול",price:0,minutes:60,deposit:0};
+  const b=el(`<div class="stack">
+    <div class="box stack" id="cbox"></div>
+    <div class="box stack"><div class="form">
+      <label class="f full">טיפול<select id="na-svc"></select></label>
+      <label class="f">תאריך<input type="date" id="na-date" value="${pre.date||todayStr()}"></label>
+      <label class="f">שעה<input type="time" id="na-start" step="300" value="${pre.start||""}"></label>
+      <label class="f">משך (דקות)<input type="number" id="na-min" min="5" step="5" value="${pre.minutes||sv0.minutes||60}"></label>
+      <label class="f">מחיר ₪<input type="number" id="na-price" min="0" value="${pre.price??sv0.price??0}"></label>
+      <label class="f">מקדמה ₪<input type="number" id="na-dep" min="0" value="${sv0.deposit||0}"></label>
+    </div><div id="na-free" class="stack"></div><div id="na-warn"></div>
+    <label class="f">הערה<textarea id="na-note" style="min-height:60px"></textarea></label></div></div>`);
+  const sel=b.querySelector("#na-svc");svcs.forEach(s=>sel.appendChild(el(`<option value="${s.id}" ${s.id===sv0.id?"selected":""}>${esc(s.name)} · ${money(s.price)} · ${s.minutes} ד׳</option>`)));
+  if(!svcs.length)sel.appendChild(el(`<option value="">אין טיפולים במחירון</option>`));
+  sel.onchange=()=>{const s=st.services[sel.value];if(s){b.querySelector("#na-min").value=s.minutes||60;b.querySelector("#na-price").value=s.price||0;b.querySelector("#na-dep").value=s.deposit||0}refresh()};
+  const cbox=b.querySelector("#cbox");
+  const paintClient=()=>{cbox.innerHTML="";
+    if(st0.clientId&&st.clients[st0.clientId]){const c=st.clients[st0.clientId];const w=el(`<div class="who"><div class="ava">${esc(initial(c.name))}</div><div style="flex:1"><div class="nm">${esc(c.name)}</div><div class="muted small ltr" style="text-align:right">${esc(c.phone||"")}</div></div><button class="btn sm">החלפה</button></div>`);w.querySelector("button").onclick=()=>{st0.clientId=null;paintClient()};cbox.appendChild(w);return}
+    const s=el(`<label class="f">לקוח<input id="na-q" placeholder="חיפוש לפי שם או טלפון" autocomplete="off" value="${esc(st0.q)}"></label>`);cbox.appendChild(s);
+    const res=el(`<div class="pick"></div>`);cbox.appendChild(res);
+    const nn=el(`<div class="form" id="na-new"><label class="f">שם מלא<input id="na-name"></label><label class="f">טלפון נייד<input id="na-phone" type="tel" placeholder="050-0000000"></label></div>`);
+    const draw=()=>{const q=st0.q.trim();res.innerHTML="";
+      const m=list("clients").filter(c=>!q||(c.name||"").includes(q)||(intlPhone(q)&&intlPhone(c.phone).includes(intlPhone(q)))).slice(0,5);
+      m.forEach(c=>{const x=el(`<button type="button"><span>${esc(c.name)}</span><span class="muted ltr small">${esc(c.phone||"")}</span></button>`);x.onclick=()=>{st0.clientId=c.id;paintClient();refresh()};res.appendChild(x)});
+      res.hidden=!m.length;nn.querySelector("#na-name").value=nn.querySelector("#na-name").value||(/\d/.test(q)?"":q);if(/\d{6,}/.test(q))nn.querySelector("#na-phone").value=q};
+    s.querySelector("input").oninput=e=>{st0.q=e.target.value;draw()};
+    cbox.appendChild(el(`<div class="note">או לקוח חדש:</div>`));cbox.appendChild(nn);draw();
+  };
+  paintClient();
+  const refresh=()=>{
+    const date=b.querySelector("#na-date").value,min=Number(b.querySelector("#na-min").value)||60;
+    const free=b.querySelector("#na-free");free.innerHTML="";
+    const rs=rangesFor(date);
+    if(!rs.length)free.appendChild(el(`<div class="note">אין שעות עבודה ביום הזה</div>`));
+    else{const row=el(`<div class="row"></div>`);let n=0;
+      rs.forEach(r=>{for(let m=toMin(r.s);m+min<=toMin(r.e);m+=15){const t={date,start:toHM(m),minutes:min};if(overlaps(t).length)continue;if(date===todayStr()&&aStart(t)<new Date())continue;
+        if(n++>=24)break;const bt=el(`<button type="button" class="btn sm num ${b.querySelector("#na-start").value===t.start?"primary":""}">${t.start}</button>`);bt.onclick=()=>{b.querySelector("#na-start").value=t.start;refresh()};row.appendChild(bt)}});
+      free.appendChild(el(`<div class="note">שעות פנויות:</div>`));free.appendChild(n?row:el(`<div class="note">אין שעות פנויות ביום הזה</div>`))}
+    const w=b.querySelector("#na-warn");w.innerHTML="";const start=b.querySelector("#na-start").value;
+    if(start){if(!inHours(date,start,min))w.appendChild(el(`<div class="warn">שימו לב, המועד מחוץ לשעות העבודה</div>`));const ov=overlaps({date,start,minutes:min});if(ov.length)w.appendChild(el(`<div class="alert">חופף לתור של ${esc(ov[0].clientName)} (${ov[0].start})</div>`))}
+  };
+  b.addEventListener("change",e=>{if(e.target.matches("#na-date,#na-min,#na-start"))refresh()});
+  refresh();
+  const save=el(`<button class="btn primary">קביעת התור</button>`);
+  save.onclick=()=>{
+    let cid=st0.clientId;
+    const start=b.querySelector("#na-start").value,date=b.querySelector("#na-date").value;
+    if(!start||!date){toast("בחרו תאריך ושעה");return}
+    if(!cid){const name=(b.querySelector("#na-name")||{}).value?.trim(),phone=(b.querySelector("#na-phone")||{}).value?.trim();
+      if(!name){toast("בחרו לקוח או מלאו שם ללקוח חדש");return}
+      if(intlPhone(phone).length<11){toast("מלאו מספר נייד תקין");return}
+      const ex=list("clients").find(c=>intlPhone(c.phone)===intlPhone(phone));
+      if(ex)cid=ex.id;else{cid=newId("clients");put("clients",cid,{name,phone,createdAt:new Date().toISOString()})}}
+    const c=st.clients[cid];const s=st.services[sel.value]||sv0;
+    const id=newId("appts");const note=b.querySelector("#na-note").value.trim();
+    const a={clientId:cid,clientName:c.name,phone:c.phone,serviceId:s.id||"",serviceName:s.name,date,start,minutes:Number(b.querySelector("#na-min").value)||60,
+      price:Number(b.querySelector("#na-price").value)||0,deposit:Number(b.querySelector("#na-dep").value)||0,status:"booked",paid:false,depositPaid:false,
+      notes:note?[{text:note,at:new Date().toISOString()}]:[],sent:{},createdAt:new Date().toISOString()};
+    put("appts",id,a);
+    openDrawer(()=>{const na={...a,id};const items=[el(`<div class="okbox">התור נקבע: ${esc(na.clientName)}, ${dayName(na.date)} ${fmtD(na.date)} בשעה ${na.start}</div>`)];
+      if(S.auto.confirm.on&&!blocked(cid)){items.push(el(`<div class="note">אוטומציית "אישור תור" פעילה. לחצו כדי לשלוח:</div>`));items.push(waBtn(na.phone,confirmMsg(na),"שליחת אישור בוואטסאפ",()=>upd("appts",id,{sent:{confirm:new Date().toISOString()}}),"btn primary"));items.push(el(`<div class="preview">${esc(confirmMsg(na))}</div>`))}
+      const op=el(`<button class="btn">פתיחת התור</button>`);op.onclick=()=>openDrawer(()=>apptDrawer(id));
+      const cl=el(`<button class="btn ink">סגירה</button>`);cl.onclick=closeDrawer;
+      return frame("תור חדש",items,[op,cl])});
+  };
+  const cancel=el(`<button class="btn">ביטול</button>`);cancel.onclick=closeDrawer;
+  return frame("תור חדש",b,[cancel,save]);
+}
+
+/* ================= clients ================= */
+const cl={q:"",sort:"name"};
+VIEWS.clients=function(){
+  const p=el(`<div class="page"><div class="page-head"><div><h1>לקוחות</h1><p>${list("clients").length} לקוחות</p></div>
+    <div class="row"><input id="cl-q" type="search" placeholder="חיפוש שם או טלפון" style="width:220px" value="${esc(cl.q)}">
+    <div class="seg" id="cl-sort"><button data-s="name" aria-pressed="${cl.sort==="name"}">א–ת</button><button data-s="recent" aria-pressed="${cl.sort==="recent"}">ביקור אחרון</button><button data-s="debt" aria-pressed="${cl.sort==="debt"}">חוב</button></div></div></div></div>`);
+  p.querySelector("#cl-q").oninput=e=>{cl.q=e.target.value;draw()};
+  p.querySelector("#cl-sort").onclick=e=>{const s=e.target.dataset.s;if(s){cl.sort=s;renderView(true)}};
+  const box=el(`<div></div>`);p.appendChild(box);
+  const draw=()=>{const q=cl.q.trim();
+    let rows=list("clients").filter(c=>!q||(c.name||"").includes(q)||(intlPhone(q)&&intlPhone(c.phone).includes(intlPhone(q))))
+      .map(c=>({c,lv:lastVisit(c.id),nx:nextAppt(c.id),bal:clientBalance(c.id)}));
+    if(cl.sort==="name")rows.sort((a,b)=>String(a.c.name).localeCompare(b.c.name,"he"));
+    if(cl.sort==="recent")rows.sort((a,b)=>(b.lv?aStart(b.lv):0)-(a.lv?aStart(a.lv):0));
+    if(cl.sort==="debt")rows.sort((a,b)=>b.bal-a.bal);
+    box.innerHTML="";
+    if(!rows.length){box.appendChild(el(`<div class="empty">${list("clients").length?"לא נמצאו לקוחות":"עדיין אין לקוחות. הוסיפו לקוח בכפתור + או קבעו תור ביומן."}</div>`));return}
+    const t=el(`<div class="table-wrap"><table><thead><tr><th>שם</th><th>טלפון</th><th>ביקור אחרון</th><th>תור הבא</th><th>יתרה</th><th></th></tr></thead><tbody></tbody></table></div>`);
+    rows.forEach(({c,lv,nx,bal})=>{const tr=el(`<tr class="click"><td><b>${esc(c.name)}</b>${c.example?' <span class="chip ex">דוגמה</span>':""}</td><td class="ltr num" style="text-align:right">${esc(c.phone||"")}</td><td class="num">${lv?fmtD(lv.date):"—"}</td><td class="num">${nx?`${fmtD(nx.date)} ${nx.start}`:"—"}</td><td class="num ${bal>0?"down":""}">${bal>0?money(bal):"—"}</td><td></td></tr>`);
+      tr.lastElementChild.appendChild(waBtn(c.phone,`שלום ${(c.name||"").split(" ")[0]}, `,"","" ,"ibtn"));tr.lastElementChild.querySelector("a").setAttribute("aria-label","וואטסאפ");tr.lastElementChild.querySelector("a").onclick=e=>e.stopPropagation();
+      tr.onclick=()=>openDrawer(()=>clientDrawer(c.id));t.querySelector("tbody").appendChild(tr)});
+    box.appendChild(t)};
+  draw();
+  const fab=el(`<button class="fab" aria-label="לקוח חדש">${ICON.plus}</button>`);fab.onclick=()=>openDrawer(()=>clientDrawer(null));p.appendChild(fab);
+  return p;
+};
+let clTab="details";
+function clientDrawer(id){
+  const c=id?st.clients[id]:{name:"",phone:"",email:"",birthday:"",notes:""};
+  if(id&&!c)return frame("לקוח",el(`<div class="empty">הלקוח נמחק</div>`));
+  const body=[];
+  if(id){body.push(el(`<div class="box who"><div class="ava">${esc(initial(c.name))}</div><div style="flex:1"><div class="nm">${esc(c.name)}</div><div class="muted small">יתרה: <span class="${clientBalance(id)>0?"down":""}">${money(clientBalance(id))}</span>${blocked(id)?" · לא מקבל הודעות אוטומטיות":""}</div></div></div>`));
+    body.push(tabsEl([["details","פרטים"],["appts","תורים"],["pay","תשלומים"]],clTab,k=>{clTab=k;drawer.dirty=false;paintDrawer()}))}
+  if(!id||clTab==="details"){
+    const f=el(`<div class="box form">
+      <label class="f full">שם מלא<input id="c-name" value="${esc(c.name)}"></label>
+      <label class="f">טלפון נייד<input id="c-phone" type="tel" value="${esc(c.phone||"")}"></label>
+      <label class="f">אימייל<input id="c-email" type="email" value="${esc(c.email||"")}"></label>
+      <label class="f">תאריך לידה<input id="c-bday" type="date" value="${esc(c.birthday||"")}"></label>
+      <label class="f full">הערות רפואיות / כלליות<textarea id="c-notes">${esc(c.notes||"")}</textarea></label></div>`);
+    body.push(f);
+    if(id){const bl=el(`<label class="row small" style="font-weight:600"><input type="checkbox" ${blocked(id)?"checked":""}> לא לשלוח ללקוח הודעות אוטומטיות</label>`);bl.querySelector("input").onchange=e=>{S.blacklist=(S.blacklist||[]).filter(x=>x!==id);if(e.target.checked)S.blacklist.push(id);saveSettings()};body.push(bl);
+      const dl=el(`<button class="btn danger sm" style="align-self:flex-start">מחיקת הלקוח</button>`);dl.onclick=()=>{if(clientAppts(id).length){toast("ללקוח יש תורים ברישום, לכן לא ניתן למחוק");return}if(!dl.dataset.s){dl.dataset.s=1;dl.textContent="לחצו שוב למחיקה";return}del("clients",id);closeDrawer();toast("הלקוח נמחק")};body.push(dl)}
+    const save=el(`<button class="btn primary">${id?"שמירה":"הוספת לקוח"}</button>`);
+    save.onclick=()=>{const g=s=>body[id?2:0].querySelector(s).value.trim();const d={name:g("#c-name"),phone:g("#c-phone"),email:g("#c-email"),birthday:g("#c-bday"),notes:g("#c-notes")};
+      if(!d.name){toast("מלאו שם");return}if(intlPhone(d.phone).length<11){toast("מלאו מספר נייד תקין");return}
+      if(id){upd("clients",id,d);liveAppts().filter(a=>a.clientId===id).forEach(a=>{if(a.clientName!==d.name||a.phone!==d.phone)upd("appts",a.id,{clientName:d.name,phone:d.phone})});drawer.dirty=false;toast("נשמר");paintDrawer()}
+      else{const nid=newId("clients");put("clients",nid,{...d,createdAt:new Date().toISOString()});openDrawer(()=>clientDrawer(nid));toast("הלקוח נוסף")}};
+    const na=el(`<button class="btn">תור חדש</button>`);na.onclick=()=>openDrawer(()=>newApptDrawer({clientId:id}));
+    return frame(id?"כרטיס לקוח":"לקוח חדש",body,id?[na,save]:[save]);
+  }
+  if(clTab==="appts"){
+    const ap=clientAppts(id);
+    if(!ap.length)body.push(el(`<div class="empty">אין תורים</div>`));
+    ap.forEach(a=>{const r=el(`<div class="box row between" style="cursor:pointer"><div><b class="num">${fmtD(a.date)} · ${a.start}</b><div class="small muted">${esc(a.serviceName)} · ${money(a.price)}</div></div>${statusChip(a)}</div>`);r.onclick=()=>openDrawer(()=>apptDrawer(a.id));body.push(r)});
+  }
+  if(clTab==="pay"){
+    const rc=list("receipts").filter(r=>r.clientId===id).sort((a,b)=>String(b.date).localeCompare(a.date));
+    const bal=clientBalance(id);
+    if(bal>0){const ch=el(`<button class="btn ink">גביית יתרה ${money(bal)}</button>`);ch.onclick=()=>{pos.clientId=id;pos.lines=[];clientAppts(id).filter(a=>owed(a)>0).forEach(a=>posAddAppt(a));closeDrawer();location.hash="pos"};body.push(ch)}
+    if(!rc.length)body.push(el(`<div class="empty">אין קבלות</div>`));
+    rc.forEach(r=>{const x=el(`<div class="box row between"><div><b>קבלה #${r.no} · ${money(r.total)}</b><div class="small muted">${fmtDT(r.date)} · ${esc(r.method)}</div></div></div>`);x.appendChild(waBtn(c.phone,receiptText(r),"שליחה",null,"btn wa sm"));body.push(x)});
+  }
+  const na=el(`<button class="btn">תור חדש</button>`);na.onclick=()=>openDrawer(()=>newApptDrawer({clientId:id}));
+  const ch=el(`<button class="btn ink">חיוב</button>`);ch.onclick=()=>{pos.clientId=id;closeDrawer();location.hash="pos"};
+  return frame("כרטיס לקוח",body,[na,ch]);
+}
+
+/* ================= POS ================= */
+const pos={clientId:null,lines:[],discount:0,method:"ביט",tab:"fav",done:null};
+function posAddAppt(a){if(pos.lines.some(l=>l.apptId===a.id))return;const cancel=a.status==="cancelled"||a.status==="noshow";
+  const amount=cancel?owed(a):Math.max(0,(a.price||0)-(a.depositPaid?a.deposit||0:0));
+  pos.lines.push({name:cancel?`דמי ביטול · ${a.serviceName} ${fmtD(a.date)}`:`${a.serviceName} · ${fmtD(a.date)}${a.depositPaid?" (בניכוי מקדמה)":""}`,qty:1,price:amount,apptId:a.id,kind:cancel?"fee":"appt"})}
+function posStartFor(a){pos.done=null;pos.clientId=a.clientId;pos.lines=[];pos.discount=0;posAddAppt(a)}
+VIEWS.pos=function(){
+  const w=el(`<div class="pos"></div>`);
+  const items=el(`<div class="pos-items"><div class="bar"></div><div class="tiles"></div></div>`);
+  const bar=items.querySelector(".bar");
+  bar.appendChild(tabsEl([["fav","טיפולים"],["appts","תורים לתשלום"],["products","מוצרים"],["packages","כרטיסיות"]],pos.tab,k=>{pos.tab=k;renderView(true)}));
+  const gen=el(`<button class="btn sm">${ICON.plus}<span>פריט כללי</span></button>`);gen.onclick=()=>{pos.lines.push({name:"פריט כללי",qty:1,price:0,kind:"general"});pos.done=null;renderView(true)};bar.appendChild(gen);
+  const tiles=items.querySelector(".tiles");
+  const tile=(k,name,price,c,fn)=>{const t=el(`<button class="tile" style="--c:${c||"var(--jade)"}"><span class="k">${esc(k)}</span><span>${esc(name)}</span><span class="p num">${money(price)}</span></button>`);t.onclick=()=>{fn();pos.done=null;renderView(true)};tiles.appendChild(t)};
+  if(pos.tab==="fav"){svcList().forEach(s=>tile(s.category||"טיפול",`${s.name} | ${s.minutes} ד׳`,s.price,s.color,()=>pos.lines.push({name:s.name,qty:1,price:Number(s.price)||0,kind:"service"})));if(!svcList().length)tiles.appendChild(el(`<div class="empty">אין טיפולים במחירון</div>`))}
+  if(pos.tab==="products"){list("products").forEach(s=>tile("מוצר",s.name,s.price,"var(--gold)",()=>pos.lines.push({name:s.name,qty:1,price:Number(s.price)||0,kind:"product",productId:s.id})));if(!list("products").length)tiles.appendChild(el(`<div class="empty">אין מוצרים. מוסיפים במחירון ← מוצרים.</div>`))}
+  if(pos.tab==="packages"){list("packages").forEach(s=>tile(`${s.sessions} טיפולים`,s.name,s.price,"var(--plum)",()=>pos.lines.push({name:s.name,qty:1,price:Number(s.price)||0,kind:"package",packageId:s.id})));if(!list("packages").length)tiles.appendChild(el(`<div class="empty">אין כרטיסיות. מוסיפים במחירון ← כרטיסיות.</div>`))}
+  if(pos.tab==="appts"){
+    const ap=liveAppts().filter(a=>(!pos.clientId||a.clientId===pos.clientId)&&(owed(a)>0||(a.status==="booked"&&!a.paid&&a.date===todayStr()))).sort((a,b)=>aStart(a)-aStart(b));
+    ap.forEach(a=>tile(`${fmtD(a.date)} ${a.start}`,`${a.clientName} · ${a.serviceName}`,owed(a)||Math.max(0,a.price-(a.depositPaid?a.deposit:0)),(st.services[a.serviceId]||{}).color,()=>{if(!pos.clientId)pos.clientId=a.clientId;posAddAppt(a)}));
+    liveAppts().filter(a=>(!pos.clientId||a.clientId===pos.clientId)&&a.status==="booked"&&!a.depositPaid&&Number(a.deposit)>0&&aStart(a)>new Date()).forEach(a=>tile(`מקדמה · ${fmtD(a.date)}`,`${a.clientName} · ${a.serviceName}`,a.deposit,"var(--gold)",()=>{if(!pos.clientId)pos.clientId=a.clientId;if(!pos.lines.some(l=>l.apptId===a.id))pos.lines.push({name:`מקדמה · ${a.serviceName} ${fmtD(a.date)}`,qty:1,price:Number(a.deposit),apptId:a.id,kind:"deposit"})}));
+    if(!tiles.children.length)tiles.appendChild(el(`<div class="empty">${pos.clientId?"אין ללקוח תורים פתוחים לתשלום":"אין תורים פתוחים לתשלום"}</div>`));
+  }
+  w.appendChild(items);
+  // cart
+  const cart=el(`<div class="cart"></div>`);
+  const c=pos.clientId&&st.clients[pos.clientId];
+  const cc=el(`<div class="row between" style="padding:12px 14px;border-bottom:1px solid var(--line)"><div class="who"><div class="ava">${c?esc(initial(c.name)):"?"}</div><div><div class="small muted">פרטי הלקוח</div><b>${c?esc(c.name):"לקוח מזדמן"}</b></div></div></div>`);
+  const pickBtn=el(`<button class="btn sm">${c?"החלפה":"בחירת לקוח"}</button>`);
+  pickBtn.onclick=()=>{const box=el(`<div style="padding:8px 14px" class="stack"><input placeholder="חיפוש לקוח" id="pos-q"><div class="pick"></div></div>`);cc.after(box);const inp=box.querySelector("input"),pk=box.querySelector(".pick");
+    const dr=()=>{pk.innerHTML="";const q=inp.value.trim();list("clients").filter(x=>!q||(x.name||"").includes(q)||(intlPhone(q)&&intlPhone(x.phone).includes(intlPhone(q)))).slice(0,6).forEach(x=>{const b=el(`<button><span>${esc(x.name)}</span><span class="muted ltr small">${esc(x.phone||"")}</span></button>`);b.onclick=()=>{pos.clientId=x.id;renderView(true)};pk.appendChild(b)});
+      const g=el(`<button><span>לקוח מזדמן</span></button>`);g.onclick=()=>{pos.clientId=null;renderView(true)};pk.appendChild(g)};inp.oninput=dr;dr();inp.focus();pickBtn.hidden=true};
+  cc.appendChild(pickBtn);cart.appendChild(cc);
+  if(pos.done){
+    const r=pos.done;const rc=c||{phone:r.phone};
+    const d=el(`<div class="stack" style="padding:16px"><div class="okbox">התשלום נרשם · קבלה #${r.no} · ${money(r.total)}</div><div class="preview">${esc(receiptText(r))}</div></div>`);
+    if(r.phone)d.appendChild(waBtn(r.phone,receiptText(r),"שליחת הקבלה בוואטסאפ",()=>upd("receipts",r.id,{sentAt:new Date().toISOString()}),"btn primary"));
+    const nw=el(`<button class="btn">תשלום חדש</button>`);nw.onclick=()=>{pos.done=null;pos.lines=[];pos.discount=0;pos.clientId=null;renderView(true)};d.appendChild(nw);
+    cart.appendChild(d);w.appendChild(cart);return w;
+  }
+  const ls=el(`<div class="lines"></div>`);
+  if(!pos.lines.length)ls.appendChild(el(`<div class="empty" style="margin:14px">בחרו טיפול, תור או מוצר כדי להוסיף לתשלום</div>`));
+  pos.lines.forEach((l,i)=>{const r=el(`<div class="cline"><input value="${esc(l.name)}" aria-label="שם הפריט" style="border:0;padding:2px 0;font-weight:600;background:none"><div class="qty"><button aria-label="פחות">−</button><span class="num" style="min-width:18px;text-align:center">${l.qty}</span><button aria-label="יותר">+</button></div><input type="number" value="${l.price}" aria-label="מחיר" style="width:84px"></div>`);
+    const [nm,pr]=r.querySelectorAll("input");nm.onchange=e=>l.name=e.target.value;pr.onchange=e=>{l.price=Number(e.target.value)||0;renderView(true)};
+    const [m,p]=r.querySelectorAll(".qty button");m.onclick=()=>{l.qty--;if(l.qty<1)pos.lines.splice(i,1);renderView(true)};p.onclick=()=>{l.qty++;renderView(true)};ls.appendChild(r)});
+  cart.appendChild(ls);
+  const sub=pos.lines.reduce((s,l)=>s+l.price*l.qty,0),tot=Math.max(0,sub-(Number(pos.discount)||0));
+  const vatL=S.vat==="licensed",before=tot/(1+S.vatRate/100);
+  const tt=el(`<div class="totals"><span>הנחה כללית ₪</span><input type="number" min="0" value="${pos.discount||0}" style="width:84px;padding:3px 6px" id="pos-disc">
+    ${vatL?`<span class="muted">סה"כ לפני מע"מ</span><span class="num muted">${money(before)}</span><span class="muted">מע"מ ${S.vatRate}%</span><span class="num muted">${money(tot-before)}</span>`:`<span class="muted">עוסק פטור</span><span></span>`}
+    <span class="grand">סה"כ</span><span class="grand num">${money(tot)}</span>
+    <span>אמצעי תשלום</span><select id="pos-m" style="width:auto;padding:3px 6px">${METHODS.map(m=>`<option ${m===pos.method?"selected":""}>${m}</option>`).join("")}</select></div>`);
+  tt.querySelector("#pos-disc").onchange=e=>{pos.discount=Number(e.target.value)||0;renderView(true)};
+  tt.querySelector("#pos-m").onchange=e=>pos.method=e.target.value;
+  cart.appendChild(tt);
+  const act=el(`<div class="row" style="padding:12px 14px;border-top:1px solid var(--line)"></div>`);
+  if(c&&tot>0){act.appendChild(waBtn(c.phone,`שלום ${(c.name||"").split(" ")[0]}, לתשלום ${money(tot)}:\n${payLinks()}${S.hyp?`\nבכרטיס אשראי: ${S.hyp.replaceAll("{amount}",tot).replaceAll("{name}",encodeURIComponent(c.name)).replaceAll("{id}","")}`:""}`,"שליחת לינק תשלום",null,"btn wa"))}
+  const charge=el(`<button class="btn ink" style="flex:1;padding:11px" ${pos.lines.length?"":"disabled"}>תשלום התקבל · הפקת קבלה</button>`);
+  charge.onclick=()=>{
+    const no=Number(S.invNo)||1001;S.invNo=no+1;saveSettings();
+    const rid=newId("receipts");const r={no,date:new Date().toISOString(),clientId:pos.clientId||"",clientName:c?c.name:"לקוח מזדמן",phone:c?c.phone:"",
+      lines:pos.lines.map(l=>({name:l.name,qty:l.qty,price:l.price,kind:l.kind,apptId:l.apptId||""})),discount:Number(pos.discount)||0,total:tot,method:pos.method,vatMode:S.vat,vatRate:S.vatRate};
+    put("receipts",rid,r);
+    pos.lines.forEach(l=>{if(!l.apptId||!st.appts[l.apptId])return;
+      if(l.kind==="appt")upd("appts",l.apptId,{paid:true,status:"done",paidAt:r.date,receiptNo:no,payMethod:pos.method});
+      if(l.kind==="fee")upd("appts",l.apptId,{feePaid:true,receiptNo:no});
+      if(l.kind==="deposit")upd("appts",l.apptId,{depositPaid:true,depositAt:r.date});});
+    pos.done={...r,id:rid};pos.lines=[];pos.discount=0;renderView(true);
+  };
+  act.appendChild(charge);cart.appendChild(act);
+  w.appendChild(cart);
+  return w;
+};
+
+/* ================= business ================= */
+let bizPeriod=30;
+VIEWS.business=function(){
+  const p=el(`<div class="page"><div class="page-head"><div><h1>פרטי העסק</h1><p>${esc(S.bizName)}</p></div></div></div>`);
+  const prof=el(`<div class="card stack"><div class="row between"><h2>${esc(S.bizName)}</h2><div class="row"><button class="btn sm" id="share">שיתוף עמוד ההזמנה</button><button class="btn sm" id="edit">${ICON.edit}<span>עריכה</span></button></div></div>
+    <div class="row">${(S.tags||[]).map(t=>`<span class="chip jade">${esc(t)}</span>`).join("")}</div>
+    <div class="small muted">${esc(S.address||"כתובת לא הוגדרה")}${S.phone?` · <span class="ltr">${esc(S.phone)}</span>`:""}</div>
+    ${!S.hyp?`<div class="warn">לא הוגדר קישור תשלום HYP למקדמות. <a href="#settings" style="color:inherit;font-weight:700">להגדרה</a></div>`:""}</div>`);
+  prof.querySelector("#edit").onclick=()=>location.hash="settings";
+  prof.querySelector("#share").onclick=async()=>{try{await navigator.clipboard.writeText(S.bookingUrl);toast("הקישור הועתק")}catch(e){toast(S.bookingUrl)}};
+  p.appendChild(prof);
+  const head=el(`<div class="row between"><h2 class="sec-title">ביצועים</h2><div class="seg">${[[1,"היום"],[7,"7 ימים"],[30,"30 ימים"]].map(([d,l])=>`<button data-d="${d}" aria-pressed="${bizPeriod===d}">${l}</button>`).join("")}</div></div>`);
+  head.querySelector(".seg").onclick=e=>{const d=Number(e.target.dataset.d);if(d){bizPeriod=d;renderView(true)}};p.appendChild(head);
+  const end=addDays(new Date(new Date().setHours(0,0,0,0)),1),start=addDays(end,-bizPeriod),pstart=addDays(start,-bizPeriod);
+  const inR=(d,a,b)=>d>=a&&d<b;
+  const calc=(a,b)=>({appts:liveAppts().filter(x=>inR(aStart(x),a,b)&&x.status!=="cancelled").length,
+    rev:list("receipts").filter(r=>inR(new Date(r.date),a,b)).reduce((s,r)=>s+(r.total||0),0),
+    nc:list("clients").filter(c=>c.createdAt&&inR(new Date(c.createdAt),a,b)).length,
+    lost:liveAppts().filter(x=>inR(aStart(x),a,b)&&["cancelled","noshow"].includes(x.status)).length});
+  const cur=calc(start,end),prev=calc(pstart,start);
+  const dl=(c,p,inv)=>{if(!p)return`<span class="d muted">אין נתון להשוואה</span>`;const v=Math.round((c-p)/p*100);const good=inv?v<=0:v>=0;return `<span class="d ${good?"up":"down"}">${v>0?"+":""}${v}% <span class="muted" style="font-weight:400">מול התקופה הקודמת</span></span>`};
+  const k=el(`<div class="kpis">
+    <div class="kpi"><div class="muted small">תורים</div><div class="v num">${cur.appts}</div>${dl(cur.appts,prev.appts)}</div>
+    <div class="kpi"><div class="muted small">הכנסות</div><div class="v num">${money(cur.rev)}</div>${dl(cur.rev,prev.rev)}</div>
+    <div class="kpi"><div class="muted small">לקוחות חדשים</div><div class="v num">${cur.nc}</div>${dl(cur.nc,prev.nc)}</div>
+    <div class="kpi"><div class="muted small">ביטולים ואי הגעה</div><div class="v num">${cur.lost}</div>${dl(cur.lost,prev.lost,true)}</div></div>`);
+  p.appendChild(k);
+  const debt=list("clients").map(c=>({c,b:clientBalance(c.id)})).filter(x=>x.b>0);
+  const today=liveAppts().filter(a=>a.date===todayStr()&&a.status!=="cancelled").sort((a,b)=>toMin(a.start)-toMin(b.start));
+  const two=el(`<div class="grid-auto" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))"></div>`);
+  const tc=el(`<div class="card stack"><h2>היום ביומן</h2></div>`);if(!today.length)tc.appendChild(el(`<div class="empty">אין תורים היום</div>`));
+  today.forEach(a=>{const r=el(`<div class="row between" style="cursor:pointer;border-bottom:1px solid var(--line);padding-bottom:8px"><div><b class="num">${a.start}</b> · ${esc(a.clientName)}<div class="small muted">${esc(a.serviceName)}</div></div>${statusChip(a)}</div>`);r.onclick=()=>openDrawer(()=>apptDrawer(a.id));tc.appendChild(r)});
+  const dc=el(`<div class="card stack"><h2>יתרות לגבייה</h2></div>`);if(!debt.length)dc.appendChild(el(`<div class="empty">אין חובות פתוחים</div>`));
+  debt.sort((a,b)=>b.b-a.b).slice(0,8).forEach(({c,b})=>{const r=el(`<div class="row between" style="cursor:pointer;border-bottom:1px solid var(--line);padding-bottom:8px"><span>${esc(c.name)}</span><b class="num down">${money(b)}</b></div>`);r.onclick=()=>{clTab="pay";openDrawer(()=>clientDrawer(c.id))};dc.appendChild(r)});
+  two.append(tc,dc);p.appendChild(two);
+  return p;
+};
+
+/* ================= automations ================= */
+let auTab="rec",auCat="popular",auEdit=null;
+VIEWS.automations=function(){
+  const w=el(`<div class="with-sub"><div class="subnav"><button aria-pressed="true">ניהול אוטומציות</button></div><div></div></div>`);
+  const main=w.lastElementChild;
+  const head=el(`<div style="background:var(--surface);padding:0 20px"></div>`);
+  head.appendChild(tabsEl([["rec","אוטומציות מומלצות"],["mine","האוטומציות שלי"],["queue",`לשליחה עכשיו (${dueMessages().length})`],["wa","חיבור WhatsApp"]],auTab,k=>{auTab=k;renderView(true)}));
+  main.appendChild(head);
+  const p=el(`<div class="page"></div>`);main.appendChild(p);
+  if(auTab==="rec"){
+    const g=el(`<div style="display:grid;grid-template-columns:200px 1fr;gap:18px" class="rec"></div>`);
+    const cats=el(`<div class="stack" style="gap:8px"></div>`);
+    [["popular","הכי פופולרי"],["pay","תשלומים"],["keep","שימור לקוחות"]].forEach(([k,l])=>{const b=el(`<button class="btn ${auCat===k?"primary":""}" style="justify-content:center">${l}</button>`);b.onclick=()=>{auCat=k;renderView(true)};cats.appendChild(b)});
+    const cards=el(`<div class="grid-auto"></div>`);
+    Object.entries(AUTO_META).filter(([k,m])=>m.cat===auCat).forEach(([k,m])=>{const on=S.auto[k].on;
+      const c=el(`<div class="card auto-card"><div class="flow">${m.from}<span>←</span>${ICON.wa}</div><b>${esc(m.name)}</b><div class="small">${esc(m.desc)}</div><div class="note">טריגר: ${esc(m.trigger)}</div></div>`);
+      const b=el(`<button class="btn ${on?"":"primary"}">${on?"פעילה ✓ · עריכה":"הפעלה"}</button>`);b.onclick=()=>{if(!on){S.auto[k].on=true;saveSettings();toast(`"${m.name}" הופעלה`)}auTab="mine";auEdit=k;renderView(true)};c.appendChild(b);cards.appendChild(c)});
+    g.append(cats,cards);p.appendChild(g);
+    if(narrow())g.style.gridTemplateColumns="1fr";
+  }
+  if(auTab==="mine"){
+    Object.entries(AUTO_META).forEach(([k,m])=>{const A=S.auto[k];
+      const c=el(`<div class="card stack"><div class="row between"><div><b>${esc(m.name)}</b><div class="note">${esc(m.trigger)}${m.param?` · ${A[m.param[0]]} ${m.param[1]}`:""}</div></div><div class="row"><button class="btn sm">${auEdit===k?"סגירה":"עריכת הודעה"}</button></div></div></div>`);
+      c.querySelector(".row .row").prepend(swEl(A.on,v=>{A.on=v;saveSettings();toast(v?"הופעלה":"כובתה")},m.name));
+      c.querySelector(".btn").onclick=()=>{auEdit=auEdit===k?null:k;renderView(true)};
+      if(auEdit===k){
+        const ed=el(`<div class="stack">${m.param?`<label class="f" style="max-width:200px">${m.param[1]}<input type="number" min="1" id="ap" value="${A[m.param[0]]}"></label>`:""}
+          <label class="f">נוסח ההודעה<textarea id="at" style="min-height:170px">${esc(A.tpl)}</textarea></label><div class="vars"></div>
+          <div class="note">תצוגה מקדימה (עם תור לדוגמה):</div><div class="preview" id="pv"></div><div class="row"><button class="btn primary sm" id="as">שמירה</button><button class="btn sm" id="ar">שחזור נוסח ברירת המחדל</button></div></div>`);
+        const vars=k==="birthday"||k==="winback"?["שם","שם_מלא","עסק","קישור_הזמנה","טלפון_עסק"]:k==="receipt"?["קבלה"]:["שם","שם_מלא","טיפול","יום","תאריך","שעה","מחיר","סכום","כתובת","ניווט","הוראות","דגשים","קישור_יומן","קישור_אישי","שורת_מקדמה","מדיניות","קישורי_תשלום","עסק","טלפון_עסק"];
+        const ta=ed.querySelector("#at"),pv=ed.querySelector("#pv");
+        const sample={id:"x",clientName:"דנה כהן",serviceName:(svcList()[0]||{}).name||"טיפול",date:ymd(addDays(new Date(),1)),start:"10:00",minutes:60,price:(svcList()[0]||{}).price||350,deposit:100,status:"booked"};
+        const sampleR={no:S.invNo,date:new Date().toISOString(),clientName:"דנה כהן",lines:[{name:sample.serviceName,qty:1,price:sample.price}],discount:0,total:sample.price,method:"ביט",vatMode:S.vat,vatRate:S.vatRate};
+        const prev=()=>{const v=k==="birthday"||k==="winback"?clientVars({name:"דנה כהן"}):{...apptVars(sample),"קבלה":receiptText(sampleR)};pv.textContent=fill(ta.value,v)};
+        vars.forEach(v=>{const b=el(`<button type="button">{${v}}</button>`);b.onclick=()=>{const s=ta.selectionStart??ta.value.length;ta.value=ta.value.slice(0,s)+`{${v}}`+ta.value.slice(ta.selectionEnd??s);ta.focus();prev()};ed.querySelector(".vars").appendChild(b)});
+        ta.oninput=prev;prev();
+        ed.querySelector("#as").onclick=()=>{A.tpl=ta.value;if(m.param)A[m.param[0]]=Number(ed.querySelector("#ap").value)||A[m.param[0]];saveSettings();toast("נשמר");auEdit=null;renderView(true)};
+        ed.querySelector("#ar").onclick=()=>{ta.value=DEF_AUTO[k].tpl;prev()};
+        c.appendChild(ed);
+      }
+      p.appendChild(c)});
+    const bl=el(`<div class="card stack"><b>רשימה שחורה</b><div class="note">לקוחות שלא יקבלו הודעות אוטומטיות: ${(S.blacklist||[]).map(id=>esc((st.clients[id]||{}).name||"")).filter(Boolean).join(", ")||"אין"}. מסמנים בכרטיס הלקוח.</div></div>`);p.appendChild(bl);
+  }
+  if(auTab==="queue"){
+    const q=dueMessages();
+    p.appendChild(el(`<div class="note">ההודעות כאן מחושבות לפי האוטומציות הפעילות. לחיצה פותחת את וואטסאפ עם ההודעה מוכנה, וההודעה מסומנת כנשלחה.</div>`));
+    if(!q.length)p.appendChild(el(`<div class="empty">אין הודעות שממתינות לשליחה</div>`));
+    q.forEach(m=>p.appendChild(queueRow(m)));
+  }
+  if(auTab==="wa"){
+    p.appendChild(el(`<div class="card stack" style="max-width:640px"><h2>איך נשלחות ההודעות</h2>
+      <div class="okbox">מצב נוכחי: שליחה בלחיצה. כל הודעה נפתחת בוואטסאפ שלך מוכנה, ואתה לוחץ "שלח". לא צריך חיבור או אישור מ-Meta.</div>
+      <div class="small">כדי שהודעות יישלחו לבד בלי לחיצה (תזכורות בלילה, קבלות מיידיות), צריך חשבון WhatsApp Business API אצל ספק כמו Green API, 360dialog או Twilio, ושרת קטן שמריץ את האוטומציות. הנוסחים והטריגרים שהגדרת כאן יעברו אליו כמו שהם.</div></div>`));
+  }
+  return w;
+};
+function queueRow(m){
+  const r=el(`<div class="card row between"><div style="min-width:0;flex:1"><div class="row"><span class="chip ${m.kind==="reminder"||m.kind==="confirm"?"jade":m.kind==="after"?"gold":""}">${m.label}</span><b>${esc(m.name)}</b></div>
+    <div class="note">${m.a?`${esc(m.a.serviceName)} · ${dayName(m.a.date)} ${fmtD(m.a.date)} ${m.a.start}`:""}</div></div></div>`);
+  if(m.kind==="pending"){r.appendChild(pendingBtns(m.a,()=>{renderBell();if(drawer&&!$("#drawer").hidden)paintDrawer()}));r.onclick=e=>{if(e.target.closest("a,button"))return;openDrawer(()=>apptDrawer(m.a.id))};return r}
+  r.appendChild(waBtn(m.phone,m.text,"שליחה",()=>{markSent(m);toast("סומן כנשלח")},"btn wa sm"));
+  const sk=el(`<button class="btn sm" title="סימון בלי לשלוח">דילוג</button>`);sk.onclick=()=>{markSent(m);toast("דולג")};r.appendChild(sk);
+  return r;
+}
+function queueDrawer(){
+  const q=dueMessages();
+  const b=[];
+  if(window.Notification&&Notification.permission==="default"){const nb=el(`<button class="btn sm">הפעלת התראות בדפדפן על בקשות תור חדשות</button>`);nb.onclick=()=>Notification.requestPermission().then(()=>{toast("ההתראות הופעלו");nb.remove()});b.push(nb)}
+  b.push(el(`<div class="note">הודעות לפי האוטומציות הפעילות. לחיצה על "שליחה" פותחת וואטסאפ עם ההודעה מוכנה.</div>`));
+  if(!q.length)b.push(el(`<div class="empty">אין הודעות שממתינות לשליחה</div>`));
+  q.forEach(m=>b.push(queueRow(m)));
+  const g=el(`<button class="btn">ניהול אוטומציות</button>`);g.onclick=()=>{closeDrawer();auTab="mine";location.hash="automations"};
+  return frame("הודעות לשליחה",b,[g]);
+}
+
+/* ================= price list ================= */
+let prTab="services";
+VIEWS.prices=function(){
+  const w=el(`<div class="with-sub"><div class="subnav"></div><div></div></div>`);
+  [["services","מחירון תורים"],["packages","כרטיסיות"],["products","מוצרים"]].forEach(([k,l])=>{const b=el(`<button aria-pressed="${prTab===k}">${l}</button>`);b.onclick=()=>{prTab=k;renderView(true)};w.firstElementChild.appendChild(b)});
+  const p=el(`<div class="page"></div>`);w.lastElementChild.appendChild(p);
+  const fab=el(`<button class="fab" aria-label="הוספה">${ICON.plus}</button>`);p.appendChild(fab);
+  if(prTab==="services"){
+    p.prepend(el(`<div class="page-head"><div><div class="crumbs">מחירון › מחירון תורים</div><h1>מחירון טיפולים</h1><p>מחיר, משך ומקדמה לכל טיפול. מכאן נבנים התורים והתשלום.</p></div></div>`));
+    const svcs=svcList();const cats=[...new Set(svcs.map(s=>s.category||"טיפול"))];
+    if(!svcs.length)p.appendChild(el(`<div class="empty">אין עדיין טיפולים. הוסיפו בכפתור +</div>`));
+    cats.forEach(cat=>{const g=el(`<div class="stack" style="gap:8px"><div class="row"><b style="font-size:17px">${esc(cat)}</b><span class="chip">${svcs.filter(s=>(s.category||"טיפול")===cat).length}</span></div></div>`);
+      svcs.filter(s=>(s.category||"טיפול")===cat).forEach((s,i,arr)=>{const r=el(`<div class="svc-row" style="--c:${s.color||COLORS[0]}"><span class="dot"></span><div style="min-width:0"><b>${esc(s.name)}</b><div class="small muted">${s.minutes} דקות${s.deposit?` · מקדמה ${money(s.deposit)}`:""}</div></div><b class="num">${money(s.price)}</b><div class="row"></div></div>`);
+        const ctl=r.lastElementChild;
+        const up=el(`<button class="ibtn" aria-label="הזזה למעלה" ${i===0?"disabled":""}>${ICON.up}</button>`);up.onclick=()=>swap(arr,i,i-1);
+        const dn=el(`<button class="ibtn" aria-label="הזזה למטה" ${i===arr.length-1?"disabled":""}>${ICON.down}</button>`);dn.onclick=()=>swap(arr,i,i+1);
+        const ed=el(`<button class="ibtn" aria-label="עריכה">${ICON.edit}</button>`);ed.onclick=()=>openDrawer(()=>serviceDrawer(s.id));
+        ctl.append(up,dn,ed);g.appendChild(r)});
+      p.appendChild(g)});
+    fab.onclick=()=>openDrawer(()=>serviceDrawer(null));
+  }
+  const simple=(col,title,fields,desc)=>{
+    p.prepend(el(`<div class="page-head"><div><div class="crumbs">מחירון › ${title}</div><h1>${title}</h1><p>${desc}</p></div></div>`));
+    const items=list(col).sort((a,b)=>String(a.name).localeCompare(b.name,"he"));
+    if(!items.length)p.appendChild(el(`<div class="empty">אין עדיין פריטים. הוסיפו בכפתור +</div>`));
+    items.forEach(x=>{const r=el(`<div class="svc-row" style="grid-template-columns:1fr auto auto;--c:var(--gold)"><div><b>${esc(x.name)}</b><div class="small muted">${fields.filter(f=>f[0]!=="name"&&f[0]!=="price").map(f=>`${f[1]}: ${esc(x[f[0]]??"")}`).join(" · ")}</div></div><b class="num">${money(x.price)}</b></div>`);
+      const ed=el(`<button class="ibtn" aria-label="עריכה">${ICON.edit}</button>`);ed.onclick=()=>openDrawer(()=>simpleDrawer(col,title,fields,x.id));r.appendChild(ed);p.appendChild(r)});
+    fab.onclick=()=>openDrawer(()=>simpleDrawer(col,title,fields,null));
+  };
+  if(prTab==="packages")simple("packages","כרטיסיות",[["name","שם"],["sessions","מספר טיפולים","number"],["price","מחיר ₪","number"],["months","תוקף (חודשים)","number"]],"חבילות טיפולים מראש, למשל 5 טיפולי דיקור.");
+  if(prTab==="products")simple("products","מוצרים",[["name","שם"],["price","מחיר ₪","number"],["stock","מלאי","number"]],"צמחי מרפא, תוספים ומוצרים שנמכרים בקליניקה.");
+  return w;
+};
+function swap(arr,i,j){const ids=arr.map(s=>s.id);[ids[i],ids[j]]=[ids[j],ids[i]];ids.forEach((id,k)=>{if(st.services[id].order!==k)upd("services",id,{order:k})})}
+function serviceDrawer(id){
+  const s=id?st.services[id]:{name:"",category:"טיפול",minutes:60,price:0,deposit:0,color:COLORS[list("services").length%COLORS.length]};
+  let color=s.color||COLORS[0];
+  const f=el(`<div class="box stack"><div class="form">
+    <label class="f full">שם הטיפול<input id="s-n" value="${esc(s.name)}"></label>
+    <label class="f">קטגוריה<input id="s-c" value="${esc(s.category||"טיפול")}"></label>
+    <label class="f">משך (דקות)<input type="number" id="s-m" min="5" step="5" value="${s.minutes||60}"></label>
+    <label class="f">מחיר ₪<input type="number" id="s-p" min="0" value="${s.price||0}"></label>
+    <label class="f">מקדמה ₪<input type="number" id="s-d" min="0" value="${s.deposit||0}"></label></div>
+    <div class="f">צבע ביומן<div class="swatches"></div></div>
+    <label class="row small" style="font-weight:600"><input type="checkbox" id="s-h" ${s.hidden?"checked":""}> להסתיר מעמוד ההזמנה באתר</label></div>`);
+  const sw=f.querySelector(".swatches");COLORS.forEach(c=>{const b=el(`<button type="button" style="--c:${c}" aria-pressed="${c===color}" aria-label="צבע"></button>`);b.onclick=()=>{color=c;$$(".swatches button",f).forEach(x=>x.setAttribute("aria-pressed",x===b))};sw.appendChild(b)});
+  const save=el(`<button class="btn primary">${id?"שמירה":"הוספה"}</button>`);
+  save.onclick=()=>{const d={name:f.querySelector("#s-n").value.trim(),category:f.querySelector("#s-c").value.trim()||"טיפול",minutes:Number(f.querySelector("#s-m").value)||60,price:Number(f.querySelector("#s-p").value)||0,deposit:Number(f.querySelector("#s-d").value)||0,color,hidden:f.querySelector("#s-h").checked};
+    if(!d.name){toast("מלאו שם טיפול");return}
+    if(id)upd("services",id,d);else put("services",newId("services"),{...d,order:list("services").length});closeDrawer();toast("נשמר")};
+  const foot=[save];
+  if(id){const dl=el(`<button class="btn danger">מחיקה</button>`);dl.onclick=()=>{if(!dl.dataset.s){dl.dataset.s=1;dl.textContent="לחצו שוב";return}del("services",id);closeDrawer()};foot.unshift(dl)}
+  return frame(id?"עריכת טיפול":"טיפול חדש",f,foot);
+}
+function simpleDrawer(col,title,fields,id){
+  const x=id?st[col][id]:{};
+  const f=el(`<div class="box form"></div>`);
+  fields.forEach(([k,l,t])=>f.appendChild(el(`<label class="f ${k==="name"?"full":""}">${l}<input data-k="${k}" type="${t||"text"}" value="${esc(x[k]??"")}"></label>`)));
+  const save=el(`<button class="btn primary">${id?"שמירה":"הוספה"}</button>`);
+  save.onclick=()=>{const d={};$$("input",f).forEach(i=>d[i.dataset.k]=i.type==="number"?Number(i.value)||0:i.value.trim());if(!d.name){toast("מלאו שם");return}
+    if(id)upd(col,id,d);else put(col,newId(col),d);closeDrawer();toast("נשמר")};
+  const foot=[save];if(id){const dl=el(`<button class="btn danger">מחיקה</button>`);dl.onclick=()=>{if(!dl.dataset.s){dl.dataset.s=1;dl.textContent="לחצו שוב";return}del(col,id);closeDrawer()};foot.unshift(dl)}
+  return frame(id?`עריכה · ${title}`:`הוספה · ${title}`,f,foot);
+}
+
+/* ================= working hours ================= */
+let hrDraft=null;
+VIEWS.hours=function(){
+  if(!hrDraft)hrDraft=structuredClone(H);
+  const p=el(`<div class="page"><div class="page-head"><div><div class="crumbs">ניהול זמינות › שעות עבודה</div><h1>שעות עבודה</h1><p>זה השבוע הקבוע. מהשעות האלה נבנים הזמנים הפנויים ביומן. לשינוי בשבוע מסוים: "עריכת משמרות" ביומן.</p></div><div class="row"><span class="chip jade num" id="tot"></span><button class="btn" id="hr-reset">ביטול שינויים</button><button class="btn primary" id="hr-save">שמירה</button></div></div></div>`);
+  const wk=el(`<div class="week"></div>`);
+  const total=()=>{let m=0;for(let d=0;d<7;d++)(hrDraft.days[d]||[]).forEach(r=>{if(r.s&&r.e)m+=Math.max(0,toMin(r.e)-toMin(r.s))});p.querySelector("#tot").textContent=`${Math.round(m/6)/10} שעות בשבוע`};
+  for(let d=0;d<7;d++){
+    hrDraft.days[d]=hrDraft.days[d]||[];
+    const c=el(`<div class="wday"><h3>${WD[d]}</h3></div>`);
+    if(!hrDraft.days[d].length)c.appendChild(el(`<div class="note" style="text-align:center">אין משמרות</div>`));
+    hrDraft.days[d].forEach((r,i)=>{const x=el(`<div class="rng"><input type="time" value="${r.s}" aria-label="התחלה"><input type="time" value="${r.e}" aria-label="סיום"><button class="btn sm danger">הסרה</button></div>`);
+      const [a,b]=x.querySelectorAll("input");a.onchange=e=>{r.s=e.target.value;total()};b.onchange=e=>{r.e=e.target.value;total()};
+      x.querySelector("button").onclick=()=>{hrDraft.days[d].splice(i,1);renderView(true)};c.appendChild(x)});
+    const add=el(`<button class="btn sm">${ICON.plus}<span>טווח</span></button>`);add.onclick=()=>{const last=hrDraft.days[d].at(-1);hrDraft.days[d].push(last?{s:last.e,e:toHM(Math.min(23*60+59,toMin(last.e)+180))}:{s:"09:00",e:"14:00"});renderView(true)};c.appendChild(add);
+    wk.appendChild(c);
+  }
+  p.appendChild(el(`<div class="table-wrap" style="border:0;background:none"></div>`)).appendChild(wk);
+  p.querySelector("#hr-save").onclick=()=>{for(let d=0;d<7;d++){if(hrDraft.days[d].some(r=>!r.s||!r.e||toMin(r.e)<=toMin(r.s))){toast(`יום ${WD[d]}: שעת הסיום צריכה להיות אחרי שעת ההתחלה`);return}}H={...structuredClone(hrDraft),overrides:H.overrides||{}};saveHours();toast("שעות העבודה נשמרו")};
+  p.querySelector("#hr-reset").onclick=()=>{hrDraft=structuredClone(H);renderView(true)};
+  total();
+  // blocked days
+  const bl=el(`<div class="card stack"><h2>חופשות וימים חסומים</h2><div class="note">בימים האלה היומן לא יציע שעות פנויות.</div><div class="stack" id="bl"></div>
+    <div class="row"><label class="f">מתאריך<input type="date" id="b-f"></label><label class="f">עד תאריך<input type="date" id="b-t"></label><label class="f" style="flex:1">סיבה<input id="b-n" placeholder="חופשה, כנס…"></label><button class="btn" id="b-add" style="align-self:end">הוספה</button></div></div>`);
+  (S.blocked||[]).forEach((b,i)=>{const r=el(`<div class="row between box"><span class="num">${fmtD(b.from)}${b.to&&b.to!==b.from?` – ${fmtD(b.to)}`:""} ${b.note?`· ${esc(b.note)}`:""}</span><button class="btn sm danger">הסרה</button></div>`);r.querySelector("button").onclick=()=>{S.blocked.splice(i,1);saveSettings()};bl.querySelector("#bl").appendChild(r)});
+  bl.querySelector("#b-add").onclick=()=>{const f=bl.querySelector("#b-f").value,t=bl.querySelector("#b-t").value||f;if(!f){toast("בחרו תאריך");return}S.blocked=[...(S.blocked||[]),{from:f,to:t<f?f:t,note:bl.querySelector("#b-n").value.trim()}];saveSettings();toast("נוסף")};
+  p.appendChild(bl);
+  return p;
+};
+
+/* ================= reports ================= */
+let rep=null,repFrom=null,repTo=null;
+const REPORTS=[
+  {cat:"לקוחות",sub:"סקירת לקוחות",icon:ICON.user,items:[["new","לקוחות חדשים"],["lapsed","לקוחות שלא חזרו"],["birthdays","ימי הולדת קרובים"],["debts","דוח חייבים"]]},
+  {cat:"הנהלת חשבונות",sub:"הכנסות וקבלות",icon:ICON.pay,items:[["receipts","דוח תקבולים"],["methods","תקבולים לפי אמצעי תשלום"],["items","מכירות לפי פריטים"]]},
+  {cat:"נוכחות",sub:"תורים והיעדרויות",icon:ICON.cal,items:[["appts","דוח תורים"],["absences","ביטולים ואי הגעה"]]},
+  {cat:"שימוש במערכת",sub:"הודעות ותזכורות",icon:ICON.bell,items:[["messages","הודעות שנשלחו"]]}
+];
+function runReport(k,from,to){
+  const F=parseYmd(from),T=addDays(parseYmd(to),1),inR=d=>d>=F&&d<T;
+  const A=()=>liveAppts().filter(a=>inR(aStart(a))).sort((a,b)=>aStart(a)-aStart(b));
+  const R=()=>list("receipts").filter(r=>inR(new Date(r.date))).sort((a,b)=>String(a.date).localeCompare(b.date));
+  const stl=a=>({booked:"מוזמן",done:"הגיע/ה",noshow:"לא הגיע/ה",cancelled:"בוטל"})[a.status]||a.status;
+  switch(k){
+    case"appts":{const a=A();return{cols:["תאריך","שעה","לקוח","טיפול","מחיר","סטטוס","שולם"],rows:a.map(x=>[fmtD(x.date),x.start,x.clientName,x.serviceName,money(x.price),stl(x),x.paid?"כן":"לא"]),sum:`${a.filter(x=>x.status!=="cancelled").length} תורים · ${a.filter(x=>x.status==="cancelled").length} בוטלו`}}
+    case"absences":{const a=A().filter(x=>["cancelled","noshow"].includes(x.status));return{cols:["תאריך","שעה","לקוח","סטטוס","דמי ביטול","שולמו"],rows:a.map(x=>[fmtD(x.date),x.start,x.clientName,stl(x),money(x.cancelFee||0),x.feePaid?"כן":(x.cancelFee?"לא":"—")]),sum:`${a.length} ביטולים ואי הגעות · דמי ביטול ${money(a.reduce((s,x)=>s+(x.cancelFee||0),0))}`}}
+    case"receipts":{const r=R();return{cols:["מס'","תאריך","לקוח","אמצעי","סכום"],rows:r.map(x=>[x.no,fmtDT(x.date),x.clientName,x.method,money(x.total)]),sum:`${r.length} קבלות · סה"כ ${money(r.reduce((s,x)=>s+x.total,0))}`}}
+    case"methods":{const m={};R().forEach(x=>m[x.method]=(m[x.method]||0)+x.total);return{cols:["אמצעי תשלום","סכום"],rows:Object.entries(m).map(([k,v])=>[k,money(v)]),sum:`סה"כ ${money(Object.values(m).reduce((s,v)=>s+v,0))}`}}
+    case"items":{const m={};R().forEach(x=>x.lines.forEach(l=>{const o=m[l.name]||(m[l.name]={q:0,t:0});o.q+=l.qty;o.t+=l.price*l.qty}));return{cols:["פריט","כמות","סכום"],rows:Object.entries(m).sort((a,b)=>b[1].t-a[1].t).map(([k,v])=>[k,v.q,money(v.t)]),sum:""}}
+    case"new":{const c=list("clients").filter(x=>x.createdAt&&inR(new Date(x.createdAt)));return{cols:["שם","טלפון","נוסף בתאריך"],rows:c.map(x=>[x.name,x.phone,fmtDT(x.createdAt)]),sum:`${c.length} לקוחות חדשים`}}
+    case"lapsed":{const d=Number(S.auto.winback.days||60);const c=list("clients").map(x=>({x,lv:lastVisit(x.id)})).filter(o=>o.lv&&!nextAppt(o.x.id)&&(new Date()-aEnd(o.lv))>d*864e5);return{cols:["שם","טלפון","ביקור אחרון"],rows:c.map(o=>[o.x.name,o.x.phone,fmtD(o.lv.date)]),sum:`לקוחות בלי ביקור ${d} ימים ובלי תור עתידי · ${c.length}`,noRange:true}}
+    case"birthdays":{const n=new Date();const c=list("clients").filter(x=>x.birthday).map(x=>{const b=parseYmd(x.birthday);let nx=new Date(n.getFullYear(),b.getMonth(),b.getDate());if(nx<new Date(n.toDateString()))nx.setFullYear(n.getFullYear()+1);return{x,nx}}).filter(o=>o.nx-n<31*864e5).sort((a,b)=>a.nx-b.nx);return{cols:["שם","טלפון","יום הולדת"],rows:c.map(o=>[o.x.name,o.x.phone,`${pad(o.nx.getDate())}/${pad(o.nx.getMonth()+1)}`]),sum:"ב-30 הימים הקרובים",noRange:true}}
+    case"debts":{const c=list("clients").map(x=>({x,b:clientBalance(x.id)})).filter(o=>o.b>0).sort((a,b)=>b.b-a.b);return{cols:["שם","טלפון","יתרה"],rows:c.map(o=>[o.x.name,o.x.phone,money(o.b)]),sum:`סה"כ לגבייה ${money(c.reduce((s,o)=>s+o.b,0))}`,noRange:true}}
+    case"messages":{const rows=[];const N={confirm:"אישור תור",reminder:"תזכורת",after:"תודה ותשלום",cancel:"ביטול"};liveAppts().forEach(a=>Object.entries(a.sent||{}).forEach(([k,v])=>{if(v&&inR(new Date(v)))rows.push([fmtDT(v),N[k]||k,a.clientName,`${fmtD(a.date)} ${a.start}`])}));list("receipts").forEach(r=>{if(r.sentAt&&inR(new Date(r.sentAt)))rows.push([fmtDT(r.sentAt),"קבלה",r.clientName,`#${r.no}`])});rows.sort((a,b)=>a[0].localeCompare(b[0]));return{cols:["נשלח","סוג","לקוח","פרטים"],rows,sum:`${rows.length} הודעות`}}
+  }
+}
+VIEWS.reports=function(){
+  const p=el(`<div class="page"></div>`);
+  if(!rep){
+    p.appendChild(el(`<div class="page-head"><h1>דוחות</h1></div>`));
+    const g=el(`<div class="grid-auto" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))"></div>`);
+    REPORTS.forEach(c=>{const x=el(`<div class="card rep-cat"><header><span style="color:var(--jade)">${c.icon.replace("<svg",'<svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6"')}</span><b>${c.cat}</b><span class="note">${c.sub}</span></header></div>`);
+      c.items.forEach(([k,l])=>{const b=el(`<button class="rep-link"><span>${l}</span><span aria-hidden="true">←</span></button>`);b.onclick=()=>{rep=[k,l];renderView(true)};x.appendChild(b)});g.appendChild(x)});
+    p.appendChild(g);return p;
+  }
+  const n=new Date();repFrom=repFrom||ymd(new Date(n.getFullYear(),n.getMonth(),1));repTo=repTo||ymd(new Date(n.getFullYear(),n.getMonth()+1,0));
+  const r=runReport(rep[0],repFrom,repTo);
+  const head=el(`<div class="page-head"><div><div class="crumbs"><a href="#reports" id="rb" style="color:inherit">דוחות</a> › ${rep[1]}</div><h1>${rep[1]}</h1><p>${esc(r.sum)}</p></div>
+    <div class="row">${r.noRange?"":`<label class="f">מתאריך<input type="date" id="rf" value="${repFrom}"></label><label class="f">עד<input type="date" id="rt" value="${repTo}"></label>`}<button class="btn" id="csv" style="align-self:end">ייצוא CSV</button></div></div>`);
+  head.querySelector("#rb").onclick=e=>{e.preventDefault();rep=null;renderView(true)};
+  if(!r.noRange){head.querySelector("#rf").onchange=e=>{repFrom=e.target.value;renderView(true)};head.querySelector("#rt").onchange=e=>{repTo=e.target.value;renderView(true)}}
+  head.querySelector("#csv").onclick=()=>{const q=v=>`"${String(v??"").replace(/"/g,'""')}"`;const csv="\ufeff"+[r.cols,...r.rows].map(x=>x.map(q).join(",")).join("\r\n");
+    const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download=`${rep[1]}.csv`;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)};
+  p.appendChild(head);
+  if(!r.rows.length){p.appendChild(el(`<div class="empty">אין נתונים בטווח הזה</div>`));return p}
+  const t=el(`<div class="table-wrap"><table><thead><tr>${r.cols.map(c=>`<th>${c}</th>`).join("")}</tr></thead><tbody>${r.rows.map(x=>`<tr>${x.map(v=>`<td class="num">${esc(v)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`);
+  p.appendChild(t);return p;
+};
+
+/* ================= settings ================= */
+VIEWS.settings=function(){
+  const p=el(`<div class="page"><div class="page-head"><div><h1>הגדרות</h1><p>פרטי העסק, תשלומים ומדיניות ביטול</p></div><button class="btn primary" id="sv">שמירה</button></div>
+    <div class="card stack"><h2>פרטי העסק</h2><div class="form">
+      <label class="f">שם העסק<input id="g-biz" value="${esc(S.bizName)}"></label>
+      <label class="f">טלפון<input id="g-ph" type="tel" value="${esc(S.phone)}"></label>
+      <label class="f">כתובת<input id="g-ad" value="${esc(S.address)}"></label>
+      <label class="f">קישור ניווט (Waze / Google Maps)<input id="g-nv" type="url" value="${esc(S.nav)}"></label>
+      <label class="f">תגיות (מופרדות בפסיק)<input id="g-tg" value="${esc((S.tags||[]).join(", "))}"></label>
+      <label class="f">קישור לעמוד ההזמנה / האתר<input id="g-bk" type="url" value="${esc(S.bookingUrl)}"></label>
+      <label class="f">הזמנה מינימום (שעות מראש)<input id="g-ld" type="number" min="0" value="${S.leadHours??3}"></label>
+      <label class="f">הזמנה עד (ימים קדימה)<input id="g-hz" type="number" min="1" value="${S.horizonDays??60}"></label>
+      <label class="f full">הוראות הגעה<textarea id="g-dr">${esc(S.directions)}</textarea></label>
+      <label class="f full">דגשים לקראת הטיפול<textarea id="g-nt">${esc(S.notes)}</textarea></label></div></div>
+    <div class="card stack"><h2>תשלומים וקבלות</h2><div class="form">
+      <label class="f full">קישור לעמוד תשלום HYP (מקדמות ואשראי)<input id="g-hy" type="url" placeholder="https://pay.hyp.co.il/..." value="${esc(S.hyp)}"><span class="note">אפשר לשלב {amount} ו-{name}. הם יוחלפו בסכום ובשם הלקוח.</span></label>
+      <label class="f">קישור ביט<input id="g-bt" type="url" value="${esc(S.bit)}"></label>
+      <label class="f">קישור פייבוקס<input id="g-pb" type="url" value="${esc(S.paybox)}"></label>
+      <label class="f">סוג עוסק<select id="g-vt"><option value="licensed" ${S.vat==="licensed"?"selected":""}>עוסק מורשה (מע"מ)</option><option value="exempt" ${S.vat==="exempt"?"selected":""}>עוסק פטור</option></select></label>
+      <label class="f">שיעור מע"מ %<input id="g-vr" type="number" value="${S.vatRate}"></label>
+      <label class="f">מספר עוסק<input id="g-id" value="${esc(S.bizId)}"></label>
+      <label class="f">מספר הקבלה הבאה<input id="g-in" type="number" min="1" value="${S.invNo}"></label></div>
+      <div class="note">הקבלה שנשלחת מכאן היא אישור תשלום ללקוח. חשבונית מס או קבלה רשמית לפי חוק צריכה לצאת מתוכנה מאושרת (למשל דרך HYP או חשבונית ירוקה).</div></div>
+    <div class="card stack"><h2>מדיניות ביטול</h2><div class="form">
+      <label class="f">ביטול ללא עלות עד (שעות לפני)<input id="g-pf" type="number" min="0" value="${S.policy.freeHours}"></label>
+      <label class="f">חיוב מלא כשנותרו פחות מ (שעות)<input id="g-pu" type="number" min="0" value="${S.policy.fullHours}"></label></div>
+      <div class="note" id="g-pp">${esc(policyText())}</div></div>
+    <div class="card stack"><h2>נתוני דוגמה</h2><div class="note">לקוחות ותורים שסומנו "דוגמה" נוספו כדי להראות איך המערכת נראית.</div><button class="btn danger sm" id="g-ex" style="align-self:flex-start">מחיקת נתוני הדוגמה</button></div></div>`);
+  const g=s=>p.querySelector(s).value.trim();
+  p.querySelector("#sv").onclick=()=>{
+    const fr=Math.max(0,Number(g("#g-pf"))||0),fu=Math.min(fr,Math.max(0,Number(g("#g-pu"))||0));
+    Object.assign(S,{bizName:g("#g-biz")||S.bizName,phone:g("#g-ph"),address:g("#g-ad"),nav:g("#g-nv"),tags:g("#g-tg").split(",").map(x=>x.trim()).filter(Boolean),bookingUrl:g("#g-bk"),leadHours:Math.max(0,Number(g("#g-ld"))||0),horizonDays:Math.max(1,Number(g("#g-hz"))||60),
+      directions:p.querySelector("#g-dr").value.trim(),notes:p.querySelector("#g-nt").value.trim(),hyp:g("#g-hy"),bit:g("#g-bt"),paybox:g("#g-pb"),vat:g("#g-vt"),vatRate:Number(g("#g-vr"))||0,bizId:g("#g-id"),invNo:Number(g("#g-in"))||S.invNo,policy:{freeHours:fr,fullHours:fu}});
+    saveSettings();toast("ההגדרות נשמרו");renderView(true)};
+  const ex=p.querySelector("#g-ex");ex.onclick=()=>{const n=list("clients").filter(c=>c.example).length+liveAppts().filter(a=>a.example).length;if(!n){toast("אין נתוני דוגמה");return}if(!ex.dataset.s){ex.dataset.s=1;ex.textContent=`לחצו שוב למחיקת ${n} רשומות`;return}
+    liveAppts().filter(a=>a.example).forEach(a=>del("appts",a.id));list("clients").filter(c=>c.example).forEach(c=>del("clients",c.id));toast("נתוני הדוגמה נמחקו")};
+  if(typeof sb!=="undefined"&&sb){const pw=el(`<div class="card stack"><h2>שינוי סיסמה</h2><div class="form"><label class="f">סיסמה חדשה<input id="pw1" type="password" autocomplete="new-password" dir="ltr"></label><label class="f">שוב את הסיסמה<input id="pw2" type="password" autocomplete="new-password" dir="ltr"></label></div><div><button class="btn sm" id="pw-s">עדכון סיסמה</button></div></div>`);
+    pw.querySelector("#pw-s").onclick=async()=>{const a=pw.querySelector("#pw1").value,b=pw.querySelector("#pw2").value;if(a.length<8){toast("הסיסמה צריכה להיות 8 תווים לפחות");return}if(a!==b){toast("הסיסמאות לא זהות");return}const {error}=await sb.auth.updateUser({password:a});if(error){toast("לא נשמר: "+error.message);return}pw.querySelector("#pw1").value="";pw.querySelector("#pw2").value="";toast("הסיסמה עודכנה")};
+    p.appendChild(pw)}
+  return p;
+};
+
+/* ================= demo data (preview only, when no store) ================= */
+function demoSeed(){
+  [["רפואה סינית - דיקור",60,350,0,COLORS[0]],["רפואה סינית - דיקור",60,380,0,COLORS[3]]].forEach(([n,m,p,d,c],i)=>{st.services["s"+i]={id:"s"+i,name:n,category:"טיפול",minutes:m,price:p,deposit:d,color:c,order:i}});
+  const cs=[["דנה כהן (דוגמה)","050-1111111"],["יואב לוי (דוגמה)","052-2222222"],["רותם אברהם (דוגמה)","054-3333333"]];
+  cs.forEach(([n,p],i)=>st.clients["c"+i]={id:"c"+i,name:n,phone:p,example:true,createdAt:new Date(Date.now()-i*864e5*20).toISOString()});
+  const w=startOfWeek(new Date());
+  [[0,1,"10:30",0],[1,2,"16:00",1],[2,2,"18:00",0],[0,4,"09:30",1]].forEach(([c,d,t,s],i)=>{const sv=st.services["s"+s],cl=st.clients["c"+c];st.appts["a"+i]={id:"a"+i,clientId:cl.id,clientName:cl.name,phone:cl.phone,serviceId:sv.id,serviceName:sv.name,date:ymd(addDays(w,d)),start:t,minutes:60,price:sv.price,deposit:0,status:"booked",paid:false,sent:{},notes:[],example:true,createdAt:new Date().toISOString()}});
+}
+
+/* ================= data layer: Supabase (Firestore-like adapter) ================= */
+function makeDb(sb){
+  const docs={};COLS.forEach(c=>docs[c]={});
+  const sett={};const L={};
+  const on=(k,f)=>{(L[k]??=new Set()).add(f);return()=>L[k].delete(f)};
+  const fire=k=>(L[k]||new Set()).forEach(f=>{try{f()}catch(e){console.error(e)}});
+  const rid=()=>crypto.randomUUID().replaceAll("-","");
+  const colSnap=col=>({docs:Object.entries(docs[col]||{}).map(([id,d])=>({id,data:()=>d}))});
+  const setSnap=key=>({exists:key in sett,data:()=>sett[key]});
+  const chk=r=>{if(r.error)throw r.error;return r};
+  const api={
+    async load(){
+      for(let from=0;;from+=1000){
+        const {data}=chk(await sb.from("docs").select("col,id,data").range(from,from+999));
+        data.forEach(r=>{(docs[r.col]??={})[r.id]=r.data});
+        if(data.length<1000)break;
+      }
+      chk(await sb.from("settings").select("key,data")).data.forEach(r=>sett[r.key]=r.data);
+    },
+    listen(){
+      sb.channel("clinic")
+        .on("postgres_changes",{event:"*",schema:"public",table:"docs"},p=>{
+          const row=p.eventType==="DELETE"?p.old:p.new;if(!row||!row.col)return;
+          if(p.eventType==="DELETE")delete (docs[row.col]||{})[row.id];else(docs[row.col]??={})[row.id]=row.data;
+          fire("c:"+row.col)})
+        .on("postgres_changes",{event:"*",schema:"public",table:"settings"},p=>{
+          const row=p.eventType==="DELETE"?p.old:p.new;if(!row||!row.key)return;
+          if(p.eventType==="DELETE")delete sett[row.key];else sett[row.key]=row.data;
+          fire("s:"+row.key)})
+        .subscribe();
+    },
+    collection(col){return{
+      doc(id){id=id||rid();return{id,
+        set:async d=>{chk(await sb.from("docs").upsert({col,id,data:d}))},
+        update:async p=>{chk(await sb.rpc("doc_update",{p_col:col,p_id:id,p_patch:p}))},
+        delete:async()=>{chk(await sb.from("docs").delete().match({col,id}))}}},
+      onSnapshot(cb){const f=()=>cb(colSnap(col));const u=on("c:"+col,f);f();return u}}},
+    doc(path){const key=path.split("/")[1];return{
+      set:async d=>{chk(await sb.from("settings").upsert({key,data:d}))},
+      onSnapshot(cb){const f=()=>cb(setSnap(key));const u=on("s:"+key,f);f();return u}}}
+  };
+  return api;
+}
+
+/* ================= boot ================= */
+buildRail();
+route=VIEWS[location.hash.slice(1)]?location.hash.slice(1):"calendar";
+renderView(true);renderBell();
+
+const CFG=window.CLINIC_CFG||{};
+let sb=null;
+const loginEl=$("#login");
+function showLogin(msg){loginEl.hidden=false;$("#logout").hidden=true;const m=$("#lg-msg");m.hidden=!msg;m.textContent=msg||""}
+async function startApp(){
+  loginEl.hidden=true;$("#logout").hidden=false;
+  db=makeDb(sb);
+  try{await db.load()}catch(e){console.error(e);toast("אין גישה לנתונים");return}
+  let n=0;const done=()=>{if(++n>=COLS.length+2)loaded=true;schedule()};
+  db.doc("settings/main").onSnapshot(s=>{S=mergeSettings(s.exists?s.data():{});done()});
+  db.doc("settings/hours").onSnapshot(s=>{H=s.exists?structuredClone(s.data()):structuredClone(DEF_HOURS);if(!H.days)H=structuredClone(DEF_HOURS);hrDraft=null;done()});
+  COLS.forEach(col=>db.collection(col).onSnapshot(snap=>{const o={};snap.docs.forEach(x=>o[x.id]={...x.data(),id:x.id});st[col]=o;done()}));
+  db.listen();
+  renderView(true);renderBell();
+}
+async function afterSignIn(){
+  const {data,error}=await sb.from("admins").select("user_id").limit(1);
+  if(error||!data||!data.length){await sb.auth.signOut();showLogin("לחשבון הזה אין הרשאת ניהול.");return}
+  startApp();
+}
+(async()=>{
+  if(!CFG.url||!CFG.anonKey||!window.supabase){demo=true;loaded=true;demoSeed();toast("מצב תצוגה: הנתונים לא נשמרים");schedule();return}
+  const recovering=/type=recovery/.test(location.hash);
+  sb=window.supabase.createClient(CFG.url,CFG.anonKey,{auth:{persistSession:true,autoRefreshToken:true}});
+  const showRec=()=>{loginEl.hidden=false;$("#loginForm").hidden=true;$("#recForm").hidden=false;$("#logout").hidden=true};
+  $("#lg-forgot").onclick=async()=>{
+    const em=$("#lg-email").value.trim();
+    if(!em){showLogin("כתבו את האימייל ואז לחצו שכחתי סיסמה.");return}
+    const b=$("#lg-forgot");b.disabled=true;
+    await sb.auth.resetPasswordForEmail(em,{redirectTo:location.origin+"/admin/"});
+    b.disabled=false;showLogin("אם האימייל רשום, נשלח אליו קישור לאיפוס סיסמה.");
+  };
+  $("#recForm").addEventListener("submit",async e=>{
+    e.preventDefault();const a=$("#rc-p1").value,b2=$("#rc-p2").value,m=$("#rc-msg");
+    m.hidden=false;
+    if(a.length<8){m.textContent="הסיסמה צריכה להיות באורך 8 תווים לפחות.";return}
+    if(a!==b2){m.textContent="שתי הסיסמאות לא זהות.";return}
+    const {error}=await sb.auth.updateUser({password:a});
+    if(error){m.textContent="לא הצלחנו לשמור: "+error.message;return}
+    history.replaceState(null,"",location.pathname);$("#recForm").hidden=true;$("#loginForm").hidden=false;
+    afterSignIn();
+  });
+  $("#loginForm").addEventListener("submit",async e=>{
+    e.preventDefault();const b=$("#lg-btn");b.disabled=true;b.textContent="נכנס…";
+    const {error}=await sb.auth.signInWithPassword({email:$("#lg-email").value.trim(),password:$("#lg-pass").value});
+    b.disabled=false;b.textContent="כניסה";
+    if(error){showLogin("אימייל או סיסמה לא נכונים.");return}
+    afterSignIn();
+  });
+  $("#logout").onclick=async()=>{await sb.auth.signOut();location.reload()};
+  const {data:{session}}=await sb.auth.getSession();
+  if(recovering){showRec();return}
+  if(session)afterSignIn();else showLogin();
+  sb.auth.onAuthStateChange(ev=>{if(ev==="PASSWORD_RECOVERY")showRec()});
+})();
+
+</script>
+
+</body></html>

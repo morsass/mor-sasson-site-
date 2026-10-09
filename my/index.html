@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="he" dir="rtl"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>התורים שלי · מור ששון</title>
+<link rel="icon" href="../assets/logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#faf8f3;--alt:#f3f5f1;--card:#fff;--ink:#3b3f45;--g:#3a5a40;--g2:#84a98c;--icon:#eef1ec;--line:#e6e9e2;--head:#fff;--bad:#a8432f;--badbg:#f7e4df;--warn:#8a6417;--warnbg:#f6ecd5;--on:#fff;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171a17;--alt:#1d211d;--card:#242924;--ink:#d9ddd5;--g:#9bc4a1;--g2:#6f9a77;--icon:#2e352e;--line:#343a34;--head:#1b1f1b;--bad:#ec8b74;--badbg:#3a221c;--warn:#e1b75a;--warnbg:#372d18;--on:#10210f;color-scheme:dark}}
+*,*:before,*:after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Heebo',system-ui,Arial,sans-serif;line-height:1.7;font-size:17px}
+a{color:inherit}[hidden]{display:none!important}
+header{position:sticky;top:0;background:var(--head);box-shadow:0 1px 0 var(--line);z-index:10}
+.nav{max-width:760px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:10px 20px;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}.brand img{width:40px;height:auto}
+.brand b{display:block;color:var(--g);font-size:20px;line-height:1.1}.brand small{color:var(--g2);font-size:13px}
+.back{color:var(--g);font-weight:500;font-size:15px;text-decoration:none;padding:6px 12px;border-radius:999px}
+main{max-width:760px;margin:0 auto;padding:26px 20px 90px}
+h1{margin:0 0 4px;color:var(--g);font-size:clamp(28px,6vw,38px);line-height:1.2}
+.sub{margin:0 0 22px;opacity:.85}
+.card{background:var(--card);border-radius:24px;padding:22px;box-shadow:0 6px 24px rgba(30,50,30,.07);margin-bottom:16px}
+.card h2{margin:0 0 6px;font-size:21px;color:var(--g)}
+.chip{display:inline-block;font-size:13px;font-weight:500;padding:1px 12px;border-radius:999px;background:var(--icon);color:var(--g);margin-inline-end:6px}
+.chip.w{background:var(--warnbg);color:var(--warn)}.chip.b{background:var(--badbg);color:var(--bad)}
+.when{font-size:19px;font-weight:700;margin:6px 0 2px}
+.note{font-size:14.5px;opacity:.82}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.row>*{flex:1 1 150px}
+.pill{background:var(--g);color:var(--on);padding:11px 22px;border-radius:999px;border:0;font:inherit;font-weight:700;cursor:pointer;text-decoration:none;text-align:center;display:inline-block}
+.pill.ghost{background:transparent;color:var(--g);border:2px solid var(--g)}
+.pill.danger{background:transparent;color:var(--bad);border:2px solid var(--bad)}
+.pill:disabled{opacity:.5;cursor:not-allowed}
+.box{margin-top:14px;padding:14px;border-radius:16px;background:var(--alt);border:1px solid var(--line)}
+.err{background:var(--badbg);color:var(--bad);border-radius:12px;padding:10px 14px;margin:10px 0;font-size:15px}
+.warn{background:var(--warnbg);color:var(--warn);border-radius:12px;padding:10px 14px;margin:10px 0;font-size:15px}
+.ok{background:var(--icon);color:var(--g);border-radius:12px;padding:10px 14px;margin:10px 0;font-size:15px;font-weight:500}
+.days{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px}
+.days button{flex:none;min-width:64px;border:1px solid var(--g2);background:var(--card);color:var(--g);border-radius:14px;padding:6px 8px;font:inherit;cursor:pointer;line-height:1.3}
+.days button b{display:block;font-size:19px}
+.days button[aria-pressed="true"]{background:var(--g);color:var(--on)}
+.times{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px}
+.times button{padding:9px 0;border-radius:12px;border:1px solid var(--g2);background:var(--card);color:var(--g);font:inherit;font-weight:700;cursor:pointer}
+.times button[aria-pressed="true"]{background:var(--g);color:var(--on)}
+label.k{display:flex;gap:10px;align-items:flex-start;margin:10px 0}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--g2);outline-offset:2px}
+details summary{cursor:pointer;font-weight:500;color:var(--g);margin:6px 0}
+.skel{height:90px;border-radius:20px;background:var(--icon);margin-bottom:12px}
+</style></head>
+<body>
+<header><div class="nav"><a class="brand" href="/"><img src="../assets/logo.png" alt=""><span><b>מור ששון</b><small>רפואה סינית</small></span></a><span style="display:flex;gap:6px"><a class="back" href="/book/">קביעת תור</a><a class="back" href="/">לאתר ←</a></span></div></header>
+<main>
+<h1>התורים שלי</h1>
+<p class="sub" id="sub"></p>
+<div id="app"><div class="skel"></div></div>
+</main>
+<script src="../config.js"></script>
+<script>
+(function(){
+"use strict";
+const CFG=window.CLINIC_CFG||{};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pad=n=>String(n).padStart(2,"0");
+const WD=["ראשון","שני","שלישי","רביעי","חמישי","שישי","שבת"];
+const money=n=>"₪"+(Math.round((Number(n)||0)*100)/100).toLocaleString("he-IL");
+const toMin=t=>{const[a,b]=String(t||"0:0").split(":").map(Number);return a*60+(b||0)};
+const toHM=m=>`${pad(Math.floor(m/60))}:${pad(m%60)}`;
+const fmtD=s=>{const[y,m,d]=s.split("-");return`${d}/${m}/${y}`};
+const dow=s=>{const[y,m,d]=s.split("-").map(Number);return new Date(Date.UTC(y,m-1,d)).getUTCDay()};
+const dayNum=s=>{const[y,m,d]=s.split("-").map(Number);return Date.UTC(y,m-1,d)/864e5};
+const naive=(s,min)=>dayNum(s)*1440+min;
+function ilNow(){const p=Object.fromEntries(new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Jerusalem",hourCycle:"h23",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"}).formatToParts(new Date()).map(x=>[x.type,x.value]));return{date:`${p.year}-${p.month}-${p.day}`,min:Number(p.hour)*60+Number(p.minute)}}
+function addDaysStr(s,n){const[y,m,d]=s.split("-").map(Number);const t=new Date(Date.UTC(y,m-1,d+n));return`${t.getUTCFullYear()}-${pad(t.getUTCMonth()+1)}-${pad(t.getUTCDate())}`}
+const ERR={slot_taken:"השעה הזו כבר נתפסה. בחרו שעה אחרת.",too_soon:"המועד קרוב מדי.",too_far:"המועד רחוק מדי.",reschedule_closed:"שינוי מועד עצמאי אפשרי רק בחלון הביטול ללא עלות. אפשר לפנות למור בוואטסאפ.",not_active:"התור הזה כבר לא פעיל.",past:"התור כבר עבר.",not_found:"התור לא נמצא.",bad_token:"הקישור לא תקין או שפג תוקפו."};
+async function rpc(fn,args){
+  if(!CFG.url||!CFG.anonKey)throw new Error("not_configured");
+  const r=await fetch(`${CFG.url}/rest/v1/rpc/${fn}`,{method:"POST",headers:{"Content-Type":"application/json",apikey:CFG.anonKey,Authorization:"Bearer "+CFG.anonKey},body:JSON.stringify(args||{})});
+  const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.message||"error");return j;
+}
+let token="";
+try{const q=new URLSearchParams(location.search).get("t");if(q){localStorage.setItem("myToken",q);history.replaceState(null,"",location.pathname)}token=localStorage.getItem("myToken")||""}catch(_){token=new URLSearchParams(location.search).get("t")||""}
+const app=$("#app");
+let D=null,INFO=null,BUSY=[],openBox=null,msg={};
+
+function policyText(){const p=D.policy;return`עד ${p.freeHours} שעות לפני התור: ביטול ושינוי ללא עלות. בין ${p.freeHours} ל-${p.fullHours} שעות: דמי ביטול בגובה המקדמה. פחות מ-${p.fullHours} שעות או אי הגעה: חיוב מלא.`}
+function gcalUrl(a){const d=a.date.replaceAll("-",""),s=toMin(a.start),e=s+a.minutes,t=m=>`${pad(Math.floor(m/60))}${pad(m%60)}00`;return"https://calendar.google.com/calendar/render?"+new URLSearchParams({action:"TEMPLATE",text:`${a.serviceName} · ${D.info.bizName||"מור ששון"}`,dates:`${d}T${t(s)}/${d}T${t(e)}`,ctz:"Asia/Jerusalem",location:D.info.address||"",details:D.info.notes||""})}
+const isFuture=a=>(a.status==="booked"||a.status==="pending")&&a.hoursLeft>0;
+
+function render(){
+  $("#sub").textContent=`שלום ${D.client.name.split(" ")[0]}, כאן אפשר לראות, לשנות ולבטל תורים.`;
+  const up=D.appts.filter(isFuture).sort((a,b)=>(a.date+a.start).localeCompare(b.date+b.start));
+  const past=D.appts.filter(a=>!isFuture(a));
+  let h="";
+  if(!up.length)h+=`<div class="card"><h2>אין תורים עתידיים</h2><p style="margin:0 0 12px">אפשר לקבוע תור חדש בכל עת.</p><a class="pill" href="/book/">קביעת תור</a></div>`;
+  up.forEach(a=>h+=card(a));
+  h+=`<div class="card"><h2 style="font-size:18px">מדיניות ביטול</h2><p class="note" style="margin:0">${esc(policyText())}</p></div>`;
+  h+=`<section class="card"><h2>היסטוריית טיפולים</h2>${past.length?past.map(a=>`<div style="padding:10px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><span><b>${fmtD(a.date)} · ${a.start}</b><br><span class="note">${esc(a.serviceName)} · ${a.minutes} דקות</span></span><span><span class="chip ${a.status==="cancelled"||a.status==="noshow"?"b":""}">${({booked:"הושלם",done:"הושלם",cancelled:"בוטל",noshow:"לא הגיע/ה",pending:"לא אושר"})[a.status]||a.status}</span></span></div>`).join(""):`<p class="note" style="margin:0">עדיין אין טיפולים קודמים.</p>`}</section>`;
+  app.innerHTML=h;bind();
+}
+function card(a){
+  const pend=a.status==="pending";
+  const dep=pend?`<span class="chip w">ממתין לאישור של מור</span>`:a.deposit>0?(a.depositPaid?`<span class="chip">מקדמה שולמה</span>`:`<span class="chip w">ממתין למקדמה ${money(a.deposit)}</span>`):"";
+  const free=pend||a.tier==="free";
+  const tierNote=free?(pend?`<div class="note">הבקשה ממתינה לאישור. אחרי האישור תקבל הודעה בוואטסאפ עם קישור לתשלום המקדמה.</div>`:""):`<div class="warn">נותרו ${Math.max(0,Math.round(a.hoursLeft))} שעות לתור. ביטול כעת כרוך ב${a.tier==="deposit"?`דמי ביטול בגובה ${money(a.fee)}`:`חיוב מלא (${money(a.fee)})`}, ושינוי מועד עצמאי כבר לא אפשרי.</div>`;
+  let box="";
+  if(openBox&&openBox.id===a.id)box=openBox.kind==="cancel"?cancelBox(a):reschedBox(a);
+  const m=msg[a.id]?`<div class="${msg[a.id].bad?"err":"ok"}" role="status">${esc(msg[a.id].t)}</div>`:"";
+  return`<section class="card" data-a="${esc(a.id)}"><div>${dep}</div><div class="when">יום ${WD[dow(a.date)]}, ${fmtD(a.date)} בשעה ${a.start}</div><div>${esc(a.serviceName)} · ${a.minutes} דקות</div>${D.info.address?`<div class="note">${esc(D.info.address)}</div>`:""}${m}${tierNote}
+    <div class="row">${free?`<button class="pill ghost" data-act="resch" data-id="${esc(a.id)}">שינוי מועד</button>`:""}<button class="pill danger" data-act="cancel" data-id="${esc(a.id)}">ביטול התור</button></div>
+    ${pend?"":`<div class="row"><a class="pill ghost" target="_blank" rel="noopener" href="${esc(gcalUrl(a))}">הוספה ליומן</a>${D.info.nav?`<a class="pill ghost" target="_blank" rel="noopener" href="${esc(D.info.nav)}">ניווט</a>`:""}</div>`}${box}</section>`;
+}
+function cancelBox(a){
+  return`<div class="box"><b>לבטל את התור?</b>${a.fee>0?`<div class="warn">לפי המדיניות, הביטול כרוך בחיוב של <b>${money(a.fee)}</b>${a.depositPaid?" (המקדמה ששולמה תקוזז)":""}.</div><label class="k"><input type="checkbox" id="cf"> אני מבין/ה ומאשר/ת את החיוב</label>`:`<p class="note" style="margin:6px 0">${a.depositPaid?"הביטול ללא עלות, והמקדמה תוחזר אליך.":"הביטול ללא עלות."}</p>`}
+    <div class="row"><button class="pill danger" id="cok" data-id="${esc(a.id)}">כן, לבטל</button><button class="pill ghost" data-act="close">חזרה</button></div></div>`;
+}
+function slotsFor(a,date){
+  const I=INFO,now=ilNow(),minN=naive(now.date,now.min)+Number(I.leadHours||0)*60,step=Number(I.slotStep||30);
+  if((I.blocked||[]).some(b=>date>=b.from&&date<=(b.to||b.from)))return[];
+  const rs=(Object.prototype.hasOwnProperty.call(I.overrides||{},date)?I.overrides[date]:((I.days||{})[dow(date)]||[]))||[];
+  const busy=BUSY.filter(b=>b.date===date&&!(date===a.date&&b.start===a.start));const out=[];
+  rs.filter(r=>r.s&&r.e).forEach(r=>{for(let m=toMin(r.s);m+a.minutes<=toMin(r.e);m+=step){if(naive(date,m)<minN)continue;if(busy.some(b=>toMin(b.start)<m+a.minutes&&toMin(b.start)+b.minutes>m))continue;out.push(toHM(m))}});
+  return out;
+}
+function reschedBox(a){
+  const now=ilNow(),maxD=addDaysStr(now.date,Math.min(Number(INFO.horizonDays||60),45));const days=[];
+  for(let d=now.date;d<=maxD;d=addDaysStr(d,1))if(slotsFor(a,d).length)days.push(d);
+  const sel=openBox.date&&days.includes(openBox.date)?openBox.date:null;
+  return`<div class="box"><b>בחירת מועד חדש</b>${days.length?`<div class="days" role="group" aria-label="ימים פנויים">${days.map(d=>`<button data-d="${d}" aria-pressed="${d===sel}"><small>${WD[dow(d)]}</small><b>${d.slice(8)}/${d.slice(5,7)}</b></button>`).join("")}</div>`:`<p class="note">אין כרגע ימים פנויים. אפשר לפנות למור בוואטסאפ.</p>`}
+    ${sel?`<div class="times">${slotsFor(a,sel).map(t=>`<button data-t="${t}" aria-pressed="${openBox.time===t}">${t}</button>`).join("")}</div>`:""}
+    <div class="row"><button class="pill" id="rok" data-id="${esc(a.id)}" ${openBox.date&&openBox.time?"":"disabled"}>אישור שינוי</button><button class="pill ghost" data-act="close">חזרה</button></div></div>`;
+}
+function bind(){
+  app.querySelectorAll("[data-act]").forEach(b=>b.onclick=async()=>{
+    const act=b.dataset.act;
+    if(act==="close"){openBox=null;render();return}
+    delete msg[b.dataset.id];
+    if(act==="cancel"){openBox={id:b.dataset.id,kind:"cancel"};render()}
+    if(act==="resch"){openBox={id:b.dataset.id,kind:"resch"};render();if(!BUSY.length){try{await loadBusy();render()}catch(_){}}}
+  });
+  app.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>{openBox.date=b.dataset.d;openBox.time=null;render()});
+  app.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{openBox.time=b.dataset.t;render()});
+  const c=$("#cok");if(c)c.onclick=async()=>{
+    const a=D.appts.find(x=>x.id===c.dataset.id);
+    if(a.fee>0&&!$("#cf").checked){alert_("יש לאשר את החיוב כדי להמשיך.");return}
+    c.disabled=true;
+    try{const r=await rpc("my_cancel",{p_token:token,p_appt:a.id});msg[a.id]={t:r.fee>0?`התור בוטל. דמי ביטול: ${money(r.fee)}.`:"התור בוטל."};openBox=null;await reload()}
+    catch(e){c.disabled=false;alert_(ERR[e.message]||"הביטול לא הצליח. נסו שוב או פנו אליי בוואטסאפ.")}
+  };
+  const r=$("#rok");if(r)r.onclick=async()=>{
+    const a=D.appts.find(x=>x.id===r.dataset.id);r.disabled=true;
+    try{await rpc("my_reschedule",{p_token:token,p_appt:a.id,p_date:openBox.date,p_start:openBox.time});msg[a.id]={t:`המועד עודכן ליום ${WD[dow(openBox.date)]} ${fmtD(openBox.date)} בשעה ${openBox.time}. אישור חדש יישלח אליך בוואטסאפ.`};openBox=null;await reload()}
+    catch(e){r.disabled=false;msg[a.id]={bad:true,t:ERR[e.message]||"שינוי המועד לא הצליח."};if(e.message==="slot_taken"){openBox.time=null;try{await loadBusy()}catch(_){}}render()}
+  };
+}
+function alert_(t){let e=$("#aerr");if(!e){e=document.createElement("div");e.id="aerr";e.className="err";e.setAttribute("role","alert");const bx=app.querySelector(".box");if(bx)bx.prepend(e)}e.textContent=t}
+async function loadBusy(){const f=ilNow().date;BUSY=await rpc("pub_busy",{d_from:f,d_to:addDaysStr(f,Number(INFO.horizonDays||60))})}
+async function reload(){D=await rpc("my_bookings",{p_token:token});BUSY=[];render()}
+(async function(){
+  if(!token){app.innerHTML=`<div class="card"><h2>צריך קישור אישי</h2><p style="margin:0">הקישור לניהול התורים נשלח אליך בוואטסאפ עם אישור התור. אפשר גם לקבוע תור חדש.</p><div class="row"><a class="pill" href="/book/">קביעת תור</a></div></div>`;return}
+  try{[D,INFO]=await Promise.all([rpc("my_bookings",{p_token:token}),rpc("pub_info")]);render()}
+  catch(e){app.innerHTML=`<div class="card"><h2>לא הצלחנו לפתוח את התורים</h2><p style="margin:0">${e.message==="bad_token"?"הקישור לא תקין. בקשו קישור חדש במענה בוואטסאפ.":"נסו שוב בעוד רגע."}</p><div class="row"><a class="pill" href="/book/">קביעת תור</a></div></div>`}
+})();
+})();
+</script>
+</body></html>
