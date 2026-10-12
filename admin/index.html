@@ -130,6 +130,17 @@ tbody tr.click:hover{background:var(--sunk)}
 .cal{display:flex;flex-direction:column;height:100%;min-height:0}
 .cal-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 18px;background:var(--surface);border-bottom:1px solid var(--line);flex-wrap:wrap}
 .cal-nav{display:flex;align-items:center;gap:8px}
+.span-seg{flex-wrap:nowrap}
+.span-seg button{min-height:36px;padding:6px 12px}
+.mgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;padding:10px 12px}
+.mhead{font-size:12px;color:var(--muted);text-align:center;font-weight:600;padding:4px 0}
+.mcell{border:1px solid var(--line);background:var(--surface);border-radius:10px;min-height:86px;padding:6px;text-align:start;display:flex;flex-direction:column;gap:3px;cursor:pointer;font:inherit;color:inherit;overflow:hidden;min-width:0}
+.mcell.other{opacity:.45}
+.mcell.today{border-color:var(--jade);box-shadow:inset 0 0 0 1px var(--jade)}
+.mcell b{font-size:14px}
+.mcount{font-size:12px;font-weight:700;color:var(--jade)}
+.mcell small{font-size:11px;color:var(--muted);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:760px){.mcell{min-height:60px;padding:4px}.mcell small{display:none}.mcount{font-size:11px}.span-seg{width:100%}.span-seg button{flex:1}}
 .cal-nav .lbl{font-size:18px;font-weight:700;min-width:130px;text-align:center}
 .cal-scroll{flex:1;overflow:auto;min-height:0;background:var(--surface)}
 .cal-head{position:sticky;top:0;z-index:5;display:grid;background:var(--surface);border-bottom:1px solid var(--line)}
@@ -564,23 +575,33 @@ function renderBell(){const n=dueMessages().length;const b=$("#bellN");b.hidden=
     try{if(window.Notification&&Notification.permission==="granted")new Notification("בקשת תור חדשה",{body:`${a.clientName} · ${dayName(a.date)} ${fmtD(a.date)} ${a.start}`})}catch(_){}})}
 
 /* ================= calendar ================= */
-const cal={week:startOfWeek(new Date()),day:todayStr(),showCancelled:false,svc:"",filterOpen:false};
+const cal={span:"week",day:todayStr(),showCancelled:false,svc:"",filterOpen:false};
+const SPAN_DAYS={day:1,week:7,two:14};
+function calStart(){const d=parseYmd(cal.day);return cal.span==="month"?startOfWeek(new Date(d.getFullYear(),d.getMonth(),1)):cal.span==="day"?d:startOfWeek(d)}
+function calShift(dir){const d=parseYmd(cal.day);cal.day=cal.span==="month"?ymd(new Date(d.getFullYear(),d.getMonth()+dir,1)):ymd(addDays(d,dir*(SPAN_DAYS[cal.span]||7)))}
 const narrow=()=>matchMedia("(max-width:760px)").matches;
 VIEWS.calendar=function(){
-  const nar=narrow();
-  if(nar&&(parseYmd(cal.day)<cal.week||parseYmd(cal.day)>=addDays(cal.week,7)))cal.day=ymd(cal.week);
-  const days=nar?[parseYmd(cal.day)]:[...Array(7)].map((_,i)=>addDays(cal.week,i));
+  const start=calStart(),monthMode=cal.span==="month",nar=narrow();
+  const n=SPAN_DAYS[cal.span]||7;
+  const days=monthMode?[]:cal.span==="day"?[start]:[...Array(n)].map((_,i)=>addDays(start,i));
   const wrap=el(`<div class="cal"></div>`);
-  const m0=cal.week,m1=addDays(cal.week,6);
-  const lbl=m0.getMonth()===m1.getMonth()?`${MONTHS[m0.getMonth()]} ${m0.getFullYear()}`:`${MONTHS[m0.getMonth()]} – ${MONTHS[m1.getMonth()]} ${m1.getFullYear()}`;
+  const anchor=parseYmd(cal.day);
+  let lbl;
+  if(monthMode)lbl=`${MONTHS[anchor.getMonth()]} ${anchor.getFullYear()}`;
+  else if(cal.span==="day")lbl=`${WD[anchor.getDay()]} ${anchor.getDate()} ${MONTHS[anchor.getMonth()]}`;
+  else{const m0=start,m1=addDays(start,n-1);lbl=m0.getMonth()===m1.getMonth()?`${MONTHS[m0.getMonth()]} ${m0.getFullYear()}`:`${MONTHS[m0.getMonth()]} – ${MONTHS[m1.getMonth()]} ${m1.getFullYear()}`}
   const bar=el(`<div class="cal-bar">
     <div class="cal-nav"><button class="btn sm" data-a="next" aria-label="השבוע הבא">${ICON.chev}</button><span class="lbl">${lbl}</span><button class="btn sm" data-a="prev" aria-label="השבוע הקודם">${ICON.chevR}</button><button class="btn sm" data-a="today">היום</button></div>
     <div class="row"><button class="btn sm" data-a="shifts">${ICON.clock}<span>עריכת משמרות</span></button><button class="btn sm" data-a="filter">${ICON.filter}<span>סינון</span></button><button class="btn sm primary" data-a="new">${ICON.plus}<span>תור חדש</span></button></div></div>`);
-  bar.querySelector("[data-a=prev]").onclick=()=>{cal.week=addDays(cal.week,-7);cal.day=ymd(cal.week);renderView(true)};
-  bar.querySelector("[data-a=next]").onclick=()=>{cal.week=addDays(cal.week,7);cal.day=ymd(cal.week);renderView(true)};
-  bar.querySelector("[data-a=today]").onclick=()=>{cal.week=startOfWeek(new Date());cal.day=todayStr();renderView(true)};
-  bar.querySelector("[data-a=new]").onclick=()=>openDrawer(()=>newApptDrawer({date:nar?cal.day:(days.some(d=>ymd(d)===todayStr())?todayStr():ymd(days[0]))}));
-  bar.querySelector("[data-a=shifts]").onclick=()=>openShifts(cal.week);
+  bar.querySelector("[data-a=prev]").onclick=()=>{calShift(-1);renderView(true)};
+  bar.querySelector("[data-a=next]").onclick=()=>{calShift(1);renderView(true)};
+  bar.querySelector("[data-a=today]").onclick=()=>{cal.day=todayStr();renderView(true)};
+  bar.querySelector("[data-a=new]").onclick=()=>openDrawer(()=>newApptDrawer({date:cal.span==="day"?cal.day:(monthMode||days.some(d=>ymd(d)===todayStr()))?todayStr():ymd(days[0])}));
+  bar.querySelector("[data-a=shifts]").onclick=()=>openShifts(startOfWeek(parseYmd(cal.day)));
+  // מתג תצוגה: יום / שבוע / שבועיים / חודש
+  const spanSeg=el(`<div class="seg span-seg" role="group" aria-label="סוג תצוגה"><button data-s="day">יום</button><button data-s="week">שבוע</button><button data-s="two">שבועיים</button><button data-s="month">חודש</button></div>`);
+  spanSeg.querySelectorAll("button").forEach(b=>{b.setAttribute("aria-pressed",String(b.dataset.s===cal.span));b.onclick=()=>{cal.span=b.dataset.s;renderView(true)}});
+  bar.querySelector(".row").prepend(spanSeg);
   bar.querySelector("[data-a=filter]").onclick=()=>{cal.filterOpen=!cal.filterOpen;renderView(true)};
   wrap.appendChild(bar);
   if(cal.filterOpen){
@@ -589,7 +610,21 @@ VIEWS.calendar=function(){
     sel.onchange=e=>{cal.svc=e.target.value;renderView(true)};f.querySelector("#cf-can").onchange=e=>{cal.showCancelled=e.target.checked;renderView(true)};
     wrap.appendChild(f);
   }
-  if(nar){const dc=el(`<div class="daychips"></div>`);for(let i=0;i<7;i++){const d=addDays(cal.week,i),s=ymd(d);const b=el(`<button aria-pressed="${s===cal.day}"><small>${WD[i]}</small><b>${d.getDate()}</b></button>`);b.onclick=()=>{cal.day=s;renderView(true)};dc.appendChild(b)}wrap.appendChild(dc)}
+  if(monthMode){
+    const first=new Date(anchor.getFullYear(),anchor.getMonth(),1),gStart=startOfWeek(first);
+    const byDate={};liveAppts().filter(a=>(cal.showCancelled||a.status!=="cancelled")&&(!cal.svc||a.serviceId===cal.svc)).forEach(a=>{(byDate[a.date]=byDate[a.date]||[]).push(a)});
+    const grid=el(`<div class="mgrid"></div>`);
+    WD.forEach(w=>grid.appendChild(el(`<div class="mhead">${w.slice(0,3)}</div>`)));
+    for(let i=0;i<42;i++){
+      const d=addDays(gStart,i),s=ymd(d),list=(byDate[s]||[]).sort((a,b)=>a.start.localeCompare(b.start));
+      const cls=`mcell${d.getMonth()!==first.getMonth()?" other":""}${s===todayStr()?" today":""}`;
+      const b=el(`<button class="${cls}" aria-label="${fmtD(s)}, ${list.length} תורים"><b class="num">${d.getDate()}</b>${list.length?`<span class="mcount num">${list.length} תורים</span><small>${list.slice(0,2).map(a=>esc(a.start+" "+a.clientName)).join(" · ")}</small>`:""}</button>`);
+      b.onclick=()=>{cal.span="day";cal.day=s;renderView(true)};
+      grid.appendChild(b);
+    }
+    wrap.appendChild(grid);
+    return wrap;
+  }
   const dstr=days.map(ymd);
   const appts=liveAppts().filter(a=>dstr.includes(a.date)&&(cal.showCancelled||a.status!=="cancelled")&&(!cal.svc||a.serviceId===cal.svc));
   let mn=24*60,mx=0;
@@ -598,7 +633,7 @@ VIEWS.calendar=function(){
   if(mx<=mn){mn=8*60;mx=20*60}
   const sH=Math.max(0,Math.floor(mn/60)-1),eH=Math.min(24,Math.ceil(mx/60)+1);
   const HOUR=56,PX=HOUR/60,tot=(eH-sH)*HOUR;
-  const tmpl=`58px repeat(${days.length},minmax(${nar?"0":"110px"},1fr))`;
+  const tmpl=`58px repeat(${days.length},minmax(${days.length===1?"0":"110px"},1fr))`;
   const sc=el(`<div class="cal-scroll"></div>`);
   const head=el(`<div class="cal-head" style="grid-template-columns:${tmpl}"><div></div></div>`);
   days.forEach(d=>{const s=ymd(d);const sp=hasOverride(s)?`<span class="chip gold" title="משמרת שונה מהקבוע">מיוחד</span>`:"";const hd=el(`<div class="${s===todayStr()?"today":""}" style="cursor:pointer" title="עריכת משמרות"><span>${WD[d.getDay()]}</span><b class="num">${d.getDate()}</b>${sp}</div>`);hd.onclick=()=>openShifts(cal.week);head.appendChild(hd)});
