@@ -633,7 +633,9 @@ VIEWS.calendar=function(){
   if(mx<=mn){mn=8*60;mx=20*60}
   const sH=Math.max(0,Math.floor(mn/60)-1),eH=Math.min(24,Math.ceil(mx/60)+1);
   const HOUR=56,PX=HOUR/60,tot=(eH-sH)*HOUR;
-  const tmpl=`58px repeat(${days.length},minmax(${days.length===1?"0":"110px"},1fr))`;
+  // בנייד: שבוע (7 ימים) נכנס כולו במסך אחד בלי גלילה אופקית
+  const fitAll=nar&&days.length<=7;
+  const tmpl=fitAll?`40px repeat(${days.length},minmax(0,1fr))`:`58px repeat(${days.length},minmax(${days.length===1?"0":"110px"},1fr))`;
   const sc=el(`<div class="cal-scroll"></div>`);
   const head=el(`<div class="cal-head" style="grid-template-columns:${tmpl}"><div></div></div>`);
   days.forEach(d=>{const s=ymd(d);const sp=hasOverride(s)?`<span class="chip gold" title="משמרת שונה מהקבוע">מיוחד</span>`:"";const hd=el(`<div class="${s===todayStr()?"today":""}" style="cursor:pointer" title="עריכת משמרות"><span>${WD[d.getDay()]}</span><b class="num">${d.getDate()}</b>${sp}</div>`);hd.onclick=()=>openShifts(cal.week);head.appendChild(hd)});
