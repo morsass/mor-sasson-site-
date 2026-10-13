@@ -568,7 +568,7 @@ $("#gsearch").addEventListener("blur",()=>setTimeout(()=>$("#gres").hidden=true,
 $("#gear").onclick=()=>{location.hash="settings"};
 $("#bell").onclick=()=>openDrawer(queueDrawer);
 let _pendSeen=null;
-function renderBell(){const n=dueMessages().length;const b=$("#bellN");b.hidden=!n;b.textContent=n;
+function renderBell(){const n=dueMessages().length+unseenQ().length;const b=$("#bellN");b.hidden=!n;b.textContent=n;
   const pend=liveAppts().filter(a=>a.status==="pending"&&aEnd(a)>new Date());
   document.title=(pend.length?`(${pend.length}) `:"")+document.title.replace(/^\(\d+\) /,"");
   if(_pendSeen===null){_pendSeen=new Set(pend.map(a=>a.id));return}
@@ -1033,6 +1033,18 @@ function clientDrawer(id){
       <label class="f full">הערות רפואיות / כלליות<textarea id="c-notes">${esc(c.notes||"")}</textarea></label></div>`);
     body.push(f);
     // טפסים חתומים שהועברו מ-LEE (נשמרים בדלי client-forms, גישה בקישור זמני)
+    // שאלונים שהלקוח מילא אונליין (נשמרים בבקשות qreq)
+    if(id){const qd=list("qreq").filter(r=>r.clientId===id&&r.status==="done").sort((a,b)=>(b.doneAt||"").localeCompare(a.doneAt||""));
+      if(qd.length){const qb=el(`<div class="box"><div class="muted small" style="margin-bottom:6px">שאלונים שמולאו</div></div>`);
+        qd.forEach(r=>{const when=new Date(r.doneAt||r.createdAt).toLocaleString("he-IL",{dateStyle:"short",timeStyle:"short"});
+          const d=el(`<details class="box" style="margin:6px 0;padding:8px 12px"><summary>${esc(r.title||"שאלון")} · ${esc(when)}</summary></details>`);
+          const lines=parseQ(r.body).map((it,i)=>{const a=(r.answers||{})["q"+i];if(it.k==="h")return `<h4 style="margin:10px 0 4px">${esc(it.t)}</h4>`;if(it.k==="p")return "";
+            if(!a)return `<div class="small muted">${esc(it.t)}: —</div>`;
+            if(it.k==="yn")return `<div class="small"><b>${esc(it.t)}</b> ${esc(a.a||"—")}${a.d?` · ${esc(a.d)}`:""}</div>`;
+            if(it.k==="txt")return `<div class="small"><b>${esc(it.t)}</b> ${esc(a.a||"—")}</div>`;
+            if(it.k==="ok")return `<div class="small">${a.a===true?"✓":"✗"} ${esc(it.t)}</div>`;return ""}).join("");
+          d.appendChild(el(`<div>${lines}</div>`));qb.appendChild(d)});
+        body.push(qb)}}
     if(id&&(c.forms||[]).length){
       const fb=el(`<div class="box"><div class="muted small" style="margin-bottom:6px">טפסים חתומים</div>${c.forms.map((f,i)=>`<button class="btn sm" data-i="${i}" style="margin:3px">${esc(f.name)} · ${esc(f.date)}</button>`).join("")}</div>`);
       fb.querySelectorAll("button").forEach(b=>b.onclick=async()=>{const f=c.forms[+b.dataset.i];try{const {data,error}=await sb.storage.from("client-forms").createSignedUrl(f.path,300);if(error||!data)throw error||new Error("no url");window.open(data.signedUrl,"_blank")}catch(e){toast("לא ניתן לפתוח את הטופס")}});
@@ -1246,7 +1258,12 @@ function queueDrawer(){
   const b=[];
   if(window.Notification&&Notification.permission==="default"){const nb=el(`<button class="btn sm">הפעלת התראות בדפדפן על בקשות תור חדשות</button>`);nb.onclick=()=>Notification.requestPermission().then(()=>{toast("ההתראות הופעלו");nb.remove()});b.push(nb)}
   b.push(el(`<div class="note">הודעות לפי האוטומציות הפעילות. לחיצה על "שליחה" פותחת וואטסאפ עם ההודעה מוכנה.</div>`));
-  if(!q.length)b.push(el(`<div class="empty">אין הודעות שממתינות לשליחה</div>`));
+  if(!q.length&&!unseenQ().length)b.push(el(`<div class="empty">אין הודעות שממתינות לשליחה</div>`));
+  unseenQ().forEach(r=>{const when=new Date(r.doneAt||r.createdAt).toLocaleString("he-IL",{dateStyle:"short",timeStyle:"short"});
+    const row=el(`<div class="box" style="margin:8px 0;padding:10px 12px"><div><b>${esc(r.clientName||"לקוח")}</b> מילא/ה את: ${esc(r.title||"שאלון")}</div><div class="muted small">${esc(when)}</div></div>`);
+    const ob=el(`<button class="btn primary sm" style="margin-top:6px">פתיחת כרטיס הלקוח</button>`);
+    ob.onclick=()=>{upd("qreq",r.id,{seen:true});openDrawer(()=>clientDrawer(r.clientId))};
+    row.appendChild(ob);b.push(row)});
   q.forEach(m=>b.push(queueRow(m)));
   const g=el(`<button class="btn">ניהול אוטומציות</button>`);g.onclick=()=>{closeDrawer();auTab="mine";location.hash="automations"};
   return frame("הודעות לשליחה",b,[g]);
@@ -1447,6 +1464,7 @@ function demoSeed(){
   [[0,1,"10:30",0],[1,2,"16:00",1],[2,2,"18:00",0],[0,4,"09:30",1]].forEach(([c,d,t,s],i)=>{const sv=st.services["s"+s],cl=st.clients["c"+c];st.appts["a"+i]={id:"a"+i,clientId:cl.id,clientName:cl.name,phone:cl.phone,serviceId:sv.id,serviceName:sv.name,date:ymd(addDays(w,d)),start:t,minutes:60,price:sv.price,deposit:0,status:"booked",paid:false,sent:{},notes:[],example:true,createdAt:new Date().toISOString()}});
 }
 
+function unseenQ(){return list("qreq").filter(r=>r.status==="done"&&!r.seen).sort((a,b)=>(b.doneAt||"").localeCompare(a.doneAt||""))}
 /* ================= data layer: Supabase (Firestore-like adapter) ================= */
 function makeDb(sb){
   const docs={};COLS.forEach(c=>docs[c]={});
