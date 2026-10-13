@@ -968,6 +968,12 @@ function clientDrawer(id){
       <label class="f">תאריך לידה<input id="c-bday" type="date" value="${esc(c.birthday||"")}"></label>
       <label class="f full">הערות רפואיות / כלליות<textarea id="c-notes">${esc(c.notes||"")}</textarea></label></div>`);
     body.push(f);
+    // טפסים חתומים שהועברו מ-LEE (נשמרים בדלי client-forms, גישה בקישור זמני)
+    if(id&&(c.forms||[]).length){
+      const fb=el(`<div class="box"><div class="muted small" style="margin-bottom:6px">טפסים חתומים</div>${c.forms.map((f,i)=>`<button class="btn sm" data-i="${i}" style="margin:3px">${esc(f.name)} · ${esc(f.date)}</button>`).join("")}</div>`);
+      fb.querySelectorAll("button").forEach(b=>b.onclick=async()=>{const f=c.forms[+b.dataset.i];try{const {data,error}=await sb.storage.from("client-forms").createSignedUrl(f.path,300);if(error||!data)throw error||new Error("no url");window.open(data.signedUrl,"_blank")}catch(e){toast("לא ניתן לפתוח את הטופס")}});
+      body.push(fb);
+    }
     if(id){const bl=el(`<label class="row small" style="font-weight:600"><input type="checkbox" ${blocked(id)?"checked":""}> לא לשלוח ללקוח הודעות אוטומטיות</label>`);bl.querySelector("input").onchange=e=>{S.blacklist=(S.blacklist||[]).filter(x=>x!==id);if(e.target.checked)S.blacklist.push(id);saveSettings()};body.push(bl);
       const dl=el(`<button class="btn danger sm" style="align-self:flex-start">מחיקת הלקוח</button>`);dl.onclick=()=>{if(clientAppts(id).length){toast("ללקוח יש תורים ברישום, לכן לא ניתן למחוק");return}if(!dl.dataset.s){dl.dataset.s=1;dl.textContent="לחצו שוב למחיקה";return}del("clients",id);closeDrawer();toast("הלקוח נמחק")};body.push(dl)}
     const save=el(`<button class="btn primary">${id?"שמירה":"הוספת לקוח"}</button>`);
