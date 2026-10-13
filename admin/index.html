@@ -400,7 +400,7 @@ function mergeSettings(o){
 }
 
 /* ================= store ================= */
-const COLS=["services","products","packages","clients","appts","receipts"];
+const COLS=["services","products","packages","clients","appts","receipts","qreq"];
 const st={};COLS.forEach(c=>st[c]={});
 let S=mergeSettings({}), H=structuredClone(DEF_HOURS);
 let db=null, demo=false, loaded=false;
@@ -934,13 +934,18 @@ const DEF_QUESTIONNAIRES=[{id:"q-intake",title:"שאלון מקדים לטיפו
 function qList(){if(!Array.isArray(S.questionnaires))S.questionnaires=structuredClone(DEF_QUESTIONNAIRES);return S.questionnaires}
 let qPick=null;
 const waPhone=p=>{let d=String(p||"").replace(/\D/g,"");if(d.startsWith("0"))d="972"+d.slice(1);return d};
+const randHex=()=>Array.from(crypto.getRandomValues(new Uint8Array(16)),b=>b.toString(16).padStart(2,"0")).join("");
+// אותו פורמט שהלקוח רואה בדף /q: # כותרת · ? שאלה כן/לא + פירוט · - שדה טקסט · ✓ הסכמה · שורה אחרת = הסבר
+function parseQ(body){return String(body||"").split("\n").map(s=>s.trim()).filter(Boolean).map(s=>{
+  if(s.startsWith("# "))return {k:"h",t:s.slice(2)};if(s.startsWith("? "))return {k:"yn",t:s.slice(2)};
+  if(s.startsWith("- "))return {k:"txt",t:s.slice(2)};if(s.startsWith("✓ "))return {k:"ok",t:s.slice(2)};return {k:"p",t:s}})}
 VIEWS.questionnaires=function(){
   const qs=qList();
   const p=el(`<div class="page"><div class="page-head"><div><div class="crumbs">אוטומציות › שאלונים</div><h1>ניהול שאלונים</h1><p>שאלונים ותקנונים שאתם שולחים ללקוחות בוואטסאפ. אפשר להוסיף, לערוך ולהסיר.</p></div><button class="btn primary" data-a="add">${ICON.plus}<span>שאלון חדש</span></button></div></div>`);
   p.querySelector('[data-a="add"]').onclick=()=>{const id="q"+Date.now().toString(36);qs.push({id,title:"שאלון חדש",body:""});saveSettings();renderView(true)};
   if(!qs.length)p.appendChild(el(`<div class="empty">אין שאלונים. לחצו על "שאלון חדש".</div>`));
   qs.forEach((q,idx)=>{
-    const card=el(`<div class="box form" style="margin-bottom:12px"><label class="f full">שם השאלון<input data-f="title" value="${esc(q.title)}"></label><label class="f full">תוכן השאלון / התקנון<textarea data-f="body" rows="6" placeholder="כתבו כאן את השאלות או את טקסט התקנון">${esc(q.body||"")}</textarea></label><div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn primary sm" data-a="save">שמירה</button><button class="btn sm" data-a="wa">שליחה בוואטסאפ ללקוח</button><button class="btn danger sm" data-a="del">הסרה</button></div><div data-pick></div></div>`);
+    const card=el(`<div class="box form" style="margin-bottom:12px"><label class="f full">שם השאלון<input data-f="title" value="${esc(q.title)}"></label><label class="f full">תוכן השאלון / התקנון<textarea data-f="body" rows="10" placeholder="# פרטים אישיים&#10;- שם מלא&#10;# מצב בריאותי&#10;? האם עברת ניתוח?&#10;✓ קראתי והסכמתי">${esc(q.body||"")}</textarea></label><div class="muted small" style="margin:-4px 0 6px">סימנים: # כותרת · ? שאלה כן/לא עם שדה פירוט · - שדה טקסט חופשי · ✓ תיבת הסכמה (חובה) · שורה רגילה = הסבר</div><div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn primary sm" data-a="save">שמירה</button><button class="btn sm" data-a="wa">שליחה בוואטסאפ ללקוח</button><button class="btn danger sm" data-a="del">הסרה</button></div><div data-pick></div></div>`);
     card.querySelector('[data-a="save"]').onclick=()=>{q.title=card.querySelector('[data-f="title"]').value.trim()||"שאלון";q.body=card.querySelector('[data-f="body"]').value;saveSettings();toast("נשמר");renderView(true)};
     const delB=card.querySelector('[data-a="del"]');
     delB.onclick=()=>{if(!delB.dataset.s){delB.dataset.s=1;delB.textContent="לחצו שוב להסרה";return}qs.splice(idx,1);saveSettings();toast("השאלון הוסר");renderView(true)};
@@ -953,13 +958,36 @@ VIEWS.questionnaires=function(){
         const body=(q.body||"").trim();
         list("clients").filter(c=>!s||(c.name||"").includes(s)||(c.phone||"").includes(s)).sort((a,b)=>(a.name||"").localeCompare(b.name||"","he")).slice(0,60).forEach(c=>{
           const first=(c.name||"").split(" ")[0];
-          const msg=`שלום ${first},\n${q.title}${body?"\n\n"+body:""}`;
-          const a=el(`<a class="btn sm" target="_blank" rel="noopener" style="display:flex;justify-content:space-between;margin:3px 0;text-decoration:none">${esc(c.name||"")} <span class="ltr small muted">${esc(c.phone||"")}</span></a>`);
-          a.href=`https://wa.me/${waPhone(c.phone)}?text=${encodeURIComponent(msg)}`;
-          box.appendChild(a)});
+          const b=el(`<button class="btn sm" style="display:flex;justify-content:space-between;width:100%;margin:3px 0">${esc(c.name||"")} <span class="ltr small muted">${esc(c.phone||"")}</span></button>`);
+          b.onclick=()=>{const rid=randHex();const link=`https://mor-sasson.com/q/?t=${rid}`;
+            put("qreq",rid,{clientId:c.id,clientName:c.name||"",questionnaireId:q.id,title:q.title,body:q.body||"",status:"open",createdAt:new Date().toISOString()});
+            const msg=`שלום ${first},\n${q.title}\nנא למלא את השאלון באונליין (במחשב או בסמארטפון):\n${link}`;
+            window.open(`https://wa.me/${waPhone(c.phone)}?text=${encodeURIComponent(msg)}`,"_blank");
+            toast("הבקשה נשמרה, ההודעה נפתחה בוואטסאפ");qPick=null;renderView(true)};
+          box.appendChild(b)});
         if(!box.children.length)box.innerHTML=`<div class="empty">לא נמצאו לקוחות</div>`;
       };
       pk.querySelector('[data-s]').oninput=draw;draw();
+    }
+    // תשובות שהתקבלו לשאלון הזה
+    const reqs=list("qreq").filter(r=>r.questionnaireId===q.id).sort((a,b)=>(b.createdAt||"").localeCompare(a.createdAt||"")).slice(0,25);
+    if(reqs.length){
+      const rs=el(`<div style="margin-top:12px"><div class="muted small" style="margin-bottom:6px">נשלחו ללקוחות (${reqs.length})</div></div>`);
+      reqs.forEach(r=>{
+        const done=r.status==="done";
+        const when=new Date(done?(r.doneAt||r.createdAt):r.createdAt).toLocaleString("he-IL",{dateStyle:"short",timeStyle:"short"});
+        const row=el(`<details class="box" style="margin:6px 0;padding:8px 12px"><summary>${esc(r.clientName||"")} · ${done?"מולא":"ממתין למילוי"} · ${esc(when)}</summary></details>`);
+        if(done){
+          const parsed=parseQ(r.body);
+          const lines=parsed.map((it,i)=>{const a=(r.answers||{})["q"+i];if(it.k==="h")return `<h4 style="margin:10px 0 4px">${esc(it.t)}</h4>`;if(it.k==="p")return "";
+            if(!a)return `<div class="small muted">${esc(it.t)}: —</div>`;
+            if(it.k==="yn")return `<div class="small"><b>${esc(it.t)}</b> ${esc(a.a||"—")}${a.d?` · ${esc(a.d)}`:""}</div>`;
+            if(it.k==="txt")return `<div class="small"><b>${esc(it.t)}</b> ${esc(a.a||"—")}</div>`;
+            if(it.k==="ok")return `<div class="small">${a.a===true?"✓":"✗"} ${esc(it.t)}</div>`;return ""}).join("");
+          row.appendChild(el(`<div>${lines}</div>`));
+        }
+        rs.appendChild(row)});
+      card.appendChild(rs);
     }
     p.appendChild(card);
   });
