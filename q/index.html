@@ -33,6 +33,11 @@ textarea{min-height:76px;resize:vertical}
 .done{text-align:center;padding:30px 10px}
 .done b{display:block;color:var(--g);font-size:24px;margin-bottom:8px}
 .req{color:var(--bad)}
+.sig-wrap{margin-top:18px;border-top:1px solid var(--line);padding-top:6px}
+.sig-canvas{width:100%;height:170px;display:block;border:1px dashed var(--g2);border-radius:12px;background:#fff;touch-action:none;margin-top:8px;cursor:crosshair}
+.sig-row{display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-size:14px}
+.sig-hint{color:var(--ink);opacity:.7}
+.sig-clear{border:0;background:none;color:var(--g);font:inherit;font-weight:700;cursor:pointer;padding:6px 8px}
 </style>
 </head>
 <body>
@@ -132,6 +137,48 @@ textarea{min-height:76px;resize:vertical}
         box.appendChild(lab);
       }
     });
+    renderSig(box);
+  }
+
+  // חתימה בסוף הטופס: שם מלא + חתימה בציור (באצבע או בעכבר)
+  var sigState = { drawn: false, img: null, ctx: null, cv: null };
+  function renderSig(box){
+    var wrap = el('div', 'sig-wrap', '');
+    wrap.appendChild(el('h3', '', 'חתימה'));
+    wrap.appendChild(el('p', '', 'אני מאשר/ת שמילאתי את הטופס בעצמי, ושהתשובות שלי נכונות.'));
+    var nm = el('input', ''); nm.type = 'text'; nm.id = 'sigName'; nm.placeholder = 'שם מלא'; nm.setAttribute('autocomplete', 'name');
+    wrap.appendChild(nm);
+    var cv = el('canvas', 'sig-canvas'); cv.id = 'sigCanvas';
+    wrap.appendChild(cv);
+    var row = el('div', 'sig-row', '');
+    row.appendChild(el('span', 'sig-hint', 'חתמו בתוך המסגרת'));
+    var clr = el('button', 'sig-clear', 'ניקוי'); clr.type = 'button';
+    row.appendChild(clr);
+    wrap.appendChild(row);
+    box.appendChild(wrap);
+    sigState.cv = cv;
+    var drawing = false, last = null;
+    function pos(e){ var r = cv.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
+    cv.addEventListener('pointerdown', function(e){ e.preventDefault(); drawing = true; cv.setPointerCapture(e.pointerId); last = pos(e); });
+    cv.addEventListener('pointermove', function(e){
+      if (!drawing || !sigState.ctx) return;
+      var p = pos(e); var c = sigState.ctx;
+      c.beginPath(); c.moveTo(last.x, last.y); c.lineTo(p.x, p.y); c.stroke();
+      last = p; sigState.drawn = true;
+    });
+    function end(){ if (!drawing) return; drawing = false; if (sigState.drawn) sigState.img = cv.toDataURL('image/png'); }
+    cv.addEventListener('pointerup', end);
+    cv.addEventListener('pointercancel', end);
+    clr.onclick = function(){ if (sigState.ctx) sigState.ctx.clearRect(0, 0, cv.width, cv.height); sigState.drawn = false; sigState.img = null; };
+  }
+  // נקרא כשהטופס מוצג, כדי שהקנבס יקבל גודל אמיתי
+  function setupSig(){
+    var cv = sigState.cv; if (!cv) return;
+    var r = cv.getBoundingClientRect(); var dpr = window.devicePixelRatio || 1;
+    cv.width = Math.round(r.width * dpr); cv.height = Math.round(r.height * dpr);
+    var c = cv.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    c.lineWidth = 2.4; c.lineCap = 'round'; c.lineJoin = 'round'; c.strokeStyle = '#1d2a22';
+    sigState.ctx = c;
   }
 
   function validate(){
@@ -141,6 +188,8 @@ textarea{min-height:76px;resize:vertical}
       if (it.k === 'yn' && (!a || !a.a)) missing.push(it.t);
       if (it.k === 'ok' && (!a || a.a !== true)) missing.push(it.t);
     });
+    if (!$('sigName') || !$('sigName').value.trim()) missing.push('שם מלא בחתימה');
+    if (!sigState.drawn || !sigState.img) missing.push('חתימה');
     return missing;
   }
 
@@ -150,6 +199,7 @@ textarea{min-height:76px;resize:vertical}
     var errBox = $('formErr');
     if (missing.length) { errBox.textContent = 'נא לענות על כל השאלות ולאשר את ההצהרה לפני השליחה.'; errBox.classList.remove('hidden'); return; }
     errBox.classList.add('hidden');
+    answers.sig = { name: $('sigName').value.trim(), img: sigState.img, signedAt: new Date().toISOString() };
     var btn = $('send'); btn.disabled = true; btn.textContent = 'שולחים…';
     rpc('submit_questionnaire', { p_token: token, p_answers: answers }).then(function(ok){
       if (ok === true) { $('ready').classList.add('hidden'); $('thanks').classList.remove('hidden'); window.scrollTo(0, 0); }
@@ -172,6 +222,7 @@ textarea{min-height:76px;resize:vertical}
     items = parse(d.body);
     render();
     $('ready').classList.remove('hidden');
+    setupSig();
   }).catch(function(){
     $('loading').classList.add('hidden');
     $('bad').classList.remove('hidden');
