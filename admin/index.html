@@ -144,10 +144,11 @@ tbody tr.click:hover{background:var(--sunk)}
 .cal-nav .lbl{font-size:18px;font-weight:700;min-width:130px;text-align:center}
 .cal-scroll{flex:1;overflow:auto;min-height:0;background:var(--surface)}
 .cal-head{position:sticky;top:0;z-index:5;display:grid;background:var(--surface);border-bottom:1px solid var(--line)}
-.cal-head div{padding:8px 4px;text-align:center;font-weight:600;color:var(--muted);display:flex;align-items:baseline;justify-content:center;gap:6px}
-.cal-head b{font-size:22px;font-weight:600;color:var(--ink)}
-.cal-head .today,.cal-head .today b{color:var(--jade)}
-.cal-head .today b{background:var(--jade-soft);border-radius:8px;padding:0 6px}
+.cal-head div{padding:8px 4px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.cal-head .wd{font-size:18px;font-weight:700;color:var(--ink);line-height:1.2}
+.cal-head .dt{font-size:12px;color:var(--muted);line-height:1.2}
+.cal-head .today .wd,.cal-head .today .dt{color:var(--jade)}
+.cal-head .today .wd{background:var(--jade-soft);border-radius:8px;padding:0 6px}
 .cal-body{display:grid;position:relative}
 .gut{position:relative;border-inline-start:1px solid var(--line)}
 .gut span{position:absolute;inset-inline:0;text-align:center;font-size:12px;color:var(--muted);transform:translateY(-50%)}
@@ -638,7 +639,7 @@ VIEWS.calendar=function(){
   const tmpl=fitAll?`40px repeat(${days.length},minmax(0,1fr))`:`58px repeat(${days.length},minmax(${days.length===1?"0":"110px"},1fr))`;
   const sc=el(`<div class="cal-scroll"></div>`);
   const head=el(`<div class="cal-head" style="grid-template-columns:${tmpl}"><div></div></div>`);
-  days.forEach(d=>{const s=ymd(d);const sp=hasOverride(s)?`<span class="chip gold" title="משמרת שונה מהקבוע">מיוחד</span>`:"";const hd=el(`<div class="${s===todayStr()?"today":""}" style="cursor:pointer" title="עריכת משמרות"><span>${WD[d.getDay()]}</span><b class="num">${d.getDate()}</b>${sp}</div>`);hd.onclick=()=>openShifts(cal.week);head.appendChild(hd)});
+  days.forEach(d=>{const s=ymd(d);const sp=hasOverride(s)?`<span class="chip gold" title="משמרת שונה מהקבוע">מיוחד</span>`:"";const hd=el(`<div class="${s===todayStr()?"today":""}" style="cursor:pointer" title="עריכת משמרות"><span class="wd">${WD[d.getDay()]}</span><span class="dt num">${pad(d.getDate())}/${pad(d.getMonth()+1)}</span>${sp}</div>`);hd.onclick=()=>openShifts(cal.week);head.appendChild(hd)});
   const body=el(`<div class="cal-body" style="grid-template-columns:${tmpl};height:${tot}px;--hour:${HOUR}px"></div>`);
   const gut=el(`<div class="gut"></div>`);for(let hh=sH+1;hh<eH;hh++)gut.appendChild(el(`<span class="num" style="top:${(hh-sH)*HOUR}px">${pad(hh)}:00</span>`));body.appendChild(gut);
   const now=new Date(),nowM=now.getHours()*60+now.getMinutes();
