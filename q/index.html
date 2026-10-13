@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="he" dir="rtl"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>שאלון · מור ששון</title>
+<link rel="icon" href="../assets/logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#faf8f3;--card:#fff;--ink:#3b3f45;--g:#3a5a40;--g2:#84a98c;--icon:#eef1ec;--line:#e6e9e2;--bad:#a8432f;--badbg:#f7e4df;--on:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171a17;--card:#242924;--ink:#d9ddd5;--g:#9bc4a1;--g2:#6f9a77;--icon:#2e352e;--line:#343a34;--bad:#ec8b74;--badbg:#3a221c;--on:#10210f}}
+*,*:before,*:after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Heebo',system-ui,Arial,sans-serif;line-height:1.7;font-size:17px;-webkit-text-size-adjust:100%}
+.wrap{max-width:640px;margin:0 auto;padding:18px 16px 60px}
+.brand{color:var(--g);font-weight:700;font-size:18px;margin:4px 0 14px}
+h1{color:var(--g);font-size:clamp(24px,6vw,32px);line-height:1.25;margin:0 0 6px}
+.hi{color:var(--ink);opacity:.85;margin:0 0 18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:0 0 14px}
+h3{color:var(--g);font-size:19px;margin:18px 0 8px}
+p{margin:6px 0}
+.q{font-weight:500;margin:0 0 10px}
+.yn{display:flex;gap:10px;margin:0 0 8px}
+.yn button{flex:1;min-height:48px;border-radius:14px;border:1px solid var(--g2);background:var(--card);color:var(--g);font:inherit;font-weight:700;font-size:17px;cursor:pointer}
+.yn button[aria-pressed="true"]{background:var(--g);color:var(--on);border-color:var(--g)}
+textarea,input[type=text]{width:100%;font:inherit;font-size:17px;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);margin-top:6px}
+textarea{min-height:76px;resize:vertical}
+.chk{display:flex;gap:10px;align-items:flex-start;padding:12px;border-radius:12px;background:var(--icon);margin:14px 0}
+.chk input{width:22px;height:22px;margin-top:4px;flex:none}
+.btn{width:100%;min-height:52px;border-radius:999px;border:0;background:var(--g);color:var(--on);font:inherit;font-weight:700;font-size:18px;cursor:pointer;margin-top:10px}
+.btn:disabled{opacity:.5}
+.err{background:var(--badbg);color:var(--bad);border-radius:12px;padding:10px 14px;margin:10px 0;font-size:15px}
+.hidden{display:none}
+.done{text-align:center;padding:30px 10px}
+.done b{display:block;color:var(--g);font-size:24px;margin-bottom:8px}
+.req{color:var(--bad)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">מור ששון · רפואה סינית</div>
+  <div id="loading" class="card">טוענים את השאלון…</div>
+  <div id="bad" class="card hidden">
+    <div class="err">הקישור לא תקין או שפג תוקפו. אפשר לפנות למור ולבקש קישור חדש.</div>
+  </div>
+  <div id="ready" class="hidden">
+    <h1 id="title"></h1>
+    <p class="hi" id="hi"></p>
+    <form id="form" novalidate>
+      <div class="card" id="items"></div>
+      <div id="formErr" class="err hidden"></div>
+      <button class="btn" id="send" type="submit">שליחת השאלון</button>
+    </form>
+  </div>
+  <div id="thanks" class="card done hidden">
+    <b>תודה, הטופס נשלח.</b>
+    <p>מור תעבור על התשובות לפני הטיפול.</p>
+  </div>
+  <div id="already" class="card done hidden">
+    <b>הטופס כבר מולא</b>
+    <p>תודה! אין צורך לשלוח שוב.</p>
+  </div>
+</div>
+<script src="../config.js"></script>
+<script>
+(function(){
+  var CFG = window.CLINIC_CFG || {};
+  var $ = function(id){ return document.getElementById(id); };
+  var token = (new URLSearchParams(location.search).get('t') || '').trim();
+  var items = [];
+  var answers = {};
+
+  // פורמט השאלון (זהה לאדמין): # כותרת, ? שאלה כן/לא עם פירוט, - שדה טקסט, ✓ הסכמה חובה, שאר השורות הם טקסט הסבר
+  function parse(body){
+    return String(body || '').split('\n').map(function(s){ return s.trim(); }).filter(Boolean).map(function(s){
+      if (s.indexOf('# ') === 0) return { k: 'h', t: s.slice(2) };
+      if (s.indexOf('? ') === 0) return { k: 'yn', t: s.slice(2) };
+      if (s.indexOf('- ') === 0) return { k: 'txt', t: s.slice(2) };
+      if (s.indexOf('✓ ') === 0) return { k: 'ok', t: s.slice(2) };
+      return { k: 'p', t: s };
+    });
+  }
+
+  function rpc(fn, args){
+    return fetch(CFG.url + '/rest/v1/rpc/' + fn, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', apikey: CFG.anonKey, Authorization: 'Bearer ' + CFG.anonKey },
+      body: JSON.stringify(args || {})
+    }).then(function(r){ return r.json().catch(function(){ return null; }).then(function(j){ if (!r.ok) throw new Error((j && j.message) || 'error'); return j; }); });
+  }
+
+  function el(tag, cls, text){ var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+
+  function render(){
+    var box = $('items'); box.innerHTML = '';
+    items.forEach(function(it, i){
+      var key = 'q' + i;
+      if (it.k === 'h') { box.appendChild(el('h3', '', it.t)); return; }
+      if (it.k === 'p') { box.appendChild(el('p', '', it.t)); return; }
+      if (it.k === 'yn') {
+        var wrap = el('div', 'qwrap'); wrap.style.margin = '14px 0';
+        wrap.appendChild(el('div', 'q', it.t));
+        var row = el('div', 'yn');
+        var det = el('textarea', '', ''); det.placeholder = 'פירוט'; det.style.display = 'none';
+        det.oninput = function(){ answers[key] = answers[key] || {}; answers[key].d = det.value; };
+        ['כן', 'לא'].forEach(function(lbl, j){
+          var b = el('button', '', lbl); b.type = 'button'; b.setAttribute('aria-pressed', 'false');
+          b.onclick = function(){
+            answers[key] = answers[key] || {};
+            answers[key].a = j === 0 ? 'כן' : 'לא';
+            Array.prototype.forEach.call(row.children, function(c){ c.setAttribute('aria-pressed', 'false'); });
+            b.setAttribute('aria-pressed', 'true');
+            det.style.display = j === 0 ? 'block' : 'none';
+            if (j !== 0) { det.value = ''; answers[key].d = ''; }
+          };
+          row.appendChild(b);
+        });
+        wrap.appendChild(row); wrap.appendChild(det);
+        box.appendChild(wrap); return;
+      }
+      if (it.k === 'txt') {
+        var w2 = el('div', '', ''); w2.style.margin = '14px 0';
+        w2.appendChild(el('div', 'q', it.t));
+        var inp = el('input', ''); inp.type = 'text';
+        inp.oninput = function(){ answers[key] = { a: inp.value }; };
+        w2.appendChild(inp); box.appendChild(w2); return;
+      }
+      if (it.k === 'ok') {
+        var lab = el('label', 'chk', '');
+        var cb = el('input', ''); cb.type = 'checkbox';
+        cb.onchange = function(){ answers[key] = { a: cb.checked }; };
+        lab.appendChild(cb); lab.appendChild(el('span', '', it.t));
+        box.appendChild(lab);
+      }
+    });
+  }
+
+  function validate(){
+    var missing = [];
+    items.forEach(function(it, i){
+      var a = answers['q' + i];
+      if (it.k === 'yn' && (!a || !a.a)) missing.push(it.t);
+      if (it.k === 'ok' && (!a || a.a !== true)) missing.push(it.t);
+    });
+    return missing;
+  }
+
+  $('form').addEventListener('submit', function(e){
+    e.preventDefault();
+    var missing = validate();
+    var errBox = $('formErr');
+    if (missing.length) { errBox.textContent = 'נא לענות על כל השאלות ולאשר את ההצהרה לפני השליחה.'; errBox.classList.remove('hidden'); return; }
+    errBox.classList.add('hidden');
+    var btn = $('send'); btn.disabled = true; btn.textContent = 'שולחים…';
+    rpc('submit_questionnaire', { p_token: token, p_answers: answers }).then(function(ok){
+      if (ok === true) { $('ready').classList.add('hidden'); $('thanks').classList.remove('hidden'); window.scrollTo(0, 0); }
+      else { throw new Error('closed'); }
+    }).catch(function(){
+      btn.disabled = false; btn.textContent = 'שליחת השאלון';
+      errBox.textContent = 'לא הצלחנו לשלוח. נסו שוב, ואם זה לא עובד פנו למור.';
+      errBox.classList.remove('hidden');
+    });
+  });
+
+  if (!token || !CFG.url || !CFG.anonKey) { $('loading').classList.add('hidden'); $('bad').classList.remove('hidden'); return; }
+  rpc('pub_questionnaire', { p_token: token }).then(function(d){
+    $('loading').classList.add('hidden');
+    if (!d) { $('bad').classList.remove('hidden'); return; }
+    if (d.status !== 'open') { $('already').classList.remove('hidden'); return; }
+    document.title = d.title + ' · מור ששון';
+    $('title').textContent = d.title;
+    $('hi').textContent = d.clientName ? ('שלום ' + d.clientName.split(' ')[0] + ', נא למלא את השאלון. זה לוקח כמה דקות.') : 'נא למלא את השאלון. זה לוקח כמה דקות.';
+    items = parse(d.body);
+    render();
+    $('ready').classList.remove('hidden');
+  }).catch(function(){
+    $('loading').classList.add('hidden');
+    $('bad').classList.remove('hidden');
+  });
+})();
+</script>
+</body></html>
