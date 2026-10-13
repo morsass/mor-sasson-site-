@@ -515,7 +515,7 @@ function waBtn(phone,text,label,onSent,cls="btn wa"){
 }
 
 /* ================= routing & shell ================= */
-const NAV=[["calendar","יומן",ICON.cal],["business","העסק שלי",ICON.shop],["clients","לקוחות",ICON.user],["pos","תשלום",ICON.pay],["automations","אוטומציות",ICON.bolt],["prices","מחירון",ICON.list],["hours","שעות עבודה",ICON.clock],["reports","דוחות",ICON.chart]];
+const NAV=[["calendar","יומן",ICON.cal],["business","העסק שלי",ICON.shop],["clients","לקוחות",ICON.user],["pos","תשלום",ICON.pay],["automations","אוטומציות",ICON.bolt],["questionnaires","שאלונים",ICON.list],["prices","מחירון",ICON.list],["hours","שעות עבודה",ICON.clock],["reports","דוחות",ICON.chart]];
 const VIEWS={};let route="calendar";
 function buildRail(){const r=$("#rail");NAV.forEach(([k,l,i])=>{const a=el(`<a href="#${k}" data-r="${k}">${i}<span>${l}</span></a>`);r.appendChild(a)})}
 function go(r){route=VIEWS[r]?r:"calendar";if(location.hash!=="#"+route){try{history.replaceState(null,"","#"+route)}catch(e){}}renderView(true)}
@@ -929,6 +929,42 @@ function newApptDrawer(pre){
 
 /* ================= clients ================= */
 const cl={q:"",sort:"name"};
+/* ================= ניהול שאלונים ================= */
+const DEF_QUESTIONNAIRES=[{id:"q-intake",title:"שאלון מקדים לטיפול ברפואה סינית",body:""},{id:"q-terms",title:"תקנון",body:""}];
+function qList(){if(!Array.isArray(S.questionnaires))S.questionnaires=structuredClone(DEF_QUESTIONNAIRES);return S.questionnaires}
+let qPick=null;
+const waPhone=p=>{let d=String(p||"").replace(/\D/g,"");if(d.startsWith("0"))d="972"+d.slice(1);return d};
+VIEWS.questionnaires=function(){
+  const qs=qList();
+  const p=el(`<div class="page"><div class="page-head"><div><div class="crumbs">אוטומציות › שאלונים</div><h1>ניהול שאלונים</h1><p>שאלונים ותקנונים שאתם שולחים ללקוחות בוואטסאפ. אפשר להוסיף, לערוך ולהסיר.</p></div><button class="btn primary" data-a="add">${ICON.plus}<span>שאלון חדש</span></button></div></div>`);
+  p.querySelector('[data-a="add"]').onclick=()=>{const id="q"+Date.now().toString(36);qs.push({id,title:"שאלון חדש",body:""});saveSettings();renderView(true)};
+  if(!qs.length)p.appendChild(el(`<div class="empty">אין שאלונים. לחצו על "שאלון חדש".</div>`));
+  qs.forEach((q,idx)=>{
+    const card=el(`<div class="box form" style="margin-bottom:12px"><label class="f full">שם השאלון<input data-f="title" value="${esc(q.title)}"></label><label class="f full">תוכן השאלון / התקנון<textarea data-f="body" rows="6" placeholder="כתבו כאן את השאלות או את טקסט התקנון">${esc(q.body||"")}</textarea></label><div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn primary sm" data-a="save">שמירה</button><button class="btn sm" data-a="wa">שליחה בוואטסאפ ללקוח</button><button class="btn danger sm" data-a="del">הסרה</button></div><div data-pick></div></div>`);
+    card.querySelector('[data-a="save"]').onclick=()=>{q.title=card.querySelector('[data-f="title"]').value.trim()||"שאלון";q.body=card.querySelector('[data-f="body"]').value;saveSettings();toast("נשמר");renderView(true)};
+    const delB=card.querySelector('[data-a="del"]');
+    delB.onclick=()=>{if(!delB.dataset.s){delB.dataset.s=1;delB.textContent="לחצו שוב להסרה";return}qs.splice(idx,1);saveSettings();toast("השאלון הוסר");renderView(true)};
+    const waB=card.querySelector('[data-a="wa"]');
+    waB.onclick=()=>{qPick=qPick===q.id?null:q.id;renderView(true)};
+    if(qPick===q.id){
+      const pk=card.querySelector('[data-pick]');
+      pk.innerHTML=`<div class="box" style="margin-top:10px"><input data-s type="search" placeholder="חיפוש לקוח לפי שם או טלפון" style="width:100%;margin-bottom:8px"><div data-l style="max-height:260px;overflow:auto"></div><div class="muted small" style="margin-top:6px">הכפתור פותח וואטסאפ עם ההודעה מוכנה. לוחצים שלח בוואטסאפ.</div></div>`;
+      const draw=()=>{const s=pk.querySelector('[data-s]').value.trim();const box=pk.querySelector('[data-l]');box.innerHTML="";
+        const body=(q.body||"").trim();
+        list("clients").filter(c=>!s||(c.name||"").includes(s)||(c.phone||"").includes(s)).sort((a,b)=>(a.name||"").localeCompare(b.name||"","he")).slice(0,60).forEach(c=>{
+          const first=(c.name||"").split(" ")[0];
+          const msg=`שלום ${first},\n${q.title}${body?"\n\n"+body:""}`;
+          const a=el(`<a class="btn sm" target="_blank" rel="noopener" style="display:flex;justify-content:space-between;margin:3px 0;text-decoration:none">${esc(c.name||"")} <span class="ltr small muted">${esc(c.phone||"")}</span></a>`);
+          a.href=`https://wa.me/${waPhone(c.phone)}?text=${encodeURIComponent(msg)}`;
+          box.appendChild(a)});
+        if(!box.children.length)box.innerHTML=`<div class="empty">לא נמצאו לקוחות</div>`;
+      };
+      pk.querySelector('[data-s]').oninput=draw;draw();
+    }
+    p.appendChild(card);
+  });
+  return p;
+};
 VIEWS.clients=function(){
   const p=el(`<div class="page"><div class="page-head"><div><h1>לקוחות</h1><p>${list("clients").length} לקוחות</p></div>
     <div class="row"><input id="cl-q" type="search" placeholder="חיפוש שם או טלפון" style="width:220px" value="${esc(cl.q)}">
