@@ -1,0 +1,7 @@
+[functions]
+  directory = "netlify/functions"
+
+[[redirects]]
+  from = "/cal.ics"
+  to = "/.netlify/functions/ics"
+  status = 200
